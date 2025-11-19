@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import 'tailwindcss';
+
+body {
+  background-color: rgb(221, 221, 221);
+  margin: 0;
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family: 'Roboto', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+  /* font-size: 12px; */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-size: 14px;
+}
+
+.body-full {
+  padding-left: 300px;
+  padding-right: 10px;
+  padding-bottom: 1rem;
+}
+
+.swal2-container {
+  z-index: 5001 !important;
+}
+
+.v-sidebar-menu {
+  --vsm-primary-color: #0059ff !important;
+  --vsm-base-bg: #2a2a2e;
+  --vsm-item-color: #fff;
+  /* --vsm-item-active-color:; */
+  /* --vsm-item-active-bg:; */
+  --vsm-item-active-line-color: var(--vsm-primary-color);
+  --vsm-item-open-color: #fff;
+  /* --vsm-item-hover-color:; */
+  --vsm-item-open-bg: var(--vsm-primary-color);
+  --vsm-item-hover-bg: rgba(202, 202, 202, 0.5) !important;
+  --vsm-icon-color: var(--vsm-item-color);
+  --vsm-icon-bg: #1e1e21;
+  /* --vsm-icon-active-color:; */
+  /* --vsm-icon-active-bg:; */
+  /* --vsm-icon-open-color:; */
+  /* --vsm-icon-open-bg:; */
+  --vsm-mobile-item-color: #fff;
+  --vsm-mobile-item-bg: var(--vsm-primary-color);
+  --vsm-mobile-icon-color: var(--vsm-mobile-item-color);
+  --vsm-mobile-icon-bg: transparent;
+  --vsm-dropdown-bg: #ffffff !important;
+  --vsm-header-item-color: rgba(255, 255, 255, 0.7);
+  --vsm-toggle-btn-color: #fff;
+  --vsm-toggle-btn-bg: #1e1e21;
+  --vsm-item-font-size: 16px;
+  --vsm-item-line-height: 35px;
+  --vsm-item-padding: 10px 15px;
+  --vsm-icon-height: 35px;
+  --vsm-icon-width: 35px;
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}

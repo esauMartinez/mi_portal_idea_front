@@ -1,0 +1,82 @@
+<script setup lang="ts">
+import { useRoute } from 'vue-router'
+import useAlumnos from '../composables/alumno/useAlumnos'
+import { formatearNombre } from '@/helper/formatearNombre'
+import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
+import useClase from '../composables/useClase'
+import { verificarPermiso } from '@/guards/verificarPermiso'
+import useEliminar from '../composables/alumno/useEliminar'
+import type { IClaseEmpleado } from '../interfaces/clase_empleado'
+import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
+import useCrear from '../composables/alumno/useCrear'
+
+const { params } = useRoute()
+const { claseId, alumnos } = useAlumnos()
+const { crearMutation } = useCrear()
+const { eliminar } = useEliminar()
+const { clase } = useClase(+params.id!)
+claseId.value = +params.id!
+
+const agregarAlumno = (payload: IEmpleado) => {
+  crearMutation.mutate({
+    claseId: clase.value.id,
+    empleadoId: payload.id,
+  })
+}
+</script>
+
+<template>
+  <v-datatable
+    :value="alumnos"
+    showGridlines
+    size="small"
+    class="p-datatable-sm"
+    responsiveLayout="scroll"
+  >
+    <template #header>
+      <div class="grid grid-cols-12 items-center">
+        <div class="col-span-7">
+          <span class="text-xl! font-bold">Alumnos</span>
+        </div>
+        <div class="col-span-5">
+          <BusquedaEmpleados
+            :seleccionarEmpleado="agregarAlumno"
+            v-if="clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')"
+          />
+        </div>
+      </div>
+    </template>
+
+    <template #empty>
+      <span>No hay alumnos para esta clase.</span>
+    </template>
+    <template #loading>
+      <v-progressspinner />
+    </template>
+
+    <v-column field="empleado.id" header="ID" sortable />
+    <v-column field="empleado.idUsuario" header="ID Usuario" sortable />
+    <v-column field="empleado.primerNombre" header="Nombre" sortable>
+      <template #body="{ data }: { data: IClaseEmpleado }">
+        <span>
+          {{ formatearNombre(data.empleado!) }}
+        </span>
+      </template>
+    </v-column>
+    <v-column
+      v-if="
+        clase.estatus !== 'en curso' &&
+        clase.estatus !== 'finalizada' &&
+        verificarPermiso('Clases.Eliminar.Alumno')
+      "
+    >
+      <template #body="{ data }: { data: IEmpleado }">
+        <div class="flex justify-center">
+          <v-button icon="pi pi-trash" severity="danger" size="small" @click="eliminar(data.id)" />
+        </div>
+      </template>
+    </v-column>
+  </v-datatable>
+</template>
+
+<style scoped></style>
