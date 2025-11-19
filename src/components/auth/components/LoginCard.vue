@@ -57,6 +57,7 @@ const submit = handleSubmit((values) => {
                 @update:modelValue="field.onChange"
                 :invalid="meta.touched && errors.length > 0"
                 :feedback="false"
+                toggleMask
               />
               <ErrorMessage name="password" class="text-red-500 text-lg" />
             </div>

@@ -4,7 +4,7 @@ import type { IClase } from './clase'
 export interface IClaseEmpleado {
   id?: number
   claseId: number
-  clase: IClase
+  clase?: IClase
   empleadoId: number
   empleado?: IEmpleado
   calificacion?: number

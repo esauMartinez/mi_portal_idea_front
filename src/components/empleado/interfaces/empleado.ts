@@ -1,5 +1,5 @@
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
-import type { IOcuapacionEmpleado } from './ocupacionesEmpleado'
+import type { IOcupacionEmpleado } from './ocupacionesEmpleado'
 import type { IJerarquia } from './jerarquia'
 import type { IPerfil } from '@/components/perfil/interfaces/perfil'
 import type { IPuesto } from '@/components/puesto/interfaces/puesto'
@@ -37,7 +37,7 @@ export interface IEmpleado {
   perfilId?: number
   perfil: IPerfil
   centroCostoId?: number
-  ocupacionesEmpleado: IOcuapacionEmpleado[]
+  ocupacionesEmpleado: IOcupacionEmpleado[]
 
   hijos: IJerarquia[]
 }
