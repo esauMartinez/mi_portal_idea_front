@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import type { IOcuapacionEmpleado } from '../interfaces/ocupacionesEmpleado'
+import type { IOcupacionEmpleado } from '../interfaces/ocupacionesEmpleado'
 
 const baseSchema = {
   idUsuario: yup
@@ -87,7 +87,7 @@ const baseSchema = {
       return schema.notRequired()
     }),
   ocupacionesEmpleado: yup
-    .array<IOcuapacionEmpleado[]>()
+    .array<IOcupacionEmpleado[]>()
     .min(1, 'Debe tener al menos una ocupación')
     .required('El campo es requerido'),
 }

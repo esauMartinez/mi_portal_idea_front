@@ -23,11 +23,11 @@ const usePdfCertificado = () => {
 
   const generarContenidoPdf = (payload: IClaseEmpleado) => {
     empleado.value = `${payload.empleado?.apellidoPaterno} ${payload.empleado?.apellidoMaterno} ${payload.empleado?.primerNombre} ${payload.empleado?.segundoNombre}`
-    const representanteEmpresa = payload.clase.representanteEmpresa
-      ? formatearNombre(payload.clase.representanteEmpresa)
+    const representanteEmpresa = payload.clase!.representanteEmpresa
+      ? formatearNombre(payload.clase!.representanteEmpresa)
       : 'S/D'
-    const representanteEmpleados = payload.clase.representanteEmpleados
-      ? formatearNombre(payload.clase.representanteEmpleados)
+    const representanteEmpleados = payload.clase!.representanteEmpleados
+      ? formatearNombre(payload.clase!.representanteEmpleados)
       : 'S/D'
 
     const content: Content[] = [
@@ -111,7 +111,7 @@ const usePdfCertificado = () => {
                 alignment: 'center',
               },
               {
-                text: `${payload.clase.ocupacion?.nombre}`,
+                text: `${payload.clase!.ocupacion?.nombre}`,
                 bold: false,
                 border: [true, false, true, true],
                 margin: [0, 2, 0, 2],
@@ -233,7 +233,7 @@ const usePdfCertificado = () => {
             // Valor: Nombre del curso
             [
               {
-                text: `${payload.clase.curso.nombre}`,
+                text: `${payload.clase!.curso.nombre}`,
                 bold: false,
                 margin: [0, 2, 0, 2],
                 fontSize: 11,
@@ -333,7 +333,7 @@ const usePdfCertificado = () => {
             // Valores de fecha
             [
               {
-                text: `${payload.clase.duracion}`,
+                text: `${payload.clase!.duracion}`,
                 bold: false,
                 colSpan: 3,
                 fontSize: 11,
@@ -342,38 +342,38 @@ const usePdfCertificado = () => {
               {},
               {},
               {
-                text: `${moment(payload.clase.fechaInicio).format('YYYY')}`,
+                text: `${moment(payload.clase!.fechaInicio).format('YYYY')}`,
                 bold: false,
                 fontSize: 11,
                 alignment: 'center',
               },
               {
-                text: `${moment(payload.clase.fechaInicio).format('MM')}`,
+                text: `${moment(payload.clase!.fechaInicio).format('MM')}`,
                 bold: false,
                 fontSize: 11,
                 alignment: 'center',
               },
               {
-                text: `${moment(payload.clase.fechaInicio).format('DD')}`,
+                text: `${moment(payload.clase!.fechaInicio).format('DD')}`,
                 bold: false,
                 fontSize: 11,
                 alignment: 'center',
               },
               {},
               {
-                text: `${moment(payload.clase.fechaFinalizacion).format('YYYY')}`,
+                text: `${moment(payload.clase!.fechaFinalizacion).format('YYYY')}`,
                 bold: false,
                 fontSize: 11,
                 alignment: 'center',
               },
               {
-                text: `${moment(payload.clase.fechaInicio).format('MM')}`,
+                text: `${moment(payload.clase!.fechaInicio).format('MM')}`,
                 bold: false,
                 fontSize: 11,
                 alignment: 'center',
               },
               {
-                text: `${moment(payload.clase.fechaInicio).format('DD')}`,
+                text: `${moment(payload.clase!.fechaInicio).format('DD')}`,
                 bold: false,
                 fontSize: 11,
                 alignment: 'center',
@@ -402,7 +402,7 @@ const usePdfCertificado = () => {
             // Valor: Área temática
             [
               {
-                text: `${payload.clase.areaTematica?.nombre}`,
+                text: `${payload.clase!.areaTematica?.nombre}`,
                 bold: false,
                 fontSize: 11,
                 margin: [0, 2, 0, 2],
@@ -481,7 +481,7 @@ const usePdfCertificado = () => {
             stack: [
               { text: '_____________________', alignment: 'center' },
               {
-                text: `${payload.clase.empleadoCalifica?.primerNombre} ${payload.clase.empleadoCalifica?.segundoNombre} ${payload.clase.empleadoCalifica?.apellidoPaterno} ${payload.clase.empleadoCalifica?.apellidoMaterno}`,
+                text: `${payload.clase!.empleadoCalifica?.primerNombre} ${payload.clase!.empleadoCalifica?.segundoNombre} ${payload.clase!.empleadoCalifica?.apellidoPaterno} ${payload.clase!.empleadoCalifica?.apellidoMaterno}`,
                 alignment: 'center',
                 bold: true,
                 fontSize: 9,
@@ -598,7 +598,7 @@ const usePdfCertificado = () => {
 
   const descargarPdf = () => {
     if (pdfUrl.value && data.value) {
-      const nombre = `${empleado.value.toUpperCase()}_${data.value.clase.curso.nombre.toUpperCase()}_${data.value.clase.areaTematica.nombre.toUpperCase()}`
+      const nombre = `${empleado.value.toUpperCase()}_${data.value.clase!.curso.nombre.toUpperCase()}_${data.value.clase!.areaTematica.nombre.toUpperCase()}`
 
       const link = document.createElement('a')
       link.href = pdfUrl.value

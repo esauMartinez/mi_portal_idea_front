@@ -16,7 +16,7 @@ const descargar = () => {
 }
 
 const selectableItems = computed(() => {
-  return misCursos?.filter((item) => item.aprobado && item.clase.calificada) || []
+  return misCursos?.filter((item) => item.aprobado && item.clase!.calificada) || []
 })
 
 const allSelected = computed(() => {
@@ -71,17 +71,17 @@ const toggleSelectAll = () => {
 
     <v-column header="Clase" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
-        {{ data.clase.id }}
+        {{ data.clase!.id }}
       </template>
     </v-column>
     <v-column header="Estatus clase" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
-        <v-tag :value="estatusClase(data.clase.estatus)" severity="info" class="w-full" />
+        <v-tag :value="estatusClase(data.clase!.estatus)" severity="info" class="w-full" />
       </template>
     </v-column>
     <v-column header="Curso" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
-        {{ data.clase.curso.nombre }}
+        {{ data.clase!.curso.nombre }}
       </template>
     </v-column>
     <v-column header="Calificacion" sortable>
@@ -96,7 +96,7 @@ const toggleSelectAll = () => {
           :value="data.aprobado ? 'Aprobado' : 'Reprobado'"
           :severity="data.aprobado ? 'success' : 'danger'"
           class="w-full!"
-          v-if="data.clase.calificada"
+          v-if="data.clase!.calificada"
         />
         <v-tag value="Sin calificar" severity="warn" class="w-full" v-else />
       </template>
@@ -109,7 +109,7 @@ const toggleSelectAll = () => {
             name: !empleado ? 'certificado-pdf' : 'certificado-empleado-pdf',
             params: { id: data.id },
           }"
-          v-if="data.aprobado && data.clase.calificada"
+          v-if="data.aprobado && data.clase!.calificada"
         >
           <v-button icon="pi pi-file-pdf" severity="danger" size="small" />
         </router-link>
@@ -127,7 +127,7 @@ const toggleSelectAll = () => {
       </template>
       <template #body="{ data }: { data: IClaseEmpleado }">
         <v-checkbox
-          v-if="data.aprobado && data.clase.calificada"
+          v-if="data.aprobado && data.clase!.calificada"
           :modelValue="isSelected(data)"
           @update:modelValue="toggleSelection(data)"
           binary

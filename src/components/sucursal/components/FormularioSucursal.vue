@@ -9,7 +9,7 @@ import useEmpresas from '@/components/empresa/composables/useEmpresas'
 
 const { sucursal, guardar } = defineProps<Props>()
 
-const { data: empresas } = useEmpresas()
+const { empresas } = useEmpresas()
 const { activo } = useDatos()
 
 const initialValues = computed(() => {

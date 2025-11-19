@@ -42,7 +42,7 @@ const useJerarquia = () => {
     return {
       key: primerElemento.padreId.toString(),
       data: primerElemento.padreId,
-      empresa: primerElemento.padre.empresa.nombre,
+      empresa: primerElemento.padre.empresa.razonSocial,
       label: formatearNombre(primerElemento.padre),
       principal: true,
 
@@ -50,7 +50,7 @@ const useJerarquia = () => {
         return {
           key: x.hijoId.toString(),
           data: x.hijoId,
-          empresa: x.hijo?.empresa.nombre || 'Sin empresa',
+          empresa: x.hijo?.empresa.razonSocial || 'Sin empresa',
           label: formatearNombre(x.hijo),
           principal: false,
           children: [],
