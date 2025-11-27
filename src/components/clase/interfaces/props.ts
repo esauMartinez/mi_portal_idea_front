@@ -34,6 +34,7 @@ export interface PropsTablaRequerimientosCurso {
 export interface PropstTablaCalificaciones {
   guardarCalificaciones: (calificacionesEmpleados: IClaseEmpleado[]) => void
   cancelar: () => void
+  pendiente: boolean
 }
 
 export interface PropsTablaEnlaces {

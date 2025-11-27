@@ -44,12 +44,24 @@ const { eliminar } = useEliminar()
 
     <template #empty> No se encontraron datos. </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
 
     <v-column field="id" header="ID" sortable />
     <v-column field="clave" header="Clave" sortable />
     <v-column field="nombre" header="Nombre" sortable />
+    <v-column field="tipo" header="Tipo" sortable>
+      <template #body="{ data }: { data: IRequerimiento }">
+        <v-tag
+          :value="data.tipo"
+          :severity="data.tipo === 'empleado' ? 'info' : 'warn'"
+          class="w-full!"
+        />
+      </template>
+    </v-column>
     <v-column field="estatus" header="Estatus" sortable>
       <template #body="{ data }: { data: IRequerimiento }">
         <v-tag

@@ -8,7 +8,7 @@ import useDatos from '@/components/empleado/composables/useDatos'
 
 const { requerimiento, guardar } = defineProps<Props>()
 
-const { activo } = useDatos()
+const { activo, tipoEmpleadoRequerimiento } = useDatos()
 
 const initialValues = computed(() => {
   return requerimiento ? { ...schema.getDefault(), ...requerimiento } : { ...schema.getDefault() }
@@ -31,6 +31,21 @@ const submit = handleSubmit((values) => {
     :validationSchema="schema"
     class="grid grid-cols-1 gap-3"
   >
+    <Field name="tipo" v-slot="{ field, meta, errors }">
+      <div>
+        <label for="tipo">Tipo</label>
+        <v-select
+          fluid
+          :options="tipoEmpleadoRequerimiento"
+          optionLabel="item"
+          optionValue="value"
+          :modelValue="field.value"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+        />
+        <ErrorMessage name="tipo" class="text-red-500" />
+      </div>
+    </Field>
     <Field name="clave" v-slot="{ field, meta, errors }">
       <div>
         <label for="clave">Clave</label>

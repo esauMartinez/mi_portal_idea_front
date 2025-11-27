@@ -45,7 +45,7 @@ const submit = handleSubmit((values: IUbicacion) => {
 
     <Field name="estatus" v-slot="{ field, meta, errors }">
       <div>
-        <label for="estatus">Nombre</label>
+        <label for="estatus">Estatus</label>
         <v-select
           fluid
           :options="activo"

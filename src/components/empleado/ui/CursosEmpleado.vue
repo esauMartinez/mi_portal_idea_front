@@ -7,7 +7,7 @@ import router from '@/router'
 
 const visible = ref<boolean>(true)
 const { params } = useRoute()
-const { data: cursosEmpleado, isSuccess } = useCursosEmpleado(+params.id!)
+const { data: cursosEmpleado, isLoading } = useCursosEmpleado(+params.id!)
 </script>
 
 <template>
@@ -18,7 +18,12 @@ const { data: cursosEmpleado, isSuccess } = useCursosEmpleado(+params.id!)
     header="Cursos empleado"
     :modal="true"
   >
-    <TablaMisCursos :mis-cursos="cursosEmpleado!" :empleado="true" v-if="isSuccess" />
+    <TablaMisCursos
+      :mis-cursos="cursosEmpleado!"
+      :empleado="true"
+      :cargando="isLoading"
+      v-if="!isLoading"
+    />
   </v-dialog>
 
   <router-view></router-view>

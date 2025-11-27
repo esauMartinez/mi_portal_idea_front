@@ -12,10 +12,10 @@ import useClase from '../composables/useClase'
 
 const { params } = useRoute()
 
-const { claseId, instructores } = useInstructores()
+const { claseId, instructores, isLoading } = useInstructores()
 const { clase } = useClase(+params.id!)
 const { eliminar } = useEliminar()
-const { crearMutation } = useCrear()
+const { crearMutation, isPending } = useCrear()
 
 claseId.value = +params.id!
 
@@ -34,15 +34,18 @@ const agregarInstructor = (payload: IEmpleado) => {
     size="small"
     class="p-datatable-sm"
     responsiveLayout="scroll"
+    :loading="isLoading"
   >
     <template #header>
-      <div class="grid grid-cols-12 items-center">
+      <div class="grid grid-cols-12 gap-3 items-center">
         <div class="col-span-7">
           <span class="text-xl! font-bold">Instructores</span>
         </div>
         <div class="col-span-5">
           <BusquedaEmpleados
             :seleccionarEmpleado="agregarInstructor"
+            :pendiente="isPending"
+            :instructor="true"
             v-if="clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Instructor')"
           />
         </div>
@@ -53,7 +56,10 @@ const agregarInstructor = (payload: IEmpleado) => {
       <span>No hay instructores para esta clase.</span>
     </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
 
     <v-column field="empleado.id" header="ID" sortable />

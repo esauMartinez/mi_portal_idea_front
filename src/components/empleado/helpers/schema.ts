@@ -6,7 +6,12 @@ const baseSchema = {
     .number()
     .typeError('Debes ingresar solo numeros')
     .nullable()
-    .required('El campo es requerido.'),
+    .when('tipo', (tipo, schema) => {
+      if (tipo[0] === 'interno') {
+        return schema.required('El campo es requerido')
+      }
+      return schema.notRequired()
+    }),
   primerNombre: yup.string().nullable().required('El campo es requerido.'),
   segundoNombre: yup.string().nullable(),
   apellidoPaterno: yup.string().nullable().required('El campo es requerido.'),
@@ -86,10 +91,7 @@ const baseSchema = {
       }
       return schema.notRequired()
     }),
-  ocupacionesEmpleado: yup
-    .array<IOcupacionEmpleado[]>()
-    .min(1, 'Debe tener al menos una ocupación')
-    .required('El campo es requerido'),
+  ocupacionesEmpleado: yup.array<IOcupacionEmpleado[]>(),
 }
 
 // Schema para crear empleado (contraseñas obligatorias)

@@ -3,4 +3,5 @@ import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_emplead
 export interface PropsTabla {
   misCursos: IClaseEmpleado[]
   empleado: boolean
+  cargando: boolean
 }

@@ -38,11 +38,37 @@ const { eliminar } = useEliminar()
 
     <template #empty> No se encontraron datos. </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
 
     <v-column field="id" header="ID" sortable />
+    <v-column field="tipo" header="Tipo del curso" sortable>
+      <template #body="{ data }: { data: ICurso }">
+        <v-tag
+          :value="data.tipo === '' ? 'S/D' : data.tipo"
+          :severity="data.tipo === '' ? 'danger' : 'success'"
+          class="w-full"
+        />
+      </template>
+    </v-column>
     <v-column field="nombre" header="Nombre del curso" sortable />
+
+    <v-column header="Requerimientos">
+      <template #body="{ data }: { data: ICurso }">
+        <div class="grid grid-cols-1 gap-1">
+          <div
+            v-for="item in data.requerimientosCursos"
+            :key="item.id"
+            class="bg-cyan-500 rounded-md p-1"
+          >
+            <span class="text-white">{{ item.requerimiento?.nombre }}</span>
+          </div>
+        </div>
+      </template>
+    </v-column>
     <v-column field="verificado" header="Estatus" sortable>
       <template #body="{ data }: { data: ICurso }">
         <v-tag

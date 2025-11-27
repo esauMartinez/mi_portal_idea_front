@@ -9,5 +9,9 @@ export interface Props {
 
 export interface PropsBusquedaEmpleados {
   disabled?: boolean
+  activo?: boolean
+  instructor?: boolean
   seleccionarEmpleado: (empleado: IEmpleado) => void
+  boton?: boolean
+  pendiente?: boolean
 }

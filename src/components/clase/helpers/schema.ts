@@ -2,6 +2,7 @@ import * as yup from 'yup'
 
 export const schema = yup.object({
   // clases: yup.number().default(1),
+  tineOrden: yup.boolean().default(false),
   fechaInicio: yup.date().typeError('Debes ingrasar una fecha').required('El campo es requerido'),
   horaInicio: yup.date().typeError('Debes ingrasar una fecha').required('El campo es requerido'),
   fechaFinalizacion: yup

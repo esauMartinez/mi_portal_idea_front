@@ -5,8 +5,6 @@ import { schema } from '../helpers/schema'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
 import type { IClase } from '../interfaces/clase'
 import useCursos from '@/components/curso/composables/useCursos'
-import { useClaseStore } from '@/stores/clase'
-import { storeToRefs } from 'pinia'
 import moment from 'moment'
 import { parseLocalDate } from '@/helper/parseLocalDate'
 import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
@@ -18,9 +16,7 @@ import useAreasTematicas from '../composables/useAreasTematicas'
 
 const { clase, guardar } = defineProps<Props>()
 const { cursos } = useCursos()
-const { tipoClase } = useDatos()
-const claseStore = useClaseStore()
-const { fechaClase } = storeToRefs(claseStore)
+const { tipoClase, tieneOrden } = useDatos()
 const { ubicaciones } = useUbicaciones()
 const { data: ocupaciones } = useOcupaciones()
 const { data: areasTematicas } = useAreasTematicas()
@@ -35,7 +31,7 @@ const initialValues = computed(() => {
           `${clase.fechaInicio} ${clase.horaInicio}`,
           'YYYY-MM-DD HH:mm:ss',
         ).toDate(),
-        fechaFinalizacion: parseLocalDate(clase.fechaInicio),
+        fechaFinalizacion: parseLocalDate(clase.fechaFinalizacion),
         horaFinalizacion: moment(
           `${clase.fechaFinalizacion} ${clase.horaFinalizacion}`,
           'YYYY-MM-DD HH:mm:ss',
@@ -46,7 +42,8 @@ const initialValues = computed(() => {
       }
     : {
         ...schema.getDefault(),
-        fechaInicio: fechaClase.value!,
+        fechaInicio: new Date(),
+        fechaFinalizacion: new Date(),
         instructores: [],
         alumnos: [],
       }
@@ -88,21 +85,109 @@ const submit = handleSubmit((values: IClase) => {
     :validation-schema="schema"
     class="grid grid-cols-1 gap-3"
   >
-    <div class="grid grid-cols-2 gap-3">
-      <div class="col-span-2">
-        <label for="estatus">Estatus</label>
-        <v-inputtext
+    <Field name="tineOrden" v-slot="{ field, meta, errors }">
+      <div>
+        <label for="tineOrden">Tiene orden de trabajo</label>
+        <v-select
           fluid
-          :modelValue="clase?.estatus"
-          disabled
-          :class="{
-            'text-yellow-600': clase?.estatus === 'pendiente',
-            'text-green-600': clase?.estatus === 'en curso',
-            'text-gray-600': clase?.estatus === 'finalizada',
-          }"
+          optionLabel="item"
+          optionValue="value"
+          :options="tieneOrden"
+          :modelValue="field.value"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
+        <ErrorMessage name="tineOrden" class="text-red-500" />
       </div>
+    </Field>
 
+    <v-fieldset legend="Datos orden de trabajo">
+      <div class="grid grid-cols-1 gap-2">
+        <Field name="tipoOrden" v-slot="{ field, meta, errors }">
+          <div>
+            <label for="tipoOrden">Tipo orden de trabajo</label>
+            <v-select
+              fluid
+              optionLabel="item"
+              optionValue="value"
+              :options="tieneOrden"
+              :modelValue="field.value"
+              @update:modelValue="field.onChange"
+              :invalid="meta.touched && errors.length > 0"
+              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+            />
+            <ErrorMessage name="tipoOrden" class="text-red-500" />
+          </div>
+        </Field>
+        <Field name="empresa" v-slot="{ field, meta, errors }">
+          <div>
+            <label for="empresa">Empresa</label>
+            <v-select
+              fluid
+              optionLabel="item"
+              optionValue="value"
+              :options="tieneOrden"
+              :modelValue="field.value"
+              @update:modelValue="field.onChange"
+              :invalid="meta.touched && errors.length > 0"
+              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+            />
+            <ErrorMessage name="empresa" class="text-red-500" />
+          </div>
+        </Field>
+        <Field name="monto" v-slot="{ field, meta, errors }">
+          <div>
+            <label for="monto">Monto</label>
+            <v-select
+              fluid
+              optionLabel="item"
+              optionValue="value"
+              :options="tieneOrden"
+              :modelValue="field.value"
+              @update:modelValue="field.onChange"
+              :invalid="meta.touched && errors.length > 0"
+              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+            />
+            <ErrorMessage name="monto" class="text-red-500" />
+          </div>
+        </Field>
+        <Field name="cotizacion" v-slot="{ field, meta, errors }">
+          <div>
+            <label for="cotizacion">Numero cotizacion</label>
+            <v-select
+              fluid
+              optionLabel="item"
+              optionValue="value"
+              :options="tieneOrden"
+              :modelValue="field.value"
+              @update:modelValue="field.onChange"
+              :invalid="meta.touched && errors.length > 0"
+              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+            />
+            <ErrorMessage name="cotizacion" class="text-red-500" />
+          </div>
+        </Field>
+        <Field name="solicitante" v-slot="{ field, meta, errors }">
+          <div>
+            <label for="solicitante">Solicitante</label>
+            <v-select
+              fluid
+              optionLabel="item"
+              optionValue="value"
+              :options="tieneOrden"
+              :modelValue="field.value"
+              @update:modelValue="field.onChange"
+              :invalid="meta.touched && errors.length > 0"
+              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+            />
+            <ErrorMessage name="solicitante" class="text-red-500" />
+          </div>
+        </Field>
+      </div>
+    </v-fieldset>
+
+    <div class="grid grid-cols-2 gap-3">
       <Field name="fechaInicio" v-slot="{ field, meta, errors }">
         <div>
           <label for="fechaInicio">Fecha de inicio</label>
@@ -113,8 +198,9 @@ const submit = handleSubmit((values: IClase) => {
             :modelValue="field.value"
             @update:modelValue="field.onChange"
             v-on:value-change="calcularDuracion"
+            :minDate="values.fechaInicio"
             :invalid="meta.touched && errors.length > 0"
-            :disabled="true"
+            :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
           />
           <ErrorMessage name="fechaInicio" class="text-red-500" />
         </div>
@@ -291,7 +377,7 @@ const submit = handleSubmit((values: IClase) => {
     <!-- <TablaRequerimientosCurso :requerimientosCurso="clase?.curso!.requerimientosCursos!" /> -->
     <Field name="ocupacionId" v-slot="{ field, meta, errors }">
       <div>
-        <label for="ocupacionId">Ocupacione especifica</label>
+        <label for="ocupacionId">Ocupaciones especifica</label>
         <v-select
           filter
           fluid
@@ -330,6 +416,7 @@ const submit = handleSubmit((values: IClase) => {
         <label for="representanteEmpresaId">Representante empresa</label>
         <BusquedaEmpleados
           :seleccionar-empleado="seleccionarRepresentanteEmpresa"
+          :boton="false"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="representanteEmpresaId" class="text-red-500" />
@@ -341,6 +428,7 @@ const submit = handleSubmit((values: IClase) => {
         <label for="representanteEmpleadosId">Representante trabajadores</label>
         <BusquedaEmpleados
           :seleccionar-empleado="seleccionarRepresentanteEmpleados"
+          :boton="false"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="representanteEmpleadosId" class="text-red-500" />

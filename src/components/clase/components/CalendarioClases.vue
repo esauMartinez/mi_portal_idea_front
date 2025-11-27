@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import useClases from '../composables/useClases'
-import { useClaseStore } from '@/stores/clase'
 import router from '@/router'
 import type { IClase } from '../interfaces/clase'
 import { parseLocalDate } from '@/helper/parseLocalDate'
 import moment from 'moment'
 import { verificarPermiso } from '@/guards/verificarPermiso'
 import useEliminar from '../composables/useEliminar'
+import useDesenlazar from '../composables/useDesenlazar'
 
-const { data: clases, inicio, fin, colorClase } = useClases()
+const { data: clases, inicio, fin, colorClase, isLoading } = useClases()
 const { eliminar } = useEliminar()
-const claseStore = useClaseStore()
+const { desenlazar } = useDesenlazar()
 const today = new Date()
 const view = ref(new Date(today.getFullYear(), today.getMonth(), 1))
 const selectedDate = ref(new Date(today.getFullYear(), today.getMonth(), today.getDate()))
@@ -47,6 +47,20 @@ const menuItems = (clase: IClase) => {
       },
     },
     {
+      label: 'Enlazar',
+      icon: 'pi pi-arrow-down-left-and-arrow-up-right-to-center',
+      command: () => {
+        router.push({ name: 'enlazar-clase', params: { id: clase.id } })
+      },
+    },
+    {
+      label: 'Desenlazar',
+      icon: 'pi pi-arrow-down-left-and-arrow-up-right-to-center',
+      command: () => {
+        desenlazar(clase.id)
+      },
+    },
+    {
       label: clase.calificada ? 'Ver calificaciones' : 'Subir calificaciones',
       icon: 'pi pi-check',
       command: () => {
@@ -70,21 +84,44 @@ const menuItems = (clase: IClase) => {
     items = items.filter((item) => item.label !== 'Subir calificaciones')
   }
 
-  if (clase.estatus.toLocaleLowerCase() === 'finalizada') {
+  if (clase.estatus?.toLowerCase() === 'finalizada') {
     items = items.filter((item) => item.label !== 'Eliminar')
     items = items.filter((item) => item.label !== 'Modificar')
   }
 
-  if (clase.estatus.toLocaleLowerCase() === 'en curso') {
+  if (clase.estatus?.toLowerCase() === 'en curso') {
     items = items.filter((item) => item.label !== 'Eliminar')
     items = items.filter((item) => item.label !== 'Modificar')
   }
 
   if (clase.padres.length > 0) {
-    items = items.filter((item) => item.label !== 'Eliminar')
     // items = items.filter((item) => item.label !== 'Modificar')
-    items = items.filter((item) => item.label !== 'Instructores')
-    items = items.filter((item) => item.label !== 'Empleados')
+    // items = items.filter((item) => item.label !== 'Instructores')
+    // items = items.filter((item) => item.label !== 'Empleados')
+  }
+
+  if (
+    clase.enlazada ||
+    clase.estatus?.toLowerCase() === 'en curso' ||
+    clase.estatus?.toLowerCase() === 'finalizada'
+  ) {
+    items = items.filter((item) => item.label !== 'Enlazar')
+  }
+
+  if (
+    !clase.enlazada ||
+    clase.estatus?.toLowerCase() === 'en curso' ||
+    clase.estatus?.toLowerCase() === 'finalizada'
+  ) {
+    items = items.filter((item) => item.label !== 'Desenlazar')
+  }
+
+  if (!verificarPermiso('Clases.Enlazar')) {
+    items = items.filter((item) => item.label !== 'Enlazar')
+  }
+
+  if (!verificarPermiso('Clases.Desenlazar')) {
+    items = items.filter((item) => item.label !== 'Desenlazar')
   }
 
   return items
@@ -152,7 +189,7 @@ const calendarDays = computed(() => {
     isToday: boolean
     isPast: boolean
     key: string
-    clases: IClase[] // 🔥 Ahora es un array de clases
+    clases: IClase[]
   }> = []
 
   const firstDayToShow = new Date(start)
@@ -192,20 +229,20 @@ function goToday() {
   selectedDate.value = new Date(today.getFullYear(), today.getMonth(), today.getDate())
 }
 
-function selectDay(d: Date) {
-  if (isPastDate(d)) return
-  selectedDate.value = new Date(d.getFullYear(), d.getMonth(), d.getDate())
-  claseStore.setFecha(d)
-  router.push({ name: 'crear-clase' })
-}
-
 function isSelected(d: Date) {
   return isoDate(d) === isoDate(selectedDate.value)
 }
 </script>
 
 <template>
-  <div class="w-full mx-auto font-sans">
+  <div class="w-full mx-auto font-sans relative">
+    <div
+      v-if="isLoading"
+      class="flex flex-col items-center justify-center absolute top-0 right-0 bottom-0 left-0 z-1001 bg-black/30 rounded-lg"
+    >
+      <v-progressspinner />
+      <span class="text-3xl! text-white">Cargando datos...</span>
+    </div>
     <header
       class="flex items-center justify-between bg-white border border-neutral-200 shadow-card rounded-lg px-4 py-3 mb-1"
     >
@@ -230,8 +267,11 @@ function isSelected(d: Date) {
       </div>
       <div class="flex gap-3">
         <v-button @click="goToday" icon="pi pi-replay" label="Hoy" size="small" />
-        <router-link :to="{ name: 'enlazar-clases' }">
+        <router-link :to="{ name: 'enlazar-clases' }" v-if="verificarPermiso('Clases.Enlazar')">
           <v-button icon="pi pi-arrow-right-arrow-left" label="Enlazar clases" size="small" />
+        </router-link>
+        <router-link :to="{ name: 'crear-clase' }" v-if="verificarPermiso('Clases.Crear')">
+          <v-button icon="pi pi-plus" label="Crear clases" size="small" />
         </router-link>
       </div>
     </header>
@@ -243,10 +283,10 @@ function isSelected(d: Date) {
     <div
       class="grid grid-cols-7 gap-px bg-neutral-200 border border-neutral-200 rounded-xl overflow-hidden"
     >
+      <!-- @click="verificarPermiso('Clases.Crear') ? selectDay(day.date) : ''" -->
       <div
         v-for="day in calendarDays"
         :key="day.key"
-        @click="verificarPermiso('Clases.Crear') ? selectDay(day.date) : ''"
         :class="[
           'relative min-h-35 bg-white transition-all duration-150 p-2 flex flex-col rounded-none',
           day.otherMonth ? 'text-neutral-400' : 'text-neutral-800',
@@ -256,8 +296,13 @@ function isSelected(d: Date) {
             : 'cursor-pointer hover:bg-primary-50',
         ]"
       >
-        <div class="text-sm font-semibold mb-1" :class="day.isToday ? 'text-primary-600' : ''">
-          {{ day.date.getDate() }}
+        <div class="text-[5px]! font-semibold mb-1" :class="day.isToday ? 'text-primary-600' : ''">
+          <v-badge
+            :value="day.date.getDate()"
+            size="large"
+            severity="contrast"
+            class="rounded-full! h-[25px]! w-[25px]!"
+          />
         </div>
 
         <!-- 🔥 Iteramos sobre todas las clases del día -->
@@ -265,20 +310,26 @@ function isSelected(d: Date) {
           <div v-for="clase in day.clases" :key="clase.id" class="mt-1!">
             <div class="rounded-md mt-2">
               <span class="text-[12px]! p-2! bg-orange-400! text-white rounded-tl-md rounded-tr-md">
-                {{ clase.horaInicio }}-{{ clase.horaFinalizacion }}
+                <span>Id: {{ clase.id }} - </span>
+                <span v-if="clase.enlazada">
+                  {{ !clase.padres[0]?.padreId ? '' : `${clase.padres[0]?.padreId} - ` }}
+                </span>
+                <span>{{ clase.horaInicio }} - </span>
+                <span>{{ clase.horaFinalizacion }} </span>
               </span>
             </div>
-            <router-link to="" @click.stop>
-              <v-splitbutton
-                fluid
-                dropdownIcon="pi pi-cog"
-                :model="menuItems(clase)"
-                :label="`${clase.curso.nombre.substring(0, 10)}`"
-                :severity="colorClase(clase.estatus)"
-                v-tooltip="clase.curso.nombre"
-                size="small"
-              />
-            </router-link>
+            <!-- <router-link to="" @click.stop> -->
+            <v-splitbutton
+              fluid
+              dropdownIcon="pi pi-cog"
+              :model="menuItems(clase)"
+              :label="`${clase.curso.nombre.substring(0, 10)}`"
+              :severity="colorClase(clase.estatus)"
+              v-tooltip="clase.curso.nombre"
+              size="small"
+            />
+
+            <!-- </router-link> -->
           </div>
         </div>
       </div>

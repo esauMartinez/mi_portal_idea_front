@@ -38,9 +38,11 @@ const { eliminar, isPending } = useEliminar()
 
     <template #empty> No se encontraron datos. </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
-
     <v-column field="id" header="ID" sortable />
     <v-column field="nombre" header="Nombre" sortable />
 

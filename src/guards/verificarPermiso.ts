@@ -13,3 +13,39 @@ export const verificarPermiso = (permiso: string) => {
   }
   return true
 }
+
+export const verificarSiMostrarGestion = () => {
+  const empleados = verificarPermiso('Empleados.Ver')
+  const perfiles = verificarPermiso('Perfiles.Ver')
+  const ubicaciones = verificarPermiso('Ubicaciones.Ver')
+  const departamentos = verificarPermiso('Departamentos.Ver')
+  const empresas = verificarPermiso('Empresas.Ver')
+  const sucursales = verificarPermiso('Sucursales.Ver')
+  const cargos = verificarPermiso('Cargos.Ver')
+  const centrosCostos = verificarPermiso('CentrosCostos.Ver')
+
+  if (
+    empleados ||
+    perfiles ||
+    ubicaciones ||
+    departamentos ||
+    empresas ||
+    sucursales ||
+    cargos ||
+    centrosCostos
+  ) {
+    return true
+  }
+  return false
+}
+
+export const verificarSiMostrarCapacitacion = () => {
+  const cursos = verificarPermiso('Cursos.Ver')
+  const clases = verificarPermiso('Clases.Ver')
+  const requerimientos = verificarPermiso('Requerimientos.Ver')
+
+  if (cursos || clases || requerimientos) {
+    return true
+  }
+  return false
+}

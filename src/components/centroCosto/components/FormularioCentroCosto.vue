@@ -50,7 +50,7 @@ const submit = handleSubmit((values: ICentroCosto) => {
 
     <Field name="nombre" v-slot="{ field, meta, errors }">
       <div>
-        <label for="nombre">Nombre curso</label>
+        <label for="nombre">Nombre</label>
         <v-inputtext
           fluid
           :modelValue="field.value"

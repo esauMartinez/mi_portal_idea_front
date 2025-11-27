@@ -6,7 +6,7 @@ import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import useGuardarCalificaciones from '../composables/useGuardarCalificaciones'
 
 const visible = ref<boolean>(true)
-const { calificarMutation } = useGuardarCalificaciones()
+const { calificarMutation, isPending } = useGuardarCalificaciones()
 
 const guardarCalificaciones = (calificaciones: IClaseEmpleado[]) => {
   calificarMutation.mutate(calificaciones)
@@ -25,7 +25,11 @@ const cancelar = () => {
     header="Calificaciones"
     :modal="true"
   >
-    <TablaCalificaciones :guardar-calificaciones="guardarCalificaciones" :cancelar="cancelar" />
+    <TablaCalificaciones
+      :guardar-calificaciones="guardarCalificaciones"
+      :cancelar="cancelar"
+      :pendiente="isPending"
+    />
   </v-dialog>
 </template>
 

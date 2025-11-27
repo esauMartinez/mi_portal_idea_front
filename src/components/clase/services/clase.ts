@@ -4,6 +4,7 @@ import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import type { IClaseInstructor } from '../interfaces/clase_instructor'
 import type { IAreaTematica } from '../interfaces/area_tematica'
 import type { IEnlaceClase } from '../interfaces/enlaceClase'
+import type { ICalificacionesClase } from '../interfaces/calificacionesClase'
 
 export const getClases = async (
   inicio: string,
@@ -57,8 +58,8 @@ export const deleteInstructorClase = async (id: number): Promise<string> => {
   return data
 }
 
-export const getAlumnosClase = async (id: number): Promise<IClaseEmpleado[]> => {
-  const { data } = await api_mi_portal.get<IClaseEmpleado[]>(`/clase/alumnos/${id}`)
+export const getAlumnosClase = async (id: number): Promise<ICalificacionesClase> => {
+  const { data } = await api_mi_portal.get<ICalificacionesClase>(`/clase/alumnos/${id}`)
   return data
 }
 
@@ -83,6 +84,21 @@ export const getAreasTematicas = async (): Promise<IAreaTematica[]> => {
 }
 
 export const postEnlaces = async (payload: IEnlaceClase[]): Promise<string> => {
+  const { data } = await api_mi_portal.post<string>(`/enlaces/clases`, payload)
+  return data
+}
+
+export const deleteEnlace = async (id: number): Promise<string> => {
+  const { data } = await api_mi_portal.delete<string>(`/enlace/clase/${id}`)
+  return data
+}
+
+export const getClasesPadres = async (): Promise<string> => {
+  const { data } = await api_mi_portal.get<string>(`/clases/padres`)
+  return data
+}
+
+export const postEnlace = async (payload: IEnlaceClase): Promise<string> => {
   const { data } = await api_mi_portal.post<string>(`/enlace/clase`, payload)
   return data
 }

@@ -29,6 +29,12 @@ body {
   padding-bottom: 1rem;
 }
 
+.body-collapsed {
+  padding-left: 70px;
+  padding-right: 10px;
+  padding-bottom: 1rem;
+}
+
 .swal2-container {
   z-index: 5001 !important;
 }
@@ -38,12 +44,12 @@ body {
   --vsm-base-bg: #2a2a2e;
   --vsm-item-color: #fff;
   /* --vsm-item-active-color:; */
-  /* --vsm-item-active-bg:; */
+  --vsm-item-active-bg: rgba(202, 202, 202, 0.849);
   --vsm-item-active-line-color: var(--vsm-primary-color);
   --vsm-item-open-color: #fff;
   /* --vsm-item-hover-color:; */
   --vsm-item-open-bg: var(--vsm-primary-color);
-  --vsm-item-hover-bg: rgba(202, 202, 202, 0.5) !important;
+  --vsm-item-hover-bg: rgba(202, 202, 202, 0.849) !important;
   --vsm-icon-color: var(--vsm-item-color);
   --vsm-icon-bg: #1e1e21;
   /* --vsm-icon-active-color:; */
@@ -63,6 +69,4 @@ body {
   --vsm-item-padding: 10px 15px;
   --vsm-icon-height: 35px;
   --vsm-icon-width: 35px;
-  border-top-right-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
 }

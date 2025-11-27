@@ -5,12 +5,13 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import type { AxiosError } from 'axios'
 import type { IErrors } from '@/interfaces/errors'
 import type { IEnlaceClase } from '../interfaces/enlaceClase'
+import { computed } from 'vue'
 
 const useEnlazar = () => {
   const queryClient = useQueryClient()
 
   const crearEnlaze = useMutation({
-    mutationKey: ['postClase'],
+    mutationKey: ['postEnlaces'],
     mutationFn: postEnlaces,
     onMutate: () => {
       console.log('Creando...')
@@ -50,6 +51,8 @@ const useEnlazar = () => {
 
   return {
     enlazar,
+
+    isPending: computed(() => crearEnlaze.isPending.value),
   }
 }
 

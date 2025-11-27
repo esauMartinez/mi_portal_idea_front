@@ -32,6 +32,7 @@ import {
 
 import {
   AutoComplete,
+  Badge,
   Button,
   Card,
   Checkbox,
@@ -51,8 +52,10 @@ import {
   MultiSelect,
   OrganizationChart,
   Password,
+  Popover,
   ProgressSpinner,
   Ripple,
+  ScrollPanel,
   Select,
   Skeleton,
   SplitButton,
@@ -170,6 +173,9 @@ app.component('v-splitbutton', SplitButton)
 app.component('v-checkbox', Checkbox)
 app.component('v-iconfield', IconField)
 app.component('v-inputicon', InputIcon)
+app.component('v-badge', Badge)
+app.component('v-scrollpanel', ScrollPanel)
+app.component('v-popover', Popover)
 
 app.use(createPinia())
 

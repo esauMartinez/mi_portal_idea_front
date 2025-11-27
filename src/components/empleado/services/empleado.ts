@@ -7,13 +7,33 @@ import type { IJerarquia } from '../interfaces/jerarquia'
 import type { IKardex } from '../interfaces/kardex'
 import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_empleado'
 
-export const getEmpleados = async (): Promise<IEmpleado[]> => {
-  const { data } = await api_mi_portal.get<IEmpleado[]>(`/empleados`)
+export const getEmpleados = async (
+  empresa: number,
+  instructor: string,
+  tipo: string,
+): Promise<IEmpleado[]> => {
+  const { data } = await api_mi_portal.get<IEmpleado[]>(`/empleados`, {
+    params: {
+      empresa,
+      instructor,
+      tipo,
+    },
+  })
   return data
 }
 
-export const getEmpleadosPorNombre = async (nombre: string): Promise<IEmpleado[]> => {
-  const { data } = await api_mi_portal.get<IEmpleado[]>(`/empleados-por-nombre/${nombre}`)
+export const getEmpleadosPorNombre = async (
+  nombre: string,
+  activo: boolean,
+  instructor: boolean,
+): Promise<IEmpleado[]> => {
+  const { data } = await api_mi_portal.get<IEmpleado[]>(`/empleados-por-nombre`, {
+    params: {
+      nombre,
+      activo,
+      instructor,
+    },
+  })
   return data
 }
 
@@ -81,6 +101,7 @@ export const deleteKardex = async (id: number): Promise<string> => {
 }
 
 export const getMisCursos = async (): Promise<IClaseEmpleado[]> => {
+  await timer()
   const { data } = await api_mi_portal.get<IClaseEmpleado[]>(`/mis-cursos`)
   return data
 }

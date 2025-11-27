@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import useAuth from '@/components/auth/composables/useAuth'
 import { computed, ref } from 'vue'
-import { verificarPermiso } from '@/guards/verificarPermiso'
+import {
+  verificarPermiso,
+  verificarSiMostrarCapacitacion,
+  verificarSiMostrarGestion,
+} from '@/guards/verificarPermiso'
 
 const { autenticado, logout } = useAuth()
 const collapsed = ref<boolean>(false)
@@ -21,6 +25,7 @@ const menu = computed(() => {
     {
       title: 'Gestion',
       icon: 'pi pi-cog',
+      hidden: !verificarSiMostrarGestion(),
       child: [
         {
           href: '/empleados',
@@ -81,6 +86,7 @@ const menu = computed(() => {
     {
       title: 'Capacitacion',
       icon: 'pi pi-bookmark',
+      hidden: !verificarSiMostrarCapacitacion(),
       child: [
         {
           href: '/cursos',
@@ -104,10 +110,20 @@ const menu = computed(() => {
     },
   ]
 })
+
+const onToggleCollapse = () => {
+  collapsed.value = !collapsed.value
+}
 </script>
 
 <template>
-  <sidebar-menu :menu="menu" theme="white-theme" :hideToggle="true" v-if="autenticado">
+  <sidebar-menu
+    :menu="menu"
+    theme="white-theme"
+    :hideToggle="false"
+    v-if="autenticado"
+    @update:collapsed="onToggleCollapse"
+  >
     <!-- <sidebar-menu :menu="menu" :hideToggle="true" v-if="autenticado"> -->
     <template v-slot:header>
       <div class="flex justify-center">
@@ -115,9 +131,9 @@ const menu = computed(() => {
       </div>
     </template>
     <template v-slot:footer>
-      <div class="p-2">
+      <div class="p-2 flex! justify-center items-center">
         <v-button
-          label="Salir"
+          :label="collapsed ? '' : 'Salir'"
           severity="danger"
           icon="pi pi-power-off"
           class="w-full"

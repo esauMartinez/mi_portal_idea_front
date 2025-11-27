@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import useClases from '../composables/useClases'
-import useEnlazar from '../composables/useEnlazar'
+import { useRoute } from 'vue-router'
+import useClasesPadres from '../composables/useClasesPadres'
 import type { IClase } from '../interfaces/clase'
-import type { PropsTablaEnlaces } from '../interfaces/props'
+import useEnlazarClase from '../composables/useEnlazarClase'
 
-const { cancelar } = defineProps<PropsTablaEnlaces>()
-
-const { clases, estatus, isLoading } = useClases()
-const { enlazar, isPending } = useEnlazar()
-estatus.value = 'pendiente'
+const { params } = useRoute()
+const { data: clases, isLoading } = useClasesPadres()
+const { enlazar } = useEnlazarClase()
 </script>
 <template>
   <v-datatable
@@ -44,30 +42,11 @@ estatus.value = 'pendiente'
     <v-column header="Enlaces">
       <template #body="{ data }: { data: IClase }">
         <div class="flex justify-center">
-          <v-toggleswitch v-model="data.enlazada" />
+          <v-button icon="pi pi-check" size="small" @click="enlazar(data.id, +params.id!)" />
         </div>
       </template>
     </v-column>
   </v-datatable>
-
-  <div class="flex justify-end gap-3 mt-2">
-    <v-button
-      icon="pi pi-times"
-      label="Cancelar"
-      severity="danger"
-      size="small"
-      text
-      @click="cancelar"
-    />
-    <v-button
-      icon="pi pi-save"
-      label="Guardar"
-      size="small"
-      type="button"
-      @click="enlazar(clases)"
-      :loading="isPending"
-    />
-  </div>
 </template>
 
 <style scoped></style>

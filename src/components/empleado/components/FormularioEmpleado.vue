@@ -74,7 +74,23 @@ const onSubmit = handleSubmit((values) => {
     :validation-schema="empleado ? getSchema(true) : getSchema(false)"
     class="grid grid-cols-1 gap-3"
   >
-    <Field name="idUsuario" v-slot="{ field, meta, errors }">
+    <Field name="tipo" v-slot="{ field, meta, errors }">
+      <div>
+        <label for="tipo">Tipo de empleado</label>
+        <v-select
+          fluid
+          :options="tipoEmpleado"
+          optionLabel="item"
+          optionValue="value"
+          :modelValue="field.value"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+        />
+        <ErrorMessage name="tipo" class="text-red-500" />
+      </div>
+    </Field>
+
+    <Field name="idUsuario" v-slot="{ field, meta, errors }" v-if="values.tipo === 'interno'">
       <div>
         <label for="idUsuario">Numero de empleado</label>
         <v-inputtext
@@ -287,22 +303,6 @@ const onSubmit = handleSubmit((values) => {
       </div>
     </Field>
 
-    <Field name="tipo" v-slot="{ field, meta, errors }">
-      <div>
-        <label for="tipo">Tipo de empleado</label>
-        <v-select
-          fluid
-          :options="tipoEmpleado"
-          optionLabel="item"
-          optionValue="value"
-          :modelValue="field.value"
-          @update:modelValue="field.onChange"
-          :invalid="meta.touched && errors.length > 0"
-        />
-        <ErrorMessage name="tipo" class="text-red-500" />
-      </div>
-    </Field>
-
     <Field name="instructor" v-slot="{ field, meta, errors }">
       <div>
         <label for="instructor">Es instructor?</label>
@@ -440,7 +440,7 @@ const onSubmit = handleSubmit((values) => {
     <Field name="padreId">
       <div>
         <label for="padreId">Depende de:</label>
-        <BusquedaEmpleados :seleccionarEmpleado="seleccionarEmpleado" />
+        <BusquedaEmpleados :seleccionarEmpleado="seleccionarEmpleado" :boton="false" />
         <ErrorMessage name="padreId" class="text-red-500" />
       </div>
     </Field>

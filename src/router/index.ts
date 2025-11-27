@@ -76,6 +76,7 @@ import ListaMisCursos from '@/components/misCursos/ui/ListaMisCursos.vue'
 import CursosEmpleado from '@/components/empleado/ui/CursosEmpleado.vue'
 import CertificadoPDF from '@/components/misCursos/components/CertificadoPDF.vue'
 import CertificadoEmpleadoPDF from '@/components/empleado/ui/CertificadoEmpleadoPDF.vue'
+import ListaClasesPadres from '@/components/clase/ui/ListaClasesPadres.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -477,6 +478,15 @@ const router = createRouter({
               path: '/enlazar-clases',
               name: 'enlazar-clases',
               component: EnlazarClases,
+            },
+            {
+              path: '/enlazar-clase/:id',
+              name: 'enlazar-clase',
+              meta: {
+                ruta_permitida: 'Clases.Enlazar',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: ListaClasesPadres,
             },
             {
               path: '/calificar-clase/:id',

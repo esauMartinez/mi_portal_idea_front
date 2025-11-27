@@ -1,5 +1,5 @@
 export interface IEnlaceClase {
-  id: number
+  id?: number
   padreId: number
   hijoId: number
 }

@@ -2,6 +2,7 @@
 import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_empleado'
 import type { PropsTabla } from '../interface/propsTabla'
 import { computed, ref } from 'vue'
+import { FilterMatchMode } from '@primevue/core/api'
 
 const { misCursos } = defineProps<PropsTabla>()
 
@@ -52,6 +53,11 @@ const toggleSelectAll = () => {
     selectedProducts.value = [...selectableItems.value]
   }
 }
+
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'clase.curso.nombre': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+})
 </script>
 
 <template>
@@ -61,12 +67,32 @@ const toggleSelectAll = () => {
     size="small"
     class="p-datatable-sm"
     responsiveLayout="scroll"
+    v-model:filters="filters"
+    :globalFilterFields="['clase.curso.nombre']"
+    paginator
+    :rows="10"
+    :rowsPerPageOptions="[5, 10, 20, 50]"
+    :loading="cargando"
   >
+    <template #header>
+      <div class="flex justify-between items-center">
+        <v-iconfield>
+          <v-inputicon>
+            <i class="pi pi-search" />
+          </v-inputicon>
+          <v-inputtext v-model="filters['global'].value" placeholder="Buscar..." />
+        </v-iconfield>
+      </div>
+    </template>
+
     <template #empty>
       <span>No se encontraron cursos.</span>
     </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
 
     <v-column header="Clase" sortable>
@@ -93,7 +119,7 @@ const toggleSelectAll = () => {
     <v-column header="Estatus" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
         <v-tag
-          :value="data.aprobado ? 'Aprobado' : 'Reprobado'"
+          :value="data.aprobado ? 'Acreditado' : 'No acreditado'"
           :severity="data.aprobado ? 'success' : 'danger'"
           class="w-full!"
           v-if="data.clase!.calificada"
@@ -104,15 +130,17 @@ const toggleSelectAll = () => {
 
     <v-column header="PDF">
       <template #body="{ data }: { data: IClaseEmpleado }">
-        <router-link
-          :to="{
-            name: !empleado ? 'certificado-pdf' : 'certificado-empleado-pdf',
-            params: { id: data.id },
-          }"
-          v-if="data.aprobado && data.clase!.calificada"
-        >
-          <v-button icon="pi pi-file-pdf" severity="danger" size="small" />
-        </router-link>
+        <div class="flex justify-center">
+          <router-link
+            :to="{
+              name: !empleado ? 'certificado-pdf' : 'certificado-empleado-pdf',
+              params: { id: data.id },
+            }"
+            v-if="data.aprobado && data.clase!.calificada"
+          >
+            <v-button icon="pi pi-file-pdf" severity="danger" size="small" />
+          </router-link>
+        </div>
       </template>
     </v-column>
 

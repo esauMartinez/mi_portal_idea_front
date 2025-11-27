@@ -1,15 +1,32 @@
 <script setup lang="ts">
+import useEmpresas from '@/components/empresa/composables/useEmpresas'
 import useActivar from '../composables/useActivar'
 import useDesactivar from '../composables/useDesactivar'
 import useEliminar from '../composables/useEliminar'
 import useEmpleados from '../composables/useEmpleados'
 import type { IEmpleado } from '../interfaces/empleado'
 import { verificarPermiso } from '@/guards/verificarPermiso'
+import { computed } from 'vue'
+import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
+import useDatos from '../composables/useDatos'
 
-const { empleados, isLoading: obteniendo, filters } = useEmpleados()
+const { empleados, empresa, instructor, tipo, isLoading: obteniendo, filters } = useEmpleados()
+const { opcionesInstructor, opcionesTipoEmpleado } = useDatos()
 const { eliminar } = useEliminar()
 const { activarUsuario, isPending: activando } = useActivar()
 const { desactivarEmpleado, isPending: desactivando } = useDesactivar()
+const { empresas } = useEmpresas()
+
+const opcionesEmpresas = computed(() => {
+  const data: IEmpresa[] = [...empresas.value]
+  data.push({
+    id: -100,
+    razonSocial: 'Todas',
+    rfc: '',
+    activo: false,
+  })
+  return data
+})
 </script>
 
 <template>
@@ -19,33 +36,73 @@ const { desactivarEmpleado, isPending: desactivando } = useDesactivar()
     size="small"
     class="p-datatable-sm"
     responsiveLayout="scroll"
+    rowHover
     v-model:filters="filters"
     :globalFilterFields="['nombreCompleto', 'email']"
     paginator
-    :rows="10"
+    :rows="5"
     :rowsPerPageOptions="[5, 10, 20, 50]"
     :loading="obteniendo"
   >
     <template #header>
-      <div class="flex justify-between items-center">
-        <v-iconfield>
-          <v-inputicon>
-            <i class="pi pi-search" />
-          </v-inputicon>
-          <v-inputtext v-model="filters['global'].value" placeholder="Buscar..." />
-        </v-iconfield>
-        <router-link :to="{ path: 'crear-empleado' }" v-if="verificarPermiso('Empleados.Crear')">
-          <v-button icon="pi pi-plus" label="Crear empleado" size="small" />
-        </router-link>
+      <div className="grid grid-cols-12 gap-4">
+        <div class="col-span-2">
+          <v-iconfield>
+            <v-inputicon>
+              <i class="pi pi-search" />
+            </v-inputicon>
+            <v-inputtext fluid v-model="filters['global'].value" placeholder="Buscar..." />
+          </v-iconfield>
+        </div>
+        <div className="col-span-2 col-start-3 row-start-1">
+          <v-select
+            fluid
+            :options="opcionesEmpresas"
+            v-model="empresa"
+            optionLabel="razonSocial"
+            optionValue="id"
+          />
+        </div>
+        <div className="col-span-2 col-start-5 row-start-1">
+          <v-select
+            fluid
+            v-model="instructor"
+            :options="opcionesInstructor"
+            optionLabel="item"
+            optionValue="value"
+          />
+        </div>
+        <div className="col-span-2 col-start-7 row-start-1">
+          <v-select
+            fluid
+            v-model="tipo"
+            :options="opcionesTipoEmpleado"
+            optionLabel="item"
+            optionValue="value"
+          />
+        </div>
+        <div className="col-span-2 col-start-11 row-start-1">
+          <router-link :to="{ path: 'crear-empleado' }" v-if="verificarPermiso('Empleados.Crear')">
+            <v-button icon="pi pi-plus" label="Crear empleado" size="small" class="w-full" />
+          </router-link>
+        </div>
       </div>
     </template>
 
     <template #empty> No se encontraron datos. </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
 
     <v-column field="id" header="ID" sortable />
+    <v-column field="tipo" header="Tipo empleado" sortable>
+      <template #body="{ data }: { data: IEmpleado }">
+        <v-tag class="w-full" :severity="data.tipo == 'interno' ? '' : 'warn'" :value="data.tipo" />
+      </template>
+    </v-column>
     <v-column field="idUsuario" header="ID Usuario" sortable />
     <v-column field="activo" header="Estatus" sortable>
       <template #body="{ data }: { data: IEmpleado }">
@@ -63,12 +120,22 @@ const { desactivarEmpleado, isPending: desactivando } = useDesactivar()
         </span>
       </template>
     </v-column>
+    <v-column field="instructor" header="Instructor" sortable>
+      <template #body="{ data }: { data: IEmpleado }">
+        <v-tag
+          class="w-full"
+          :severity="data.instructor ? 'success' : 'warn'"
+          :value="data.instructor ? 'Si' : 'No'"
+        />
+      </template>
+    </v-column>
     <v-column field="empresa.nombre" header="Empresa" sortable>
       <template #body="{ data }: { data: IEmpleado }">
         <div v-if="data.empresa">{{ data.empresa?.razonSocial }}/{{ data.empresa?.rfc }}</div>
       </template>
     </v-column>
     <v-column field="email" header="Email" sortable />
+    <v-column field="perfil.nombre" header="Perfil" sortable />
     <v-column field="tieneUsuario" header="Tiene usuario" sortable>
       <template #body="{ data }: { data: IEmpleado }">
         <v-tag
@@ -163,6 +230,8 @@ const { desactivarEmpleado, isPending: desactivando } = useDesactivar()
         </div>
       </template>
     </v-column>
+
+    <template #footer> Numero de empleados: {{ empleados.length }} </template>
   </v-datatable>
 </template>
 

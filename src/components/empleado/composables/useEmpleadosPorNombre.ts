@@ -6,11 +6,13 @@ import { formatearNombre } from '@/helper/formatearNombre'
 
 const useEmpleadosPorNombre = () => {
   const nombre = ref<string | null>(null)
+  const activo = ref<boolean>(false)
+  const instructor = ref<boolean>(false)
   const empleados = ref<IEmpleado[]>([])
 
   const { data, isLoading } = useQuery({
-    queryKey: ['getEmpleadosPorNombre', nombre],
-    queryFn: () => getEmpleadosPorNombre(nombre.value!),
+    queryKey: ['getEmpleadosPorNombre', nombre, activo, instructor],
+    queryFn: () => getEmpleadosPorNombre(nombre.value!, activo.value, instructor.value),
     enabled: () => nombre.value !== null,
   })
 
@@ -31,6 +33,8 @@ const useEmpleadosPorNombre = () => {
   return {
     empleados,
     nombre,
+    activo,
+    instructor,
 
     isLoading,
 

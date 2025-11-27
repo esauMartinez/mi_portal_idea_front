@@ -18,7 +18,7 @@ const useGuardarCalificaciones = () => {
       mensajeOk(payload)
 
       queryClient.invalidateQueries({
-        queryKey: ['getClase'],
+        queryKey: ['getAlumnosClase'],
       })
     },
     onError: (error: AxiosError) => {

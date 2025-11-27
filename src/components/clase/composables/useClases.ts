@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/vue-query'
 import { getClases } from '../services/clase'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import moment from 'moment'
 import type { IClase } from '../interfaces/clase'
 
@@ -10,7 +10,7 @@ const useClases = () => {
   const estatus = ref('todos')
   const clases = ref<IClase[]>([])
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getClases', inicio, fin, estatus],
     queryFn: () => getClases(inicio.value, fin.value, estatus.value),
   })
@@ -34,6 +34,8 @@ const useClases = () => {
     inicio,
     fin,
     estatus,
+
+    isLoading: computed(() => isLoading.value),
 
     clases,
     data,

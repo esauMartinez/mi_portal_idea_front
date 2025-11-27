@@ -8,10 +8,10 @@ import RequerimientosCurso from './RequerimientosCurso.vue'
 import type { IRequerimiento } from '@/components/requerimiento/interface/requerimineto'
 import type { IRequerimientoCurso } from '../interfaces/requerimiento_curso'
 import { useToast } from 'primevue'
-import useDatos from '../composables/useDatos'
+import useDatos from '@/components/empleado/composables/useDatos'
 
 const { curso, guardar } = defineProps<Props>()
-const { estatus } = useDatos()
+const { activo, tipoCurso } = useDatos()
 const toast = useToast()
 
 const initialValues = computed(() => {
@@ -74,6 +74,22 @@ const submit = handleSubmit((values: ICurso) => {
     :validation-schema="schema"
     class="grid grid-cols-1 gap-3"
   >
+    <Field name="tipo" v-slot="{ field, meta, errors }">
+      <div>
+        <label for="tipo">Tipo de curso</label>
+        <v-select
+          fluid
+          :options="tipoCurso"
+          optionLabel="item"
+          optionValue="value"
+          :modelValue="field.value"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+        />
+        <ErrorMessage name="tipo" class="text-red-500" />
+      </div>
+    </Field>
+
     <Field name="nombre" v-slot="{ field, meta, errors }">
       <div>
         <label for="nombre">Nombre curso</label>
@@ -86,12 +102,13 @@ const submit = handleSubmit((values: ICurso) => {
         <ErrorMessage name="nombre" class="text-red-500" />
       </div>
     </Field>
+
     <Field name="estatus" v-slot="{ field, meta, errors }">
       <div>
         <label for="estatus">Estatus</label>
         <v-select
           fluid
-          :options="estatus"
+          :options="activo"
           optionLabel="item"
           optionValue="value"
           :modelValue="field.value"

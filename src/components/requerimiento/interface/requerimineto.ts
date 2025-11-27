@@ -3,4 +3,5 @@ export interface IRequerimiento {
   clave: string
   nombre: string
   estatus: boolean
+  tipo: 'instructor' | 'empleado'
 }

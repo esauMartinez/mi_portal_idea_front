@@ -19,7 +19,7 @@ defineProps<PropsRequerimientosCurso>()
   >
     <template #header>
       <div class="flex justify-between items-center">
-        <span class="text-xl! font-bold">Lista de cursos</span>
+        <span class="text-xl! font-bold">Lista de requerimientos</span>
         <v-button
           icon="pi pi-plus"
           label="Agregar requerimiento"
@@ -37,8 +37,8 @@ defineProps<PropsRequerimientosCurso>()
     <v-column field="requerimiento.id" header="ID" sortable />
     <v-column field="requerimiento.clave" header="Clave" sortable />
     <v-column field="requerimiento.nombre" header="Nombre" sortable />
-    <v-column field="requerimiento.descripcion" header="Descripcion" sortable />
-    <v-column field="requerimiento.descripcion" header="Descripcion" sortable>
+    <v-column field="requerimiento.tipo" header="Tipo de requerimiento" sortable />
+    <v-column header="Acciones" sortable>
       <template #body="{ data }: { data: IRequerimiento }">
         <div class="flex justify-center items-center">
           <v-button

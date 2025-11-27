@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/vue-query'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { getAlumnosClase } from '../../services/clase'
-import type { IClaseEmpleado } from '../../interfaces/clase_empleado'
+import type { ICalificacionesClase } from '../../interfaces/calificacionesClase'
 
 const useAlumnos = () => {
   const claseId = ref<number | null>(null)
-  const alumnos = ref<IClaseEmpleado[]>([])
+  const clase = ref<ICalificacionesClase>({} as ICalificacionesClase)
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getAlumnosClase', claseId],
     queryFn: () => getAlumnosClase(claseId.value!),
     enabled: () => claseId.value !== null,
@@ -17,7 +17,7 @@ const useAlumnos = () => {
     data,
     (payload) => {
       if (payload) {
-        alumnos.value = payload
+        clase.value = payload
       }
     },
     { immediate: true },
@@ -25,7 +25,9 @@ const useAlumnos = () => {
 
   return {
     claseId,
-    alumnos,
+    clase,
+
+    isLoading: computed(() => isLoading.value),
   }
 }
 

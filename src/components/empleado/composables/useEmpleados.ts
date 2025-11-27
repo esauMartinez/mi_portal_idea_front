@@ -7,10 +7,14 @@ import { formatearNombre } from '@/helper/formatearNombre'
 
 const useEmpleados = () => {
   const empleados = ref<IEmpleado[]>([])
+  const empresa = ref<number | null>(-100)
+  const instructor = ref<string | null>('todos')
+  const tipo = ref<string | null>('todos')
 
   const { data, isLoading } = useQuery({
-    queryKey: ['getEmpleados'],
-    queryFn: () => getEmpleados(),
+    queryKey: ['getEmpleados', empresa, instructor, tipo],
+    queryFn: () => getEmpleados(empresa.value!, instructor.value!, tipo.value!),
+    enabled: () => empresa.value !== null,
   })
 
   watch(data, (payload) => {
@@ -30,6 +34,10 @@ const useEmpleados = () => {
 
   return {
     empleados,
+    empresa,
+    instructor,
+    tipo,
+
     isLoading: computed(() => isLoading.value),
 
     filters,

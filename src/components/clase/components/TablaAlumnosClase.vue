@@ -3,23 +3,22 @@ import { useRoute } from 'vue-router'
 import useAlumnos from '../composables/alumno/useAlumnos'
 import { formatearNombre } from '@/helper/formatearNombre'
 import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
-import useClase from '../composables/useClase'
-import { verificarPermiso } from '@/guards/verificarPermiso'
+// import { verificarPermiso } from '@/guards/verificarPermiso'
 import useEliminar from '../composables/alumno/useEliminar'
 import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
 import useCrear from '../composables/alumno/useCrear'
 
 const { params } = useRoute()
-const { claseId, alumnos } = useAlumnos()
-const { crearMutation } = useCrear()
+const { claseId, clase, isLoading } = useAlumnos()
+const { crearMutation, isPending } = useCrear()
 const { eliminar } = useEliminar()
-const { clase } = useClase(+params.id!)
+// const { clase } = useClase(+params.id!)
 claseId.value = +params.id!
 
 const agregarAlumno = (payload: IEmpleado) => {
   crearMutation.mutate({
-    claseId: clase.value.id,
+    claseId: clase.value.clase.id,
     empleadoId: payload.id,
   })
 }
@@ -27,11 +26,12 @@ const agregarAlumno = (payload: IEmpleado) => {
 
 <template>
   <v-datatable
-    :value="alumnos"
+    :value="clase.claseEmpleado"
     showGridlines
     size="small"
     class="p-datatable-sm"
     responsiveLayout="scroll"
+    :loading="isLoading"
   >
     <template #header>
       <div class="grid grid-cols-12 items-center">
@@ -41,8 +41,10 @@ const agregarAlumno = (payload: IEmpleado) => {
         <div class="col-span-5">
           <BusquedaEmpleados
             :seleccionarEmpleado="agregarAlumno"
-            v-if="clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')"
+            :pendiente="isPending"
+            :instructor="false"
           />
+          <!-- v-if="clase.clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')" -->
         </div>
       </div>
     </template>
@@ -51,7 +53,10 @@ const agregarAlumno = (payload: IEmpleado) => {
       <span>No hay alumnos para esta clase.</span>
     </template>
     <template #loading>
-      <v-progressspinner />
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
     </template>
 
     <v-column field="empleado.id" header="ID" sortable />
@@ -63,13 +68,12 @@ const agregarAlumno = (payload: IEmpleado) => {
         </span>
       </template>
     </v-column>
-    <v-column
-      v-if="
-        clase.estatus !== 'en curso' &&
-        clase.estatus !== 'finalizada' &&
+    <!-- v-if="
+        clase.clase.estatus !== 'en curso' &&
+        clase.clase.estatus !== 'finalizada' &&
         verificarPermiso('Clases.Eliminar.Alumno')
-      "
-    >
+      " -->
+    <v-column>
       <template #body="{ data }: { data: IEmpleado }">
         <div class="flex justify-center">
           <v-button icon="pi pi-trash" severity="danger" size="small" @click="eliminar(data.id)" />

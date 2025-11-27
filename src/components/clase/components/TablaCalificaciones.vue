@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import useClase from '../composables/useClase'
 import { formatearNombre } from '@/helper/formatearNombre'
 import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import { ref, watch } from 'vue'
@@ -12,17 +11,15 @@ defineProps<PropstTablaCalificaciones>()
 
 const empleados = ref<IClaseEmpleado[]>([])
 const { params } = useRoute()
-const { clase } = useClase(+params.id!)
-const { claseId, alumnos } = useAlumnos()
+const { claseId, clase } = useAlumnos()
 
 claseId.value = +params.id!
 
 watch(
-  alumnos,
+  clase,
   (payload) => {
-    if (payload) {
-      console.log(payload)
-      empleados.value = payload.map((x) => ({ ...x }))
+    if (payload.claseEmpleado) {
+      empleados.value = payload.claseEmpleado.map((x) => ({ ...x }))
     }
   },
   { immediate: true },
@@ -54,7 +51,7 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
       <div class="grid grid-cols-12 items-center">
         <div class="col-span-7">
           <span class="text-lg! font-bold">
-            {{ clase.curso?.nombre }}
+            {{ clase.clase?.curso?.nombre }}
           </span>
         </div>
       </div>
@@ -81,14 +78,14 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
           placeholder="Puntos"
           v-model="data.calificacion"
           @keyup="verificarCalificacion(data.empleadoId, $event)"
-          :disabled="clase.calificada"
+          :disabled="clase.clase.calificada"
         />
       </template>
     </v-column>
     <v-column header="Estatus" :style="{ width: '150px' }">
       <template #body="{ data }: { data: IClaseEmpleado }">
         <v-tag
-          :value="data.aprobado ? 'Aprobado' : 'Reprobado'"
+          :value="data.aprobado ? 'Acreditado' : 'No acreditado'"
           :severity="data.aprobado ? 'success' : 'danger'"
           class="w-full!"
         />
@@ -96,8 +93,9 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
     </v-column>
 
     <template #footer>
-      {{ clase.fechaInicio }} {{ clase.horaInicio }} // {{ clase.fechaFinalizacion }}
-      {{ clase.horaFinalizacion }}
+      {{ clase.clase?.fechaInicio }} {{ clase.clase?.horaInicio }} //
+      {{ clase.clase?.fechaFinalizacion }}
+      {{ clase.clase?.horaFinalizacion }}
     </template>
   </v-datatable>
 
@@ -115,7 +113,8 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
       icon="pi pi-save"
       @click="guardarCalificaciones(empleados)"
       size="small"
-      v-if="!clase.calificada"
+      v-if="!clase.clase?.calificada"
+      :loading="pendiente"
     />
   </div>
 </template>

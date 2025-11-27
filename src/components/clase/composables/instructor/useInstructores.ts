@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/vue-query'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { getInstructoresClase } from '../../services/clase'
 import type { IClaseInstructor } from '../../interfaces/clase_instructor'
 
@@ -7,7 +7,7 @@ const useInstructores = () => {
   const claseId = ref<number | null>(null)
   const instructores = ref<IClaseInstructor[]>([])
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getInstructoresClase', claseId],
     queryFn: () => getInstructoresClase(claseId.value!),
     enabled: () => claseId.value !== null,
@@ -26,6 +26,8 @@ const useInstructores = () => {
   return {
     claseId,
     instructores,
+
+    isLoading: computed(() => isLoading.value),
   }
 }
 
