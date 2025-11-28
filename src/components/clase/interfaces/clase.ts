@@ -1,7 +1,7 @@
 import type { ICurso } from '@/components/curso/interfaces/curso'
 import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
-import type { IOcupacion } from '@/components/empleado/interfaces/ocupacion'
-import type { IAreaTematica } from './area_tematica'
+import type { IOcupacion } from '@/components/ocupacion/interfaces/ocupacion'
+import type { IAreaTematica } from '../../areaTematica/interfaces/area_tematica'
 import type { IEnlaceClase } from './enlaceClase'
 
 export interface IClase {

@@ -77,6 +77,18 @@ import CursosEmpleado from '@/components/empleado/ui/CursosEmpleado.vue'
 import CertificadoPDF from '@/components/misCursos/components/CertificadoPDF.vue'
 import CertificadoEmpleadoPDF from '@/components/empleado/ui/CertificadoEmpleadoPDF.vue'
 import ListaClasesPadres from '@/components/clase/ui/ListaClasesPadres.vue'
+import ListaOcupaciones from '@/components/ocupacion/ui/ListaOcupaciones.vue'
+import CrearOcupacion from '@/components/ocupacion/ui/CrearOcupacion.vue'
+import ModificarOcupacion from '@/components/ocupacion/ui/ModificarOcupacion.vue'
+import ListaAreasTematicas from '@/components/areaTematica/ui/ListaAreasTematicas.vue'
+import CrearAreaTematica from '@/components/areaTematica/ui/CrearAreaTematica.vue'
+import ModificarAreaTematica from '@/components/areaTematica/ui/ModificarAreaTematica.vue'
+import AreasTematicasPage from '@/pages/AreasTematicasPage.vue'
+import OcupacionesPage from '@/pages/OcupacionesPage.vue'
+import ModelosPage from '@/pages/ModelosPage.vue'
+import ListaModelos from '@/components/modelo/ui/ListaModelos.vue'
+import CrearModelo from '@/components/modelo/ui/CrearModelo.vue'
+import ModificarModelo from '@/components/modelo/ui/ModificarModelo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -335,6 +347,80 @@ const router = createRouter({
                   component: CertificadoEmpleadoPDF,
                 },
               ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: '/ocupaciones',
+      name: 'ocupaciones',
+      redirect: { name: 'lista-ocupaciones' },
+      component: OcupacionesPage,
+      children: [
+        {
+          path: '/lista-ocupaciones',
+          name: 'lista-ocupaciones',
+          meta: {
+            ruta_permitida: 'Ocupaciones.Ver',
+          },
+          beforeEnter: [verificarAutenticacion],
+          component: ListaOcupaciones,
+          children: [
+            {
+              path: '/crear-ocupacion',
+              name: 'crear-ocupacion',
+              meta: {
+                ruta_permitida: 'Ocupaciones.Crear',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: CrearOcupacion,
+            },
+            {
+              path: '/modificar-ocupacion/:id',
+              name: 'modificar-ocupacion',
+              meta: {
+                ruta_permitida: 'Ocupaciones.Modificar',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: ModificarOcupacion,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: '/areas-tematicas',
+      name: 'areas-tematicas',
+      redirect: { name: 'lista-areas-tematicas' },
+      component: AreasTematicasPage,
+      children: [
+        {
+          path: '/lista-areas-tematicas',
+          name: 'lista-areas-tematicas',
+          meta: {
+            ruta_permitida: 'AreasTematicas.Ver',
+          },
+          beforeEnter: [verificarAutenticacion],
+          component: ListaAreasTematicas,
+          children: [
+            {
+              path: '/crear-area-tematica',
+              name: 'crear-area-tematica',
+              meta: {
+                ruta_permitida: 'AreasTematicas.Crear',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: CrearAreaTematica,
+            },
+            {
+              path: '/modificar-area-tematica/:id',
+              name: 'modificar-area-tematica',
+              meta: {
+                ruta_permitida: 'AreasTematicas.Modificar',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: ModificarAreaTematica,
             },
           ],
         },
@@ -714,6 +800,43 @@ const router = createRouter({
               path: '/certificado-pdf/:id',
               name: 'certificado-pdf',
               component: CertificadoPDF,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: '/modelos',
+      name: 'modelos',
+      redirect: { name: 'lista-modelos' },
+      component: ModelosPage,
+      children: [
+        {
+          path: '/lista-modelos',
+          name: 'lista-modelos',
+          meta: {
+            ruta_permitida: 'Modelos.Ver',
+          },
+          beforeEnter: [verificarAutenticacion],
+          component: ListaModelos,
+          children: [
+            {
+              path: '/crear-modelo',
+              name: 'crear-modelo',
+              meta: {
+                ruta_permitida: 'Modelos.Crear',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: CrearModelo,
+            },
+            {
+              path: '/modificar-modelo/:id',
+              name: 'modificar-modelo',
+              meta: {
+                ruta_permitida: 'Modelos.Modificar',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: ModificarModelo,
             },
           ],
         },

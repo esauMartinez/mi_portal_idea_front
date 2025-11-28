@@ -2,9 +2,10 @@ import router from '@/router'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const dominio = 'mi-portal-idea-560bb088c8b9.herokuapp.com'
+// const dominio = 'mi-portal-idea-560bb088c8b9.herokuapp.com'
+const dominio = 'localhost:2300'
 
-export const baseURL = `https://${dominio}/`
+export const baseURL = `http://${dominio}/`
 
 export const api_mi_portal = axios.create({
   baseURL,

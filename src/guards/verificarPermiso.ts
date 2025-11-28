@@ -23,6 +23,9 @@ export const verificarSiMostrarGestion = () => {
   const sucursales = verificarPermiso('Sucursales.Ver')
   const cargos = verificarPermiso('Cargos.Ver')
   const centrosCostos = verificarPermiso('CentrosCostos.Ver')
+  const ocupacionesEspecificas = verificarPermiso('Ocupaciones.Ver')
+  const areasTematicas = verificarPermiso('AreasTematicas.Ver')
+  const modelos = verificarPermiso('Modelos.Ver')
 
   if (
     empleados ||
@@ -32,7 +35,10 @@ export const verificarSiMostrarGestion = () => {
     empresas ||
     sucursales ||
     cargos ||
-    centrosCostos
+    centrosCostos ||
+    ocupacionesEspecificas ||
+    areasTematicas ||
+    modelos
   ) {
     return true
   }

@@ -19,7 +19,7 @@ const menu = computed(() => {
     },
     {
       title: 'Mis cursos',
-      icon: 'pi pi-check',
+      icon: 'pi pi-graduation-cap',
       href: '/mis-cursos',
     },
     {
@@ -80,6 +80,24 @@ const menu = computed(() => {
           title: 'Centros de costos',
           icon: 'pi pi-dollar',
           hidden: !verificarPermiso('CentrosCostos.Ver'),
+        },
+        {
+          href: '/ocupaciones',
+          title: 'Ocupaciones especificas',
+          icon: 'pi pi-briefcase',
+          hidden: !verificarPermiso('Ocupaciones.Ver'),
+        },
+        {
+          href: '/areas-tematicas',
+          title: 'Areas tematicas',
+          icon: 'pi pi-id-card',
+          hidden: !verificarPermiso('AreasTematicas.Ver'),
+        },
+        {
+          href: '/modelos',
+          title: 'Modelos',
+          icon: 'pi pi-desktop',
+          hidden: !verificarPermiso('Modelos.Ver'),
         },
       ],
     },

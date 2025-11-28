@@ -1,4 +1,4 @@
-import type { IOcupacion } from './ocupacion'
+import type { IOcupacion } from '../../ocupacion/interfaces/ocupacion'
 
 export interface IOcupacionEmpleado {
   id?: number

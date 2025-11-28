@@ -12,10 +12,10 @@ import useEmpresas from '@/components/empresa/composables/useEmpresas'
 import useSucursalesEmpresa from '@/components/sucursal/composables/useSucursalesEmpresa'
 import usePerfiles from '@/components/perfil/composables/usePerfiles'
 import useCentrosCostos from '@/components/centroCosto/composables/useCentrosCostos'
-import useOcupaciones from '../composables/useOcupaciones'
 import { formatearNombre } from '@/helper/formatearNombre'
 import { ref } from 'vue'
 import BusquedaEmpleados from './BusquedaEmpleados.vue'
+import useOcupaciones from '@/components/ocupacion/composables/useOcupaciones'
 
 const { empleado, cancelar, guardar } = defineProps<Props>()
 const { activo, verificado, tipoEmpleado, tieneUsuario, instructor } = useDatos()

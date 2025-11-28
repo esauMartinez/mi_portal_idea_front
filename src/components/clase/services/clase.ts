@@ -2,7 +2,6 @@ import { api_mi_portal } from '@/api'
 import type { IClase } from '../interfaces/clase'
 import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import type { IClaseInstructor } from '../interfaces/clase_instructor'
-import type { IAreaTematica } from '../interfaces/area_tematica'
 import type { IEnlaceClase } from '../interfaces/enlaceClase'
 import type { ICalificacionesClase } from '../interfaces/calificacionesClase'
 
@@ -75,11 +74,6 @@ export const deleteAlumnoClase = async (id: number): Promise<string> => {
 
 export const postCalificaciones = async (payload: IClaseEmpleado[]): Promise<string> => {
   const { data } = await api_mi_portal.post<string>(`/clase/calificaciones`, payload)
-  return data
-}
-
-export const getAreasTematicas = async (): Promise<IAreaTematica[]> => {
-  const { data } = await api_mi_portal.get<IAreaTematica[]>(`/areas-tematicas`)
   return data
 }
 

@@ -11,15 +11,15 @@ import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
 import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
 import useDatos from '@/components/empleado/composables/useDatos'
 import useUbicaciones from '@/components/ubicacion/composables/useUbicaciones'
-import useOcupaciones from '@/components/empleado/composables/useOcupaciones'
-import useAreasTematicas from '../composables/useAreasTematicas'
+import useOcupaciones from '@/components/ocupacion/composables/useOcupaciones'
+import useAreasTematicas from '@/components/areaTematica/composables/useAreasTematicas'
 
 const { clase, guardar } = defineProps<Props>()
 const { cursos } = useCursos()
 const { tipoClase, tieneOrden } = useDatos()
 const { ubicaciones } = useUbicaciones()
-const { data: ocupaciones } = useOcupaciones()
-const { data: areasTematicas } = useAreasTematicas()
+const { ocupaciones } = useOcupaciones()
+const { areasTematicas } = useAreasTematicas()
 
 const initialValues = computed(() => {
   return clase
@@ -101,91 +101,6 @@ const submit = handleSubmit((values: IClase) => {
         <ErrorMessage name="tineOrden" class="text-red-500" />
       </div>
     </Field>
-
-    <v-fieldset legend="Datos orden de trabajo">
-      <div class="grid grid-cols-1 gap-2">
-        <Field name="tipoOrden" v-slot="{ field, meta, errors }">
-          <div>
-            <label for="tipoOrden">Tipo orden de trabajo</label>
-            <v-select
-              fluid
-              optionLabel="item"
-              optionValue="value"
-              :options="tieneOrden"
-              :modelValue="field.value"
-              @update:modelValue="field.onChange"
-              :invalid="meta.touched && errors.length > 0"
-              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
-            />
-            <ErrorMessage name="tipoOrden" class="text-red-500" />
-          </div>
-        </Field>
-        <Field name="empresa" v-slot="{ field, meta, errors }">
-          <div>
-            <label for="empresa">Empresa</label>
-            <v-select
-              fluid
-              optionLabel="item"
-              optionValue="value"
-              :options="tieneOrden"
-              :modelValue="field.value"
-              @update:modelValue="field.onChange"
-              :invalid="meta.touched && errors.length > 0"
-              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
-            />
-            <ErrorMessage name="empresa" class="text-red-500" />
-          </div>
-        </Field>
-        <Field name="monto" v-slot="{ field, meta, errors }">
-          <div>
-            <label for="monto">Monto</label>
-            <v-select
-              fluid
-              optionLabel="item"
-              optionValue="value"
-              :options="tieneOrden"
-              :modelValue="field.value"
-              @update:modelValue="field.onChange"
-              :invalid="meta.touched && errors.length > 0"
-              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
-            />
-            <ErrorMessage name="monto" class="text-red-500" />
-          </div>
-        </Field>
-        <Field name="cotizacion" v-slot="{ field, meta, errors }">
-          <div>
-            <label for="cotizacion">Numero cotizacion</label>
-            <v-select
-              fluid
-              optionLabel="item"
-              optionValue="value"
-              :options="tieneOrden"
-              :modelValue="field.value"
-              @update:modelValue="field.onChange"
-              :invalid="meta.touched && errors.length > 0"
-              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
-            />
-            <ErrorMessage name="cotizacion" class="text-red-500" />
-          </div>
-        </Field>
-        <Field name="solicitante" v-slot="{ field, meta, errors }">
-          <div>
-            <label for="solicitante">Solicitante</label>
-            <v-select
-              fluid
-              optionLabel="item"
-              optionValue="value"
-              :options="tieneOrden"
-              :modelValue="field.value"
-              @update:modelValue="field.onChange"
-              :invalid="meta.touched && errors.length > 0"
-              :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
-            />
-            <ErrorMessage name="solicitante" class="text-red-500" />
-          </div>
-        </Field>
-      </div>
-    </v-fieldset>
 
     <div class="grid grid-cols-2 gap-3">
       <Field name="fechaInicio" v-slot="{ field, meta, errors }">

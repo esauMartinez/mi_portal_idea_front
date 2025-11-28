@@ -2,7 +2,6 @@ import { api_mi_portal } from '@/api'
 import type { IEmpleado } from '../interfaces/empleado'
 import { timer } from '@/helper/timer'
 import type { IBitacoraEmpleado } from '../interfaces/bitacora'
-import type { IOcupacion } from '../interfaces/ocupacion'
 import type { IJerarquia } from '../interfaces/jerarquia'
 import type { IKardex } from '../interfaces/kardex'
 import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_empleado'
@@ -72,11 +71,6 @@ export const desactivar = async (payload: IBitacoraEmpleado): Promise<string> =>
 
 export const getBitacoraEmpleado = async (id: number): Promise<IBitacoraEmpleado[]> => {
   const { data } = await api_mi_portal.get<IBitacoraEmpleado[]>(`/bitacora/empleado/${id}`)
-  return data
-}
-
-export const getOcupaciones = async (): Promise<IOcupacion[]> => {
-  const { data } = await api_mi_portal.get<IOcupacion[]>(`/ocupaciones`)
   return data
 }
 
