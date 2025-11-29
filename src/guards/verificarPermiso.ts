@@ -26,6 +26,7 @@ export const verificarSiMostrarGestion = () => {
   const ocupacionesEspecificas = verificarPermiso('Ocupaciones.Ver')
   const areasTematicas = verificarPermiso('AreasTematicas.Ver')
   const modelos = verificarPermiso('Modelos.Ver')
+  const ordenes = verificarPermiso('Ordenes.Ver')
 
   if (
     empleados ||
@@ -38,7 +39,8 @@ export const verificarSiMostrarGestion = () => {
     centrosCostos ||
     ocupacionesEspecificas ||
     areasTematicas ||
-    modelos
+    modelos ||
+    ordenes
   ) {
     return true
   }

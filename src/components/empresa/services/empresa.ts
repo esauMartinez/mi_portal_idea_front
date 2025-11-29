@@ -7,6 +7,11 @@ export const getEmpresas = async (): Promise<IEmpresa[]> => {
   return data
 }
 
+export const getEmpresasPorNombre = async (nombre: string): Promise<IEmpresa[]> => {
+  const { data } = await api_mi_portal.get<IEmpresa[]>(`/empresas/${nombre}`)
+  return data
+}
+
 export const getEmpresa = async (id: number): Promise<IEmpresa> => {
   const { data } = await api_mi_portal.get<IEmpresa>(`/empresa/${id}`)
   return data

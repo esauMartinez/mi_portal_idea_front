@@ -26,7 +26,7 @@ const { empresas } = useEmpresas()
 const { empresaId, data: sucursales } = useSucursalesEmpresa()
 const { perfiles } = usePerfiles()
 const { centrosCostos } = useCentrosCostos()
-const { data: ocupaciones } = useOcupaciones()
+const { ocupaciones } = useOcupaciones()
 
 const padre = ref()
 

@@ -15,9 +15,6 @@ const {
 const empleadoSeleccionado = ref<IEmpleado | null>(null)
 const { empleados, activo, instructor, search } = useEmpleadosPorNombre()
 
-console.log(activoProp)
-console.log(instructorProp)
-
 activo.value = activoProp
 instructor.value = instructorProp
 

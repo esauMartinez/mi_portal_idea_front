@@ -89,6 +89,10 @@ import ModelosPage from '@/pages/ModelosPage.vue'
 import ListaModelos from '@/components/modelo/ui/ListaModelos.vue'
 import CrearModelo from '@/components/modelo/ui/CrearModelo.vue'
 import ModificarModelo from '@/components/modelo/ui/ModificarModelo.vue'
+import OrdenesPage from '@/pages/OrdenesPage.vue'
+import ListaOrdenes from '@/components/orden/ui/ListaOrdenes.vue'
+import CrearOrden from '@/components/orden/ui/CrearOrden.vue'
+import ModificarOrden from '@/components/orden/ui/ModificarOrden.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -837,6 +841,43 @@ const router = createRouter({
               },
               beforeEnter: [verificarAutenticacion],
               component: ModificarModelo,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: '/ordenes',
+      name: 'ordenes',
+      redirect: { name: 'lista-ordenes' },
+      component: OrdenesPage,
+      children: [
+        {
+          path: '/lista-ordenes',
+          name: 'lista-ordenes',
+          meta: {
+            ruta_permitida: 'Ordenes.Ver',
+          },
+          beforeEnter: [verificarAutenticacion],
+          component: ListaOrdenes,
+          children: [
+            {
+              path: '/crear-orden',
+              name: 'crear-orden',
+              meta: {
+                ruta_permitida: 'Ordenes.Crear',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: CrearOrden,
+            },
+            {
+              path: '/modificar-orden/:id',
+              name: 'modificar-orden',
+              meta: {
+                ruta_permitida: 'Ordenes.Modificar',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: ModificarOrden,
             },
           ],
         },

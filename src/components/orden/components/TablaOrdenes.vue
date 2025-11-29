@@ -1,0 +1,92 @@
+<script setup lang="ts">
+import { verificarPermiso } from '@/guards/verificarPermiso'
+import useEliminar from '../composables/useEliminar'
+import useOrdenes from '../composables/useOrdenes'
+import type { IOrden } from '../interfaces/orden'
+import { formatearNombre } from '@/helper/formatearNombre'
+
+const { ordenes, isLoading: obteniendo, filters } = useOrdenes()
+const { eliminar, isPending } = useEliminar()
+</script>
+
+<template>
+  <v-datatable
+    :value="ordenes"
+    showGridlines
+    size="small"
+    class="p-datatable-sm"
+    responsiveLayout="scroll"
+    v-model:filters="filters"
+    :globalFilterFields="['referencia']"
+    paginator
+    :rows="10"
+    :rowsPerPageOptions="[5, 10, 20, 50]"
+    :loading="obteniendo"
+  >
+    <template #header>
+      <div class="flex justify-between items-center">
+        <v-iconfield>
+          <v-inputicon>
+            <i class="pi pi-search" />
+          </v-inputicon>
+          <v-inputtext v-model="filters['global'].value" placeholder="Buscar..." />
+        </v-iconfield>
+        <router-link :to="{ path: 'crear-orden' }" v-if="verificarPermiso('Ordenes.Crear')">
+          <v-button icon="pi pi-plus" label="Crear orden" size="small" />
+        </router-link>
+      </div>
+    </template>
+
+    <template #empty> No se encontraron datos. </template>
+    <template #loading>
+      <div class="flex flex-col items-center justify-center">
+        <v-progressspinner />
+        <span class="text-3xl! text-white">Cargando datos...</span>
+      </div>
+    </template>
+
+    <v-column field="id" header="ID" sortable />
+    <v-column field="referencia" header="Referencia" sortable />
+    <v-column field="referenciaSap" header="Referencia SAP" sortable />
+    <v-column field="empresa.razonSocial" header="Empresa" sortable>
+      <template #body="{ data }: { data: IOrden }">
+        {{ data.empresa.rfc }} / {{ data.empresa.razonSocial }}
+      </template>
+    </v-column>
+    <v-column header="Empresa" sortable>
+      <template #body="{ data }: { data: IOrden }">
+        {{ formatearNombre(data.solicitante) }}
+      </template>
+    </v-column>
+    <v-column field="estatus" header="Estatus" sortable />
+
+    <v-column header="Acciones">
+      <template #body="{ data }: { data: IOrden }">
+        <div class="flex gap-2 justify-center">
+          <router-link
+            :to="{ name: 'modificar-orden', params: { id: data.id } }"
+            v-if="verificarPermiso('Ordenes.Modificar')"
+          >
+            <v-button icon="pi pi-pencil" severity="warn" size="small" />
+          </router-link>
+          <!-- <router-link
+            :to="{ name: 'bitacora-puesto', params: { id: data.id } }"
+            v-if="verificarPermiso('Ordenes.Bitacora')"
+          >
+            <v-button icon="pi pi-list" size="small" />
+          </router-link> -->
+          <v-button
+            icon="pi pi-trash"
+            severity="danger"
+            size="small"
+            @click="eliminar(data.id!)"
+            :loading="isPending"
+            v-if="verificarPermiso('Ordenes.Eliminar')"
+          />
+        </div>
+      </template>
+    </v-column>
+  </v-datatable>
+</template>
+
+<style scoped></style>

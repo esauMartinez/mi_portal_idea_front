@@ -99,6 +99,12 @@ const menu = computed(() => {
           icon: 'pi pi-desktop',
           hidden: !verificarPermiso('Modelos.Ver'),
         },
+        {
+          href: '/ordenes',
+          title: 'Ordenes de trabajo',
+          icon: 'pi pi-wallet',
+          hidden: !verificarPermiso('Ordenes.Ver'),
+        },
       ],
     },
     {
