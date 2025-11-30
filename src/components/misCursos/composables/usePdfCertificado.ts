@@ -233,7 +233,7 @@ const usePdfCertificado = () => {
             // Valor: Nombre del curso
             [
               {
-                text: `${payload.clase!.curso.nombre}`,
+                text: `${payload.clase!.curso.nombre} ${payload.clase?.modelo.nombre}`,
                 bold: false,
                 margin: [0, 2, 0, 2],
                 fontSize: 11,

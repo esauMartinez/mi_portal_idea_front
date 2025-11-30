@@ -18,6 +18,9 @@ import type { IAreaTematica } from '@/components/areaTematica/interfaces/area_te
 import type { IOcupacion } from '@/components/ocupacion/interfaces/ocupacion'
 import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
+import { formatearNombre } from '@/helper/formatearNombre'
+import useOrdenes from '@/components/orden/composables/useOrdenes'
+import useModelosPorNombre from '@/components/modelo/composables/useModelosPorNombre'
 
 const { clase, guardar } = defineProps<Props>()
 const { empresas, buscarEmpresa } = useEmpresasPorNombre()
@@ -26,6 +29,10 @@ const { ubicaciones } = useUbicaciones()
 const { cursos, buscarCurso } = useCursosPorNombre()
 const { ocupaciones, buscarOcupacion } = useOcupacionesPorNombre()
 const { areasTematicas, buscarAreaTematica } = useAreasTematicasPorNombre()
+const { ordenes, estatus } = useOrdenes()
+const { modelos, buscarModelo } = useModelosPorNombre()
+
+estatus.value = 'Liberada'
 
 const initialValues = computed(() => {
   return clase
@@ -91,9 +98,9 @@ const submit = handleSubmit((values: IClase) => {
     :validation-schema="schema"
     class="grid grid-cols-1 gap-3"
   >
-    <Field name="tineOrden" v-slot="{ field, meta, errors }">
+    <Field name="tieneOrden" v-slot="{ field, meta, errors }">
       <div>
-        <label for="tineOrden">Tiene orden de trabajo</label>
+        <label for="tieneOrden">Tiene orden de trabajo</label>
         <v-select
           fluid
           optionLabel="item"
@@ -104,7 +111,24 @@ const submit = handleSubmit((values: IClase) => {
           :invalid="meta.touched && errors.length > 0"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
-        <ErrorMessage name="tineOrden" class="text-red-500" />
+        <ErrorMessage name="tieneOrden" class="text-red-500" />
+      </div>
+    </Field>
+
+    <Field name="ordenId" v-slot="{ field, meta, errors }" v-if="values.tieneOrden">
+      <div>
+        <label for="ordenId">Orden</label>
+        <v-select
+          fluid
+          filter
+          :options="ordenes"
+          :modelValue="field.value"
+          optionLabel="referencia"
+          optionValue="id"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+        />
+        <ErrorMessage name="ordenId" class="text-red-500" />
       </div>
     </Field>
 
@@ -113,6 +137,7 @@ const submit = handleSubmit((values: IClase) => {
         <label for="empresaId">Empresa</label>
         <v-autocomplete
           fluid
+          :modelValue="clase?.empresa.razonSocial"
           :suggestions="empresas"
           @complete="buscarEmpresa"
           optionLabel="razonSocial"
@@ -266,26 +291,50 @@ const submit = handleSubmit((values: IClase) => {
     </div>
     <!-- numero de alumnos -->
 
-    <Field name="cursoId" v-slot="{ meta, errors }">
-      <div>
-        <label for="cursoId">Curso</label>
-        <v-autocomplete
-          fluid
-          :suggestions="cursos"
-          @complete="buscarCurso"
-          optionLabel="nombre"
-          @update:modelValue="
-            (curso: ICurso) => {
-              if (typeof curso === 'object') {
-                setFieldValue('cursoId', curso.id)
+    <div class="grid grid-cols-2 gap-3">
+      <Field name="cursoId" v-slot="{ meta, errors }">
+        <div>
+          <label for="cursoId">Curso</label>
+          <v-autocomplete
+            fluid
+            :modelValue="clase?.curso.nombre"
+            :suggestions="cursos"
+            @complete="buscarCurso"
+            optionLabel="nombre"
+            @update:modelValue="
+              (curso: ICurso) => {
+                if (typeof curso === 'object') {
+                  setFieldValue('cursoId', curso.id)
+                }
               }
-            }
-          "
-          :invalid="meta.touched && errors.length > 0"
-        />
-        <ErrorMessage name="cursoId" class="text-red-500" />
-      </div>
-    </Field>
+            "
+            :invalid="meta.touched && errors.length > 0"
+          />
+          <ErrorMessage name="cursoId" class="text-red-500" />
+        </div>
+      </Field>
+      <Field name="modeloId" v-slot="{ meta, errors }">
+        <div>
+          <label for="modeloId">Modelo</label>
+          <v-autocomplete
+            fluid
+            :modelValue="clase?.modelo.nombre"
+            :suggestions="modelos"
+            @complete="buscarModelo"
+            optionLabel="nombre"
+            @update:modelValue="
+              (curso: ICurso) => {
+                if (typeof curso === 'object') {
+                  setFieldValue('modeloId', curso.id)
+                }
+              }
+            "
+            :invalid="meta.touched && errors.length > 0"
+          />
+          <ErrorMessage name="modeloId" class="text-red-500" />
+        </div>
+      </Field>
+    </div>
 
     <div class="grid grid-cols-2 gap-3">
       <Field name="ubicacionId" v-slot="{ field, meta, errors }">
@@ -327,6 +376,7 @@ const submit = handleSubmit((values: IClase) => {
         <label for="ocupacionId">Ocupacion especifica</label>
         <v-autocomplete
           fluid
+          :modelValue="clase?.ocupacion.nombre"
           :suggestions="ocupaciones"
           @complete="buscarOcupacion"
           optionLabel="nombre"
@@ -348,6 +398,7 @@ const submit = handleSubmit((values: IClase) => {
         <label for="areaTematicaId">Area tematica</label>
         <v-autocomplete
           fluid
+          :modelValue="clase?.areaTematica.nombre"
           :suggestions="areasTematicas"
           @complete="buscarAreaTematica"
           optionLabel="nombre"
@@ -368,6 +419,7 @@ const submit = handleSubmit((values: IClase) => {
       <div>
         <label for="representanteEmpresaId">Representante empresa</label>
         <BusquedaEmpleados
+          :nombre="formatearNombre(clase?.representanteEmpresa!)"
           :seleccionar-empleado="seleccionarRepresentanteEmpresa"
           :boton="false"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
@@ -380,6 +432,7 @@ const submit = handleSubmit((values: IClase) => {
       <div>
         <label for="representanteEmpleadosId">Representante trabajadores</label>
         <BusquedaEmpleados
+          :nombre="formatearNombre(clase?.representanteEmpleados!)"
           :seleccionar-empleado="seleccionarRepresentanteEmpleados"
           :boton="false"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"

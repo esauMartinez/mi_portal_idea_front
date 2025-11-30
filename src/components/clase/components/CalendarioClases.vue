@@ -336,7 +336,7 @@ function isSelected(d: Date) {
               :model="menuItems(clase)"
               :label="`${clase.curso.nombre.substring(0, 10)}`"
               :severity="colorClase(clase.estatus)"
-              v-tooltip="clase.curso.nombre"
+              v-tooltip.left="clase.curso.nombre"
               size="small"
             />
 

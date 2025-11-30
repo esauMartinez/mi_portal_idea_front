@@ -23,23 +23,13 @@ watch(isSuccess, (payload) => {
 })
 </script>
 <template>
-  <!-- <v-drawer
-    v-model:visible="visible"
-    modal
-    :dismissable="false"
-    header="Crear clase"
-    v-on:after-hide="router.back()"
-    class="!w-full md:!w-80 lg:!w-[50%] rounded-tr-md rounded-br-md"
-  >
-  </v-drawer> -->
   <v-dialog
     v-model:visible="visible"
     :style="{ width: '50%' }"
     v-on:after-hide="router.back()"
-    header="Crear clase"
+    header="Crear capacitacion"
     :modal="true"
   >
-    <!-- :position="'left'" -->
     <FormularioClase :cancelar="cancelar" :guardar="guardar" :pendiente="isPending" />
   </v-dialog>
 </template>

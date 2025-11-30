@@ -31,13 +31,12 @@ watch(isSuccess, (payload) => {
 </script>
 
 <template>
-  <v-drawer
+  <v-dialog
     v-model:visible="visible"
-    modal
-    :dismissable="false"
-    header="Crear clase"
+    :style="{ width: '50%' }"
     v-on:after-hide="router.back()"
-    class="!w-full md:!w-80 lg:!w-[50%] rounded-tr-md rounded-br-md"
+    header="Modifcar capacitacion"
+    :modal="true"
   >
     <EsqueletoFormulario v-if="isPendingClase" />
     <FormularioClase
@@ -47,16 +46,7 @@ watch(isSuccess, (payload) => {
       :pendiente="isPending"
       v-else
     />
-  </v-drawer>
-  <!-- <v-dialog
-    v-model:visible="visible"
-    :style="{ width: '50%' }"
-    v-on:after-hide="router.back()"
-    header="Modifcar clase"
-    :modal="true"
-    :position="'left'"
-  >
-  </v-dialog> -->
+  </v-dialog>
 </template>
 
 <style scoped></style>

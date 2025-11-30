@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import router from '@/router'
 import { ref, watch } from 'vue'
-import type { IOrden } from '../interfaces/orden'
 import FormularioOrden from '../components/FormularioOrden.vue'
 import useCrear from '../composables/useCrear'
 
@@ -12,7 +11,7 @@ const cancelar = () => {
   visible.value = false
 }
 
-const guardar = (orden: IOrden) => {
+const guardar = (orden: FormData) => {
   crearMutation.mutate(orden)
 }
 

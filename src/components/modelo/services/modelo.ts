@@ -7,6 +7,15 @@ export const getModelos = async (): Promise<IModelo[]> => {
   return data
 }
 
+export const getModelosPorNombre = async (nombre: string): Promise<IModelo[]> => {
+  const { data } = await api_mi_portal.get<IModelo[]>(`/modelos-por-nombre`, {
+    params: {
+      nombre,
+    },
+  })
+  return data
+}
+
 export const getModelo = async (id: number): Promise<IModelo> => {
   const { data } = await api_mi_portal.get<IModelo>(`/modelo/${id}`)
   return data

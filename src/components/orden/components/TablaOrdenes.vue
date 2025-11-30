@@ -4,9 +4,13 @@ import useEliminar from '../composables/useEliminar'
 import useOrdenes from '../composables/useOrdenes'
 import type { IOrden } from '../interfaces/orden'
 import { formatearNombre } from '@/helper/formatearNombre'
+import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
+import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
 
-const { ordenes, isLoading: obteniendo, filters } = useOrdenes()
+const { ordenes, isLoading, estatus, filters, opcionesEstatus, empresa, severity, descargar } =
+  useOrdenes()
 const { eliminar, isPending } = useEliminar()
+const { empresas, buscarEmpresa } = useEmpresasPorNombre()
 </script>
 
 <template>
@@ -21,19 +25,54 @@ const { eliminar, isPending } = useEliminar()
     paginator
     :rows="10"
     :rowsPerPageOptions="[5, 10, 20, 50]"
-    :loading="obteniendo"
+    :loading="isLoading"
   >
     <template #header>
-      <div class="flex justify-between items-center">
-        <v-iconfield>
-          <v-inputicon>
-            <i class="pi pi-search" />
-          </v-inputicon>
-          <v-inputtext v-model="filters['global'].value" placeholder="Buscar..." />
-        </v-iconfield>
-        <router-link :to="{ path: 'crear-orden' }" v-if="verificarPermiso('Ordenes.Crear')">
-          <v-button icon="pi pi-plus" label="Crear orden" size="small" />
-        </router-link>
+      <div className="grid grid-cols-12 gap-4">
+        <div class="col-span-2">
+          <v-iconfield>
+            <v-inputicon>
+              <i class="pi pi-search" />
+            </v-inputicon>
+            <v-inputtext fluid v-model="filters['global'].value" placeholder="Buscar..." />
+          </v-iconfield>
+        </div>
+        <div className="col-span-2 col-start-3 row-start-1">
+          <v-floatlabel variant="on">
+            <v-select
+              fluid
+              v-model="estatus"
+              :options="opcionesEstatus"
+              optionLabel="item"
+              optionValue="value"
+            />
+            <label for="estatus">Estatus</label>
+          </v-floatlabel>
+        </div>
+        <div className="col-span-2 col-start-5 row-start-1">
+          <v-floatlabel variant="on">
+            <v-autocomplete
+              fluid
+              :modelValue="'Todas'"
+              :suggestions="empresas"
+              @complete="buscarEmpresa"
+              optionLabel="razonSocial"
+              @update:modelValue="
+                (values: IEmpresa) => {
+                  if (typeof values === 'object') {
+                    empresa = values.id
+                  }
+                }
+              "
+            />
+            <label for="empresa">Empresa</label>
+          </v-floatlabel>
+        </div>
+        <div className="col-span-2 col-start-11 row-start-1">
+          <router-link :to="{ path: 'crear-orden' }" v-if="verificarPermiso('Ordenes.Crear')">
+            <v-button icon="pi pi-plus" label="Crear orden" size="small" class="w-full" />
+          </router-link>
+        </div>
       </div>
     </template>
 
@@ -53,16 +92,28 @@ const { eliminar, isPending } = useEliminar()
         {{ data.empresa.rfc }} / {{ data.empresa.razonSocial }}
       </template>
     </v-column>
+    <v-column field="sucursal.nombre" header="Sucursal" sortable />
     <v-column header="Nombre solicita" sortable>
       <template #body="{ data }: { data: IOrden }">
         {{ formatearNombre(data.solicitante) }}
       </template>
     </v-column>
-    <v-column field="estatus" header="Estatus" sortable />
+    <v-column field="estatus" header="Estatus" sortable>
+      <template #body="{ data }: { data: IOrden }">
+        <v-tag :value="data.estatus" :severity="severity(data.estatus)" />
+      </template>
+    </v-column>
 
     <v-column header="Acciones">
       <template #body="{ data }: { data: IOrden }">
         <div class="flex gap-2 justify-center">
+          <v-button
+            icon="pi pi-file-pdf"
+            severity="danger"
+            size="small"
+            v-if="data.pathArchivo"
+            @click="descargar(data.pathArchivo)"
+          />
           <router-link
             :to="{ name: 'modificar-orden', params: { id: data.id } }"
             v-if="verificarPermiso('Ordenes.Modificar')"

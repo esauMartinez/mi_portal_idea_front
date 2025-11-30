@@ -1,32 +1,20 @@
 <script setup lang="ts">
-import useEmpresas from '@/components/empresa/composables/useEmpresas'
 import useActivar from '../composables/useActivar'
 import useDesactivar from '../composables/useDesactivar'
 import useEliminar from '../composables/useEliminar'
 import useEmpleados from '../composables/useEmpleados'
 import type { IEmpleado } from '../interfaces/empleado'
 import { verificarPermiso } from '@/guards/verificarPermiso'
-import { computed } from 'vue'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
 import useDatos from '../composables/useDatos'
+import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
 
 const { empleados, empresa, instructor, tipo, isLoading: obteniendo, filters } = useEmpleados()
 const { opcionesInstructor, opcionesTipoEmpleado } = useDatos()
 const { eliminar } = useEliminar()
 const { activarUsuario, isPending: activando } = useActivar()
 const { desactivarEmpleado, isPending: desactivando } = useDesactivar()
-const { empresas } = useEmpresas()
-
-const opcionesEmpresas = computed(() => {
-  const data: IEmpresa[] = [...empresas.value]
-  data.push({
-    id: -100,
-    razonSocial: 'Todas',
-    rfc: '',
-    activo: false,
-  })
-  return data
-})
+const { empresas, buscarEmpresa } = useEmpresasPorNombre()
 </script>
 
 <template>
@@ -55,31 +43,47 @@ const opcionesEmpresas = computed(() => {
           </v-iconfield>
         </div>
         <div className="col-span-2 col-start-3 row-start-1">
-          <v-select
-            fluid
-            :options="opcionesEmpresas"
-            v-model="empresa"
-            optionLabel="razonSocial"
-            optionValue="id"
-          />
+          <v-floatlabel variant="on">
+            <v-autocomplete
+              fluid
+              :modelValue="'Todas'"
+              :suggestions="empresas"
+              @complete="buscarEmpresa"
+              optionLabel="razonSocial"
+              @update:modelValue="
+                (values: IEmpresa) => {
+                  if (typeof values === 'object') {
+                    empresa = values.id
+                  }
+                }
+              "
+            />
+            <label for="empresa">Empresa</label>
+          </v-floatlabel>
         </div>
         <div className="col-span-2 col-start-5 row-start-1">
-          <v-select
-            fluid
-            v-model="instructor"
-            :options="opcionesInstructor"
-            optionLabel="item"
-            optionValue="value"
-          />
+          <v-floatlabel variant="on">
+            <v-select
+              fluid
+              v-model="instructor"
+              :options="opcionesInstructor"
+              optionLabel="item"
+              optionValue="value"
+            />
+            <label for="instructor">Instructor</label>
+          </v-floatlabel>
         </div>
         <div className="col-span-2 col-start-7 row-start-1">
-          <v-select
-            fluid
-            v-model="tipo"
-            :options="opcionesTipoEmpleado"
-            optionLabel="item"
-            optionValue="value"
-          />
+          <v-floatlabel variant="on">
+            <v-select
+              fluid
+              v-model="tipo"
+              :options="opcionesTipoEmpleado"
+              optionLabel="item"
+              optionValue="value"
+            />
+            <label for="tipoEmpleado">Tipo de empleado</label>
+          </v-floatlabel>
         </div>
         <div className="col-span-2 col-start-11 row-start-1">
           <router-link :to="{ path: 'crear-empleado' }" v-if="verificarPermiso('Empleados.Crear')">

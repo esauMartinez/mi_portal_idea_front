@@ -60,7 +60,7 @@ const { handleSubmit, setFieldValue, values } = useForm<IEmpleado>({
 
 const seleccionarEmpleado = (empleado: IEmpleado) => {
   console.log(empleado)
-  // setFieldValue('padreId', val.id)
+  // setFieldValue('padreId', empleado.id)
 }
 
 const onSubmit = handleSubmit((values) => {
@@ -443,7 +443,11 @@ const onSubmit = handleSubmit((values) => {
     <Field name="padreId">
       <div>
         <label for="padreId">Depende de:</label>
-        <BusquedaEmpleados :seleccionarEmpleado="seleccionarEmpleado" :boton="false" />
+        <BusquedaEmpleados
+          :nombre="formatearNombre(empleado?.hijos[0]?.padre!)"
+          :seleccionarEmpleado="seleccionarEmpleado"
+          :boton="false"
+        />
         <ErrorMessage name="padreId" class="text-red-500" />
       </div>
     </Field>

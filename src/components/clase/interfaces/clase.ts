@@ -3,6 +3,9 @@ import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
 import type { IOcupacion } from '@/components/ocupacion/interfaces/ocupacion'
 import type { IAreaTematica } from '../../areaTematica/interfaces/area_tematica'
 import type { IEnlaceClase } from './enlaceClase'
+import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
+import type { IOrden } from '@/components/orden/interfaces/orden'
+import type { IModelo } from '@/components/modelo/interfaces/modelo'
 
 export interface IClase {
   id: number
@@ -22,6 +25,7 @@ export interface IClase {
   enlazada: boolean
   padre: boolean
   empresaId: number
+  empresa: IEmpresa
 
   representanteEmpresaId: number
   representanteEmpresa: IEmpleado
@@ -33,6 +37,13 @@ export interface IClase {
   ocupacion: IOcupacion
   areaTematicaId: number
   areaTematica: IAreaTematica
+
+  tieneOrden: boolean
+  ordenId: number
+  orden: IOrden
+
+  modeloId: number
+  modelo: IModelo
 
   padres: IEnlaceClase[]
   hijos: IEnlaceClase[]

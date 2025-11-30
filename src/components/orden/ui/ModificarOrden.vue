@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 import EsqueletoFormulario from '@/components/esqueletos/EsqueletoFormulario.vue'
 import useModificar from '../composables/useModificar'
 import useOrden from '../composables/useOrden'
-import type { IOrden } from '../interfaces/orden'
 import FormularioOrden from '../components/FormularioOrden.vue'
 
 const visible = ref<boolean>(true)
@@ -17,7 +16,7 @@ const cancelar = () => {
   visible.value = false
 }
 
-const guardar = (orden: IOrden) => {
+const guardar = (orden: FormData) => {
   modificarMutation.mutate(orden)
 }
 

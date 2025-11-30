@@ -92,6 +92,7 @@ const baseSchema = {
       return schema.notRequired()
     }),
   ocupacionesEmpleado: yup.array<IOcupacionEmpleado[]>(),
+  padreId: yup.number().nullable(),
 }
 
 // Schema para crear empleado (contraseñas obligatorias)

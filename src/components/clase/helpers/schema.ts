@@ -2,7 +2,7 @@ import * as yup from 'yup'
 
 export const schema = yup.object({
   // clases: yup.number().default(1),
-  tineOrden: yup.boolean().default(false),
+  tieneOrden: yup.boolean().default(false),
   fechaInicio: yup.date().typeError('Debes ingrasar una fecha').required('El campo es requerido'),
   horaInicio: yup.date().typeError('Debes ingrasar una fecha').required('El campo es requerido'),
   fechaFinalizacion: yup
@@ -13,6 +13,7 @@ export const schema = yup.object({
   duracion: yup.string().required('El campo es requerido'),
   tipo: yup.string().required('El campo es requerido'),
   cursoId: yup.number().required('El campo es requerido'),
+  modeloId: yup.number(),
   ubicacionId: yup.number().nullable(),
   sala: yup.string().nullable(),
   // instructores: yup

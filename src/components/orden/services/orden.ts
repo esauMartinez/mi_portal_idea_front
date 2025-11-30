@@ -2,8 +2,13 @@ import { api_mi_portal } from '@/api'
 import type { IOrden } from '../interfaces/orden'
 import type { IBitacoraOrden } from '../interfaces/bitacora_orden'
 
-export const getOrdenes = async (): Promise<IOrden[]> => {
-  const { data } = await api_mi_portal.get<IOrden[]>(`/ordenes`)
+export const getOrdenes = async (estatus: string, empresaId: number): Promise<IOrden[]> => {
+  const { data } = await api_mi_portal.get<IOrden[]>(`/ordenes`, {
+    params: {
+      estatus,
+      empresaId,
+    },
+  })
   return data
 }
 
@@ -12,13 +17,13 @@ export const getOrden = async (id: number): Promise<IOrden> => {
   return data
 }
 
-export const postOrden = async (payload: IOrden): Promise<string> => {
+export const postOrden = async (payload: FormData): Promise<string> => {
   const { data } = await api_mi_portal.post<string>(`/orden`, payload)
   return data
 }
 
-export const updateOrden = async (payload: IOrden): Promise<string> => {
-  const { data } = await api_mi_portal.put<string>(`/orden/${payload.id}`, payload)
+export const updateOrden = async (payload: FormData): Promise<string> => {
+  const { data } = await api_mi_portal.put<string>(`/orden`, payload)
   return data
 }
 

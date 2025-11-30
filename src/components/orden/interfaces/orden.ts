@@ -7,11 +7,13 @@ export interface IOrden {
   referencia: string
   referenciaSap: string
   monto: number
-  estatus: string
+  estatus: 'Creada' | 'Liberada' | 'Cerrada'
   empresaId: number
   empresa: IEmpresa
   sucursalId: number
   sucursal: ISucursal
   solicitanteId: number
   solicitante: IEmpleado
+  pathArchivo: string
+  file: File | null
 }

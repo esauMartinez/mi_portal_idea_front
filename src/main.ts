@@ -44,6 +44,8 @@ import {
   Dialog,
   Drawer,
   Fieldset,
+  FileUpload,
+  FloatLabel,
   IconField,
   InputIcon,
   InputNumber,
@@ -176,6 +178,8 @@ app.component('v-inputicon', InputIcon)
 app.component('v-badge', Badge)
 app.component('v-scrollpanel', ScrollPanel)
 app.component('v-popover', Popover)
+app.component('v-floatlabel', FloatLabel)
+app.component('v-fileupload', FileUpload)
 
 app.use(createPinia())
 
