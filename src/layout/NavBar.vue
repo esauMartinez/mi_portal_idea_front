@@ -15,11 +15,11 @@ const { nombreEmpleado, autenticado } = storeToRefs(authSotore)
 <template>
   <v-menubar :model="[]" v-if="autenticado" class="mb-3">
     <template #start>
-      <span class="text-xl! font-extralight">{{ titulo }}</span>
+      <span class="text-xl!">{{ titulo }}</span>
     </template>
     <template #end>
       <div class="flex items-center gap-2 p-2">
-        <span class="text-xl! font-extralight">{{ nombreEmpleado }}</span>
+        <span class="text-xl!">{{ nombreEmpleado }}</span>
       </div>
     </template>
   </v-menubar>

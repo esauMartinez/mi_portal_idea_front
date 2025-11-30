@@ -93,6 +93,12 @@ import OrdenesPage from '@/pages/OrdenesPage.vue'
 import ListaOrdenes from '@/components/orden/ui/ListaOrdenes.vue'
 import CrearOrden from '@/components/orden/ui/CrearOrden.vue'
 import ModificarOrden from '@/components/orden/ui/ModificarOrden.vue'
+import BitacoraOrden from '@/components/orden/ui/BitacoraOrden.vue'
+import BitacoraPerfil from '@/components/perfil/ui/BitacoraPerfil.vue'
+import BitacoraOcupacion from '@/components/ocupacion/ui/BitacoraOcupacion.vue'
+import BitacoraAreaTematica from '@/components/areaTematica/ui/BitacoraAreaTematica.vue'
+import BitacoraModelo from '@/components/modelo/ui/BitacoraModelo.vue'
+import BitacoraClase from '@/components/clase/ui/BitacoraClase.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -280,6 +286,15 @@ const router = createRouter({
               beforeEnter: [verificarAutenticacion],
               component: ModificarPerfil,
             },
+            {
+              path: '/bitacora-perfil/:id',
+              name: 'bitacora-perfil',
+              meta: {
+                ruta_permitida: 'Perfiles.Bitacora',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: BitacoraPerfil,
+            },
           ],
         },
       ],
@@ -389,6 +404,15 @@ const router = createRouter({
               beforeEnter: [verificarAutenticacion],
               component: ModificarOcupacion,
             },
+            {
+              path: '/bitacora-ocupacion/:id',
+              name: 'bitacora-ocupacion',
+              meta: {
+                ruta_permitida: 'Ocupaciones.Bitacora',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: BitacoraOcupacion,
+            },
           ],
         },
       ],
@@ -425,6 +449,15 @@ const router = createRouter({
               },
               beforeEnter: [verificarAutenticacion],
               component: ModificarAreaTematica,
+            },
+            {
+              path: '/bitacora-area-tematica/:id',
+              name: 'bitacora-area-tematica',
+              meta: {
+                ruta_permitida: 'AreasTematicas.Bitacora',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: BitacoraAreaTematica,
             },
           ],
         },
@@ -596,6 +629,15 @@ const router = createRouter({
               path: '/lista-alumnos/:id',
               name: 'lista-alumnos',
               component: ListaAlumnos,
+            },
+            {
+              path: '/bitacora-clase/:id',
+              name: 'bitacora-clase',
+              meta: {
+                ruta_permitida: 'Clases.Bitacora',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: BitacoraClase,
             },
           ],
         },
@@ -842,6 +884,15 @@ const router = createRouter({
               beforeEnter: [verificarAutenticacion],
               component: ModificarModelo,
             },
+            {
+              path: '/bitacora-modelo/:id',
+              name: 'bitacora-modelo',
+              meta: {
+                ruta_permitida: 'Modelos.Bitacora',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: BitacoraModelo,
+            },
           ],
         },
       ],
@@ -878,6 +929,15 @@ const router = createRouter({
               },
               beforeEnter: [verificarAutenticacion],
               component: ModificarOrden,
+            },
+            {
+              path: '/bitacora-orden/:id',
+              name: 'bitacora-orden',
+              meta: {
+                ruta_permitida: 'Ordenes.Bitacora',
+              },
+              beforeEnter: [verificarAutenticacion],
+              component: BitacoraOrden,
             },
           ],
         },

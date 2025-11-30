@@ -8,7 +8,6 @@ import { computed } from 'vue'
 import useCargos from '@/components/cargo/composables/useCargos'
 import usePuestos from '@/components/puesto/composables/usePuestos'
 import useDepartamentos from '@/components/departamento/composables/useDepartamentos'
-import useEmpresas from '@/components/empresa/composables/useEmpresas'
 import useSucursalesEmpresa from '@/components/sucursal/composables/useSucursalesEmpresa'
 import usePerfiles from '@/components/perfil/composables/usePerfiles'
 import useCentrosCostos from '@/components/centroCosto/composables/useCentrosCostos'
@@ -16,13 +15,15 @@ import { formatearNombre } from '@/helper/formatearNombre'
 import { ref } from 'vue'
 import BusquedaEmpleados from './BusquedaEmpleados.vue'
 import useOcupaciones from '@/components/ocupacion/composables/useOcupaciones'
+import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
+import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
 
 const { empleado, cancelar, guardar } = defineProps<Props>()
 const { activo, verificado, tipoEmpleado, tieneUsuario, instructor } = useDatos()
 const { cargos } = useCargos()
 const { puestos } = usePuestos()
 const { departamentos } = useDepartamentos()
-const { empresas } = useEmpresas()
+const { empresas, buscarEmpresa } = useEmpresasPorNombre()
 const { empresaId, data: sucursales } = useSucursalesEmpresa()
 const { perfiles } = usePerfiles()
 const { centrosCostos } = useCentrosCostos()
@@ -52,7 +53,7 @@ const initialValues = computed(() => {
     : { ...getSchema(false).getDefault() }
 })
 
-const { handleSubmit, values } = useForm<IEmpleado>({
+const { handleSubmit, setFieldValue, values } = useForm<IEmpleado>({
   initialValues: initialValues.value,
   validationSchema: empleado ? getSchema(true) : getSchema(false),
 })
@@ -319,19 +320,21 @@ const onSubmit = handleSubmit((values) => {
       </div>
     </Field>
 
-    <Field name="empresaId" v-slot="{ field, meta, errors }">
+    <Field name="empresaId" v-slot="{ meta, errors }">
       <div>
         <label for="empresaId">Empresa</label>
-        <v-select
+        <v-autocomplete
           fluid
-          :options="empresas"
+          :modelValue="empleado?.empresa.razonSocial"
+          :suggestions="empresas"
+          @complete="buscarEmpresa"
           optionLabel="razonSocial"
-          optionValue="id"
-          :modelValue="field.value"
-          @update:modelValue="field.onChange"
-          @change="
-            (e: any) => {
-              empresaId = e.value
+          @update:modelValue="
+            (empresa: IEmpresa) => {
+              if (typeof empresa === 'object') {
+                empresaId = empresa.id
+                setFieldValue('empresaId', empresa.id)
+              }
             }
           "
           :invalid="meta.touched && errors.length > 0"

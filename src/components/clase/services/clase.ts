@@ -4,6 +4,7 @@ import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import type { IClaseInstructor } from '../interfaces/clase_instructor'
 import type { IEnlaceClase } from '../interfaces/enlaceClase'
 import type { ICalificacionesClase } from '../interfaces/calificacionesClase'
+import type { IBitacoraClase } from '../interfaces/bitacora_clase'
 
 export const getClases = async (
   inicio: string,
@@ -94,5 +95,10 @@ export const getClasesPadres = async (): Promise<string> => {
 
 export const postEnlace = async (payload: IEnlaceClase): Promise<string> => {
   const { data } = await api_mi_portal.post<string>(`/enlace/clase`, payload)
+  return data
+}
+
+export const getBitacora = async (id: number): Promise<IBitacoraClase[]> => {
+  const { data } = await api_mi_portal.get<IBitacoraClase[]>(`/clase/bitacora/${id}`)
   return data
 }

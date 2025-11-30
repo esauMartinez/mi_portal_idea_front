@@ -68,6 +68,13 @@ const menuItems = (clase: IClase) => {
       },
     },
     {
+      label: 'Ver bitacora',
+      icon: 'pi pi-list',
+      command: () => {
+        router.push({ name: 'bitacora-clase', params: { id: clase.id } })
+      },
+    },
+    {
       label: 'Eliminar',
       icon: 'pi pi-times',
       command: () => {
@@ -118,6 +125,10 @@ const menuItems = (clase: IClase) => {
 
   if (!verificarPermiso('Clases.Enlazar')) {
     items = items.filter((item) => item.label !== 'Enlazar')
+  }
+
+  if (!verificarPermiso('Clases.Bitacora')) {
+    items = items.filter((item) => item.label !== 'Ver bitacora')
   }
 
   if (!verificarPermiso('Clases.Desenlazar')) {
@@ -288,7 +299,7 @@ function isSelected(d: Date) {
         v-for="day in calendarDays"
         :key="day.key"
         :class="[
-          'relative min-h-35 bg-white transition-all duration-150 p-2 flex flex-col rounded-none',
+          'relative min-h-35 max-h-60 overflow-auto bg-white transition-all duration-150 p-2 flex flex-col rounded-none',
           day.otherMonth ? 'text-neutral-400' : 'text-neutral-800',
           isSelected(day.date) ? 'ring-2 ring-[#0059ff]' : '',
           day.isPast

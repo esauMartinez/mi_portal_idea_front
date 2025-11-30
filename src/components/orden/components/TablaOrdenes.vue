@@ -53,7 +53,7 @@ const { eliminar, isPending } = useEliminar()
         {{ data.empresa.rfc }} / {{ data.empresa.razonSocial }}
       </template>
     </v-column>
-    <v-column header="Empresa" sortable>
+    <v-column header="Nombre solicita" sortable>
       <template #body="{ data }: { data: IOrden }">
         {{ formatearNombre(data.solicitante) }}
       </template>
@@ -69,12 +69,12 @@ const { eliminar, isPending } = useEliminar()
           >
             <v-button icon="pi pi-pencil" severity="warn" size="small" />
           </router-link>
-          <!-- <router-link
-            :to="{ name: 'bitacora-puesto', params: { id: data.id } }"
+          <router-link
+            :to="{ name: 'bitacora-orden', params: { id: data.id } }"
             v-if="verificarPermiso('Ordenes.Bitacora')"
           >
             <v-button icon="pi pi-list" size="small" />
-          </router-link> -->
+          </router-link>
           <v-button
             icon="pi pi-trash"
             severity="danger"

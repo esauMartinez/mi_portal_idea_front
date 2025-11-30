@@ -1,5 +1,6 @@
 import { api_mi_portal } from '@/api'
 import type { IModelo } from '../interfaces/modelo'
+import type { IBitacoraModelo } from '../interfaces/bitacora_modelo'
 
 export const getModelos = async (): Promise<IModelo[]> => {
   const { data } = await api_mi_portal.get<IModelo[]>(`/modelos`)
@@ -23,5 +24,10 @@ export const updateModelo = async (payload: IModelo): Promise<string> => {
 
 export const deleteModelo = async (id: number): Promise<string> => {
   const { data } = await api_mi_portal.delete<string>(`/modelo/${id}`)
+  return data
+}
+
+export const getBitacora = async (id: number): Promise<IBitacoraModelo[]> => {
+  const { data } = await api_mi_portal.get<IBitacoraModelo[]>(`/modelo/bitacora/${id}`)
   return data
 }

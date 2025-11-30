@@ -1,8 +1,18 @@
 import { api_mi_portal } from '@/api'
 import type { IOcupacion } from '../interfaces/ocupacion'
+import type { IBitacoraOcupacion } from '../interfaces/bitacora_ocupacion'
 
 export const getOcupaciones = async (): Promise<IOcupacion[]> => {
   const { data } = await api_mi_portal.get<IOcupacion[]>(`/ocupaciones`)
+  return data
+}
+
+export const getOcupacionesPorNombre = async (nombre: string): Promise<IOcupacion[]> => {
+  const { data } = await api_mi_portal.get<IOcupacion[]>(`/ocupaciones-por-nombre`, {
+    params: {
+      nombre,
+    },
+  })
   return data
 }
 
@@ -26,7 +36,7 @@ export const deleteOcupacion = async (id: number): Promise<string> => {
   return data
 }
 
-// export const getBitacora = async (id: number): Promise<IBitacoraUbicacion[]> => {
-//   const { data } = await api_mi_portal.get<IBitacoraUbicacion[]>(`/ubicacion/bitacora/${id}`)
-//   return data
-// }
+export const getBitacora = async (id: number): Promise<IBitacoraOcupacion[]> => {
+  const { data } = await api_mi_portal.get<IBitacoraOcupacion[]>(`/ocupacion/bitacora/${id}`)
+  return data
+}

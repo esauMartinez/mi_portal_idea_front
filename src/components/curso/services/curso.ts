@@ -7,6 +7,15 @@ export const getCursos = async (): Promise<ICurso[]> => {
   return data
 }
 
+export const getCursosPorNombre = async (nombre: string): Promise<ICurso[]> => {
+  const { data } = await api_mi_portal.get<ICurso[]>(`/cursos-por-nombre`, {
+    params: {
+      nombre,
+    },
+  })
+  return data
+}
+
 export const getCurso = async (id: number): Promise<ICurso> => {
   const { data } = await api_mi_portal.get<ICurso>(`/curso/${id}`)
   return data

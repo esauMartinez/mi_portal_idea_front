@@ -1,6 +1,7 @@
 import { api_mi_portal } from '@/api'
 import type { IPerfil } from '../interfaces/perfil'
 import { timer } from '@/helper/timer'
+import type { IBitacoraPerfil } from '../interfaces/bitacora_perfil'
 
 export const getPerfiles = async (): Promise<IPerfil[]> => {
   const { data } = await api_mi_portal.get<IPerfil[]>(`/perfiles`)
@@ -28,5 +29,10 @@ export const updatePerfil = async (payload: IPerfil): Promise<string> => {
 export const deletePerfil = async (id: number): Promise<string> => {
   await timer()
   const { data } = await api_mi_portal.delete<string>(`/perfil/${id}`)
+  return data
+}
+
+export const getBitacora = async (id: number): Promise<IBitacoraPerfil[]> => {
+  const { data } = await api_mi_portal.get<IBitacoraPerfil[]>(`/perfil/bitacora/${id}`)
   return data
 }

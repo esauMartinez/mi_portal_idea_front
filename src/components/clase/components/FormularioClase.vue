@@ -4,22 +4,28 @@ import type { Props } from '../interfaces/props'
 import { schema } from '../helpers/schema'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
 import type { IClase } from '../interfaces/clase'
-import useCursos from '@/components/curso/composables/useCursos'
 import moment from 'moment'
 import { parseLocalDate } from '@/helper/parseLocalDate'
 import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
 import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
 import useDatos from '@/components/empleado/composables/useDatos'
 import useUbicaciones from '@/components/ubicacion/composables/useUbicaciones'
-import useOcupaciones from '@/components/ocupacion/composables/useOcupaciones'
-import useAreasTematicas from '@/components/areaTematica/composables/useAreasTematicas'
+import useCursosPorNombre from '@/components/curso/composables/useCursosPorNombre'
+import type { ICurso } from '@/components/curso/interfaces/curso'
+import useOcupacionesPorNombre from '@/components/ocupacion/composables/useOcupacionesPorNombre'
+import useAreasTematicasPorNombre from '@/components/areaTematica/composables/useAreasTematicasPorNombre'
+import type { IAreaTematica } from '@/components/areaTematica/interfaces/area_tematica'
+import type { IOcupacion } from '@/components/ocupacion/interfaces/ocupacion'
+import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
+import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
 
 const { clase, guardar } = defineProps<Props>()
-const { cursos } = useCursos()
+const { empresas, buscarEmpresa } = useEmpresasPorNombre()
 const { tipoClase, tieneOrden } = useDatos()
 const { ubicaciones } = useUbicaciones()
-const { ocupaciones } = useOcupaciones()
-const { areasTematicas } = useAreasTematicas()
+const { cursos, buscarCurso } = useCursosPorNombre()
+const { ocupaciones, buscarOcupacion } = useOcupacionesPorNombre()
+const { areasTematicas, buscarAreaTematica } = useAreasTematicasPorNombre()
 
 const initialValues = computed(() => {
   return clase
@@ -99,6 +105,27 @@ const submit = handleSubmit((values: IClase) => {
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="tineOrden" class="text-red-500" />
+      </div>
+    </Field>
+
+    <Field name="empresaId" v-slot="{ meta, errors }">
+      <div>
+        <label for="empresaId">Empresa</label>
+        <v-autocomplete
+          fluid
+          :suggestions="empresas"
+          @complete="buscarEmpresa"
+          optionLabel="razonSocial"
+          @update:modelValue="
+            (empresa: IEmpresa) => {
+              if (typeof empresa === 'object') {
+                setFieldValue('empresaId', empresa.id)
+              }
+            }
+          "
+          :invalid="meta.touched && errors.length > 0"
+        />
+        <ErrorMessage name="empresaId" class="text-red-500" />
       </div>
     </Field>
 
@@ -239,18 +266,22 @@ const submit = handleSubmit((values: IClase) => {
     </div>
     <!-- numero de alumnos -->
 
-    <Field name="cursoId" v-slot="{ field, meta, errors }">
+    <Field name="cursoId" v-slot="{ meta, errors }">
       <div>
         <label for="cursoId">Curso</label>
-        <v-select
+        <v-autocomplete
           fluid
+          :suggestions="cursos"
+          @complete="buscarCurso"
           optionLabel="nombre"
-          optionValue="id"
-          :options="cursos"
-          :modelValue="field.value"
-          @update:modelValue="field.onChange"
+          @update:modelValue="
+            (curso: ICurso) => {
+              if (typeof curso === 'object') {
+                setFieldValue('cursoId', curso.id)
+              }
+            }
+          "
           :invalid="meta.touched && errors.length > 0"
-          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="cursoId" class="text-red-500" />
       </div>
@@ -290,37 +321,44 @@ const submit = handleSubmit((values: IClase) => {
     </div>
 
     <!-- <TablaRequerimientosCurso :requerimientosCurso="clase?.curso!.requerimientosCursos!" /> -->
-    <Field name="ocupacionId" v-slot="{ field, meta, errors }">
+
+    <Field name="ocupacionId" v-slot="{ meta, errors }">
       <div>
-        <label for="ocupacionId">Ocupaciones especifica</label>
-        <v-select
-          filter
+        <label for="ocupacionId">Ocupacion especifica</label>
+        <v-autocomplete
           fluid
-          :options="ocupaciones"
+          :suggestions="ocupaciones"
+          @complete="buscarOcupacion"
           optionLabel="nombre"
-          optionValue="id"
-          :modelValue="field.value"
-          @update:modelValue="field.onChange"
-          :invalid="meta.touched && errors.length !== 0"
-          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+          @update:modelValue="
+            (ocupacion: IOcupacion) => {
+              if (typeof ocupacion === 'object') {
+                setFieldValue('ocupacionId', ocupacion.id)
+              }
+            }
+          "
+          :invalid="meta.touched && errors.length > 0"
         />
         <ErrorMessage name="ocupacionId" class="text-red-500" />
       </div>
     </Field>
 
-    <Field name="areaTematicaId" v-slot="{ field, meta, errors }">
+    <Field name="areaTematicaId" v-slot="{ meta, errors }">
       <div>
         <label for="areaTematicaId">Area tematica</label>
-        <v-select
-          filter
+        <v-autocomplete
           fluid
-          :options="areasTematicas"
+          :suggestions="areasTematicas"
+          @complete="buscarAreaTematica"
           optionLabel="nombre"
-          optionValue="id"
-          :modelValue="field.value"
-          @update:modelValue="field.onChange"
-          :invalid="meta.touched && errors.length !== 0"
-          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+          @update:modelValue="
+            (areaTematica: IAreaTematica) => {
+              if (typeof areaTematica === 'object') {
+                setFieldValue('areaTematicaId', areaTematica.id)
+              }
+            }
+          "
+          :invalid="meta.touched && errors.length > 0"
         />
         <ErrorMessage name="areaTematicaId" class="text-red-500" />
       </div>

@@ -64,12 +64,12 @@ const { eliminar, isPending } = useEliminar()
           >
             <v-button icon="pi pi-pencil" severity="warn" size="small" />
           </router-link>
-          <!-- <router-link
-            :to="{ name: 'bitacora-ubicacion', params: { id: data.id } }"
-            v-if="verificarPermiso('Ubicaciones.Bitacora')"
+          <router-link
+            :to="{ name: 'bitacora-area-tematica', params: { id: data.id } }"
+            v-if="verificarPermiso('AreasTematicas.Bitacora')"
           >
             <v-button icon="pi pi-list" size="small" />
-          </router-link> -->
+          </router-link>
           <v-button
             icon="pi pi-trash"
             severity="danger"

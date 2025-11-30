@@ -21,6 +21,7 @@ export interface IClase {
   sala: string
   enlazada: boolean
   padre: boolean
+  empresaId: number
 
   representanteEmpresaId: number
   representanteEmpresa: IEmpleado

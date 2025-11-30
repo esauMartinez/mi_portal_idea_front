@@ -10,7 +10,7 @@ import FormularioEmpresa from '../components/FormularioEmpresa.vue'
 
 const visible = ref<boolean>(true)
 const { params } = useRoute()
-const { data: empresa, isLoading } = useEmpresa(+params.id!)
+const { empresa, isLoading } = useEmpresa(+params.id!)
 const { modificarMutation, isSuccess, isPending } = useModificar()
 
 const cancelar = () => {

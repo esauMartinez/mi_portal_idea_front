@@ -56,6 +56,13 @@ const { eliminar, isPending } = useEliminar()
           >
             <v-button icon="pi pi-pencil" severity="warn" size="small" />
           </router-link>
+
+          <router-link
+            :to="{ name: 'bitacora-perfil', params: { id: data.id } }"
+            v-if="verificarPermiso('Perfiles.Bitacora')"
+          >
+            <v-button icon="pi pi-list" size="small" />
+          </router-link>
           <v-button
             icon="pi pi-trash"
             severity="danger"
