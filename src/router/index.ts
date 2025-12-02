@@ -5,7 +5,6 @@ import HomePage from '@/pages/HomePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import NotFoundPage from '@/pages/NotFoundPage.vue'
 import PerfilesPage from '@/pages/PerfilesPage.vue'
-import RestaurarPasswordPage from '@/pages/RestaurarPasswordPage.vue'
 import UnauthorizedPage from '@/pages/UnauthorizedPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import EmpleadosPage from '@/pages/EmpleadosPage.vue'
@@ -99,6 +98,8 @@ import BitacoraOcupacion from '@/components/ocupacion/ui/BitacoraOcupacion.vue'
 import BitacoraAreaTematica from '@/components/areaTematica/ui/BitacoraAreaTematica.vue'
 import BitacoraModelo from '@/components/modelo/ui/BitacoraModelo.vue'
 import BitacoraClase from '@/components/clase/ui/BitacoraClase.vue'
+import RecuperarPassworPage from '@/pages/RecuperarPassworPage.vue'
+import PasswordOlvidadaPage from '@/pages/PasswordOlvidadaPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -944,9 +945,14 @@ const router = createRouter({
       ],
     },
     {
-      path: '/restaurar',
-      name: 'restaurar',
-      component: RestaurarPasswordPage,
+      path: '/password-olvidada',
+      name: 'password-olvidada',
+      component: PasswordOlvidadaPage,
+    },
+    {
+      path: '/recuperar-password',
+      name: 'recuperar-password',
+      component: RecuperarPassworPage,
     },
     {
       path: '/unauthorized',

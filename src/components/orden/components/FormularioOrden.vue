@@ -165,13 +165,14 @@ const onFileRemove = () => {
       </div>
     </Field>
 
-    <Field name="solicitanteId">
+    <Field name="solicitanteId" v-slot="{ meta, errors }">
       <div>
         <label for="solicitanteId">Empleado solicitante</label>
         <BusquedaEmpleados
           :nombre="formatearNombre(orden?.solicitante!)"
           :seleccionarEmpleado="seleccionarEmpleado"
           :boton="false"
+          :invalid="meta.touched && errors.length > 0"
         />
         <ErrorMessage name="solicitanteId" class="text-red-500" />
       </div>

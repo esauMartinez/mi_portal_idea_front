@@ -41,6 +41,7 @@ const submit = () => {
         }
       "
       :disabled="disabled"
+      :invalid="invalid"
       v-if="!boton"
     />
 
@@ -58,6 +59,7 @@ const submit = () => {
         }
       "
       :disabled="disabled"
+      :invalid="invalid"
       v-if="boton"
     />
 

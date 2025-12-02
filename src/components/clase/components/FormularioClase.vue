@@ -318,7 +318,7 @@ const submit = handleSubmit((values: IClase) => {
           <label for="modeloId">Modelo</label>
           <v-autocomplete
             fluid
-            :modelValue="clase?.modelo.nombre"
+            :modelValue="clase?.modelo?.nombre"
             :suggestions="modelos"
             @complete="buscarModelo"
             optionLabel="nombre"
@@ -415,7 +415,7 @@ const submit = handleSubmit((values: IClase) => {
       </div>
     </Field>
 
-    <Field name="representanteEmpresaId">
+    <Field name="representanteEmpresaId" v-slot="{ meta, errors }">
       <div>
         <label for="representanteEmpresaId">Representante empresa</label>
         <BusquedaEmpleados
@@ -423,12 +423,13 @@ const submit = handleSubmit((values: IClase) => {
           :seleccionar-empleado="seleccionarRepresentanteEmpresa"
           :boton="false"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+          :invalid="meta.touched && errors.length > 0"
         />
         <ErrorMessage name="representanteEmpresaId" class="text-red-500" />
       </div>
     </Field>
 
-    <Field name="representanteEmpleadosId">
+    <Field name="representanteEmpleadosId" v-slot="{ meta, errors }">
       <div>
         <label for="representanteEmpleadosId">Representante trabajadores</label>
         <BusquedaEmpleados
@@ -436,6 +437,7 @@ const submit = handleSubmit((values: IClase) => {
           :seleccionar-empleado="seleccionarRepresentanteEmpleados"
           :boton="false"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+          :invalid="meta.touched && errors.length > 0"
         />
         <ErrorMessage name="representanteEmpleadosId" class="text-red-500" />
       </div>

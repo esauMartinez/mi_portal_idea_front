@@ -2,13 +2,10 @@ import router from '@/router'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const dominio = 'mi-portal-idea-560bb088c8b9.herokuapp.com'
-// const dominio = 'localhost:2300'
-
-export const baseURL = `https://${dominio}/`
+const apiUrl = import.meta.env.VITE_API_URL
 
 export const api_mi_portal = axios.create({
-  baseURL,
+  baseURL: apiUrl,
 })
 
 api_mi_portal.interceptors.response.use(
@@ -35,7 +32,7 @@ api_mi_portal.interceptors.response.use(
       })
     } else if (error.response.status === 403) {
       Swal.fire({
-        icon: 'error',
+        icon: 'warning',
         title: 'Oops...',
         text: error.response.data.mensaje,
       })

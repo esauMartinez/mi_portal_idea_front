@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 import useBitacoraEmpleado from '../composables/useBitacoraEmpleado'
 import type { IBitacoraEmpleado } from '../interfaces/bitacora'
+import moment from 'moment'
 
 const { params } = useRoute()
 const { data: bitacora } = useBitacoraEmpleado(+params.id!)
@@ -17,7 +18,11 @@ const { data: bitacora } = useBitacoraEmpleado(+params.id!)
     <template #empty> No hay bitacora de este empleado </template>
 
     <v-column field="id" header="ID"></v-column>
-    <v-column field="fecha" header="Fecha"></v-column>
+    <v-column field="fecha" header="Fecha">
+      <template #body="{ data }: { data: IBitacoraEmpleado }">
+        {{ moment(data.fecha).format('YYYY/MM/DD HH:mm:ss') }}
+      </template>
+    </v-column>
     <v-column field="evento" header="Evento">
       <template #body="{ data }: { data: IBitacoraEmpleado }">
         <v-tag :value="data.evento.toUpperCase()" class="w-full" />

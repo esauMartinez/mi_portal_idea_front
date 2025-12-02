@@ -63,8 +63,11 @@ const submit = handleSubmit((values) => {
             </div>
           </Field>
 
-          <div class="flex justify-end mt-3 mb-3">
-            <RouterLink to="restaurar" class="text-[16px]! text-[#0059ff] hover:text-[#0059ffe1]">
+          <div class="flex justify-center mt-1 mb-1">
+            <RouterLink
+              to="password-olvidada"
+              class="text-[16px]! text-[#0059ff] hover:text-[#0059ffe1]"
+            >
               ¿Olvidaste tu contraseña?
             </RouterLink>
           </div>

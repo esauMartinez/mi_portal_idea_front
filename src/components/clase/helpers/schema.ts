@@ -13,16 +13,16 @@ export const schema = yup.object({
   duracion: yup.string().required('El campo es requerido'),
   tipo: yup.string().required('El campo es requerido'),
   cursoId: yup.number().required('El campo es requerido'),
-  modeloId: yup.number(),
-  ubicacionId: yup.number().nullable(),
-  sala: yup.string().nullable(),
+  modeloId: yup.number().nullable(),
+  ubicacionId: yup.number().nullable().required('El campo es requerido'),
+  sala: yup.string().nullable().required('El campo es requerido'),
   // instructores: yup
   //   .array<IEmpleado[]>()
   //   .min(1, 'Debes ingresar al menos un instructor')
   //   .required('Debes ingresar al menos un instructor'),
   // alumnos: yup.array<IEmpleado[]>(),
-  representanteEmpresaId: yup.number().nullable(),
-  representanteEmpleadosId: yup.number().nullable(),
+  representanteEmpresaId: yup.number().nullable().required('El campo es requerido'),
+  representanteEmpleadosId: yup.number().nullable().required('El campo es requerido'),
   ocupacionId: yup.number().required('El campo es requerido'),
   areaTematicaId: yup.number().required('El campo es requerido'),
   estatus: yup.string(),

@@ -16,4 +16,5 @@ export interface IOrden {
   solicitante: IEmpleado
   pathArchivo: string
   file: File | null
+  createdAt: Date
 }

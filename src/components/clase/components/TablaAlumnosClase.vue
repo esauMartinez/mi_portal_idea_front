@@ -3,22 +3,23 @@ import { useRoute } from 'vue-router'
 import useAlumnos from '../composables/alumno/useAlumnos'
 import { formatearNombre } from '@/helper/formatearNombre'
 import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
-// import { verificarPermiso } from '@/guards/verificarPermiso'
 import useEliminar from '../composables/alumno/useEliminar'
 import type { IClaseEmpleado } from '../interfaces/clase_empleado'
 import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
 import useCrear from '../composables/alumno/useCrear'
+import { verificarPermiso } from '@/guards/verificarPermiso'
+import useClase from '../composables/useClase'
 
 const { params } = useRoute()
-const { claseId, clase, isLoading } = useAlumnos()
+const { claseId, clase: alumnos, isLoading } = useAlumnos()
 const { crearMutation, isPending } = useCrear()
 const { eliminar } = useEliminar()
-// const { clase } = useClase(+params.id!)
+const { clase } = useClase(+params.id!)
 claseId.value = +params.id!
 
 const agregarAlumno = (payload: IEmpleado) => {
   crearMutation.mutate({
-    claseId: clase.value.clase.id,
+    claseId: clase.value.id,
     empleadoId: payload.id,
   })
 }
@@ -26,7 +27,7 @@ const agregarAlumno = (payload: IEmpleado) => {
 
 <template>
   <v-datatable
-    :value="clase.claseEmpleado"
+    :value="alumnos.claseEmpleado"
     showGridlines
     size="small"
     class="p-datatable-sm"
@@ -43,8 +44,9 @@ const agregarAlumno = (payload: IEmpleado) => {
             :seleccionarEmpleado="agregarAlumno"
             :pendiente="isPending"
             :instructor="false"
+            v-if="clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')"
           />
-          <!-- v-if="clase.clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')" -->
+          {{ clase.estatus }}
         </div>
       </div>
     </template>

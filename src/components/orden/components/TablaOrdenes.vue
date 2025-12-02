@@ -6,6 +6,7 @@ import type { IOrden } from '../interfaces/orden'
 import { formatearNombre } from '@/helper/formatearNombre'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
 import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
+import moment from 'moment'
 
 const { ordenes, isLoading, estatus, filters, opcionesEstatus, empresa, severity, descargar } =
   useOrdenes()
@@ -86,6 +87,11 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
 
     <v-column field="id" header="ID" sortable />
     <v-column field="referencia" header="Referencia" sortable />
+    <v-column field="createdAt" header="Fecha" sortable>
+      <template #body="{ data }: { data: IOrden }">
+        {{ moment(data.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
+      </template>
+    </v-column>
     <v-column field="referenciaSap" header="Referencia SAP" sortable />
     <v-column field="empresa.razonSocial" header="Empresa" sortable>
       <template #body="{ data }: { data: IOrden }">

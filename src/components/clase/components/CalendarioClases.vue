@@ -235,10 +235,10 @@ function nextMonth() {
   view.value = addMonths(view.value, 1)
 }
 
-function goToday() {
-  view.value = new Date(today.getFullYear(), today.getMonth(), 1)
-  selectedDate.value = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-}
+// function goToday() {
+//   view.value = new Date(today.getFullYear(), today.getMonth(), 1)
+//   selectedDate.value = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+// }
 
 function isSelected(d: Date) {
   return isoDate(d) === isoDate(selectedDate.value)
@@ -277,7 +277,7 @@ function isSelected(d: Date) {
         </button>
       </div>
       <div class="flex gap-3">
-        <v-button @click="goToday" icon="pi pi-replay" label="Hoy" size="small" />
+        <!-- <v-button @click="goToday" icon="pi pi-replay" label="Hoy" size="small" /> -->
         <router-link :to="{ name: 'enlazar-clases' }" v-if="verificarPermiso('Clases.Enlazar')">
           <v-button icon="pi pi-arrow-right-arrow-left" label="Enlazar clases" size="small" />
         </router-link>
@@ -319,7 +319,7 @@ function isSelected(d: Date) {
         <!-- 🔥 Iteramos sobre todas las clases del día -->
         <div v-if="day.clases.length > 0">
           <div v-for="clase in day.clases" :key="clase.id" class="mt-1!">
-            <div class="rounded-md mt-2">
+            <!-- <div class="rounded-md mt-2">
               <span class="text-[12px]! p-2! bg-orange-400! text-white rounded-tl-md rounded-tr-md">
                 <span>Id: {{ clase.id }} - </span>
                 <span v-if="clase.enlazada">
@@ -328,7 +328,7 @@ function isSelected(d: Date) {
                 <span>{{ clase.horaInicio }} - </span>
                 <span>{{ clase.horaFinalizacion }} </span>
               </span>
-            </div>
+            </div> -->
             <!-- <router-link to="" @click.stop> -->
             <v-splitbutton
               fluid

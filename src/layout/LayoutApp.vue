@@ -165,6 +165,10 @@ const onToggleCollapse = () => {
         />
       </div>
     </template>
+    <template v-slot:toggle-icon>
+      <i class="pi pi-chevron-left" v-if="!collapsed"></i>
+      <i class="pi pi-chevron-right" v-else></i>
+    </template>
   </sidebar-menu>
 
   <div class="">
