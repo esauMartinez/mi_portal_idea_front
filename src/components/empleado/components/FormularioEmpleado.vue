@@ -17,6 +17,8 @@ import BusquedaEmpleados from './BusquedaEmpleados.vue'
 import useOcupaciones from '@/components/ocupacion/composables/useOcupaciones'
 import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
+import type { FileUploadSelectEvent } from 'primevue'
+import { apiUrl } from '@/api'
 
 const { empleado, cancelar, guardar } = defineProps<Props>()
 const { activo, verificado, tipoEmpleado, tieneUsuario, instructor } = useDatos()
@@ -30,6 +32,8 @@ const { centrosCostos } = useCentrosCostos()
 const { ocupaciones } = useOcupaciones()
 
 const padre = ref()
+const imagePreview = ref<string | null>(null)
+const imageName = ref<string | null>(null)
 
 // Inicializar empresaId correctamente
 if (empleado?.empresaId) {
@@ -63,8 +67,51 @@ const seleccionarEmpleado = (empleado: IEmpleado) => {
   // setFieldValue('padreId', empleado.id)
 }
 
+const onFileSelect = (event: FileUploadSelectEvent) => {
+  const file = event.files?.[0] ?? null
+  setFieldValue('file', file)
+
+  if (file) {
+    imageName.value = file.name
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      imagePreview.value = reader.result as string // base64 para <img>
+    }
+    reader.readAsDataURL(file) // convierte imagen a base64
+  }
+}
+
+const onFileRemove = () => {
+  setFieldValue('file', null)
+  imagePreview.value = null
+  imageName.value = null
+}
+
 const onSubmit = handleSubmit((values) => {
-  guardar(values)
+  // guardar(values)
+  const formData = new FormData()
+
+  // Agregar valores simples
+  Object.keys(values).forEach((key) => {
+    // Evitar meter file en esta parte
+    if (key !== 'file') {
+      if (key === 'ocupacionesEmpleado') {
+        formData.append(key, JSON.stringify(values[key]))
+      } else {
+        // @ts-expect-error no usar
+        formData.append(key, values[key])
+      }
+    }
+  })
+
+  // Agregar archivo si existe
+  if (values.file) {
+    formData.append('file', values.file)
+  }
+
+  guardar(formData)
+  // guardar(values)
 })
 </script>
 
@@ -449,6 +496,44 @@ const onSubmit = handleSubmit((values) => {
           :boton="false"
         />
         <ErrorMessage name="padreId" class="text-red-500" />
+      </div>
+    </Field>
+
+    <Field name="file">
+      <div>
+        <label for="pdf">PDF de orden</label>
+        <v-fileupload
+          chooseLabel="Seleccionar archivo"
+          cancelLabel="Cancelar"
+          :showUploadButton="false"
+          :multiple="false"
+          accept="image/*"
+          @select="onFileSelect"
+          @remove="onFileRemove"
+          @clear="onFileRemove"
+          @removeUploadedFile="onFileRemove"
+        >
+          <template #content>
+            <!-- Nombre del archivo -->
+            <div v-if="imageName" class="mt-2 text-sm text-gray-700">
+              Archivo seleccionado: <strong>{{ imageName }}</strong>
+            </div>
+
+            <!-- Previsualización PDF -->
+            <div v-if="imagePreview" class="mt-3 border rounded h-[400px]">
+              <iframe :src="imagePreview" class="w-full h-full rounded"></iframe>
+            </div>
+
+            <div
+              v-if="empleado?.pathArchivo !== null && !imagePreview"
+              class="mt-3 border rounded h-[400px]"
+            >
+              <img :src="`${apiUrl}/archivos/${empleado?.pathArchivo}`" />
+            </div>
+
+            <ErrorMessage name="file" class="text-red-500" />
+          </template>
+        </v-fileupload>
       </div>
     </Field>
 

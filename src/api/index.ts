@@ -2,7 +2,7 @@ import router from '@/router'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const apiUrl = import.meta.env.VITE_API_URL
+export const apiUrl = import.meta.env.VITE_API_URL
 
 export const api_mi_portal = axios.create({
   baseURL: apiUrl,

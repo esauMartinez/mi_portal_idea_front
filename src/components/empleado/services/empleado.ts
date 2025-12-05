@@ -41,7 +41,7 @@ export const getEmpleado = async (id: number): Promise<IEmpleado> => {
   return data
 }
 
-export const postEmpleado = async (payload: IEmpleado): Promise<string> => {
+export const postEmpleado = async (payload: FormData): Promise<string> => {
   const { data } = await api_mi_portal.post<string>(`/empleado`, payload)
   return data
 }
@@ -51,9 +51,9 @@ export const deleteEmpleado = async (id: number): Promise<string> => {
   return data
 }
 
-export const updateEmpleado = async (payload: IEmpleado): Promise<string> => {
+export const updateEmpleado = async (payload: FormData): Promise<string> => {
   await timer()
-  const { data } = await api_mi_portal.put<string>(`/empleado/${payload.id}`, payload)
+  const { data } = await api_mi_portal.put<string>(`/empleado`, payload)
   return data
 }
 

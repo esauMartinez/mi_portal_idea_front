@@ -2,7 +2,6 @@
 import router from '@/router'
 import { ref, watch } from 'vue'
 import FormularioEmpleado from '../components/FormularioEmpleado.vue'
-import type { IEmpleado } from '../interfaces/empleado'
 import useEmpleado from '../composables/useEmpleado'
 import { useRoute } from 'vue-router'
 import EsqueletoFormulario from '@/components/esqueletos/EsqueletoFormulario.vue'
@@ -18,7 +17,7 @@ const cancelar = () => {
   visible.value = false
 }
 
-const guardar = (empleado: IEmpleado) => {
+const guardar = (empleado: FormData) => {
   modificarMutation.mutate(empleado)
 }
 

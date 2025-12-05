@@ -11,9 +11,10 @@ export const schema = yup.object({
   nombre: yup.string().required('El campo es requerido'),
   estatus: yup.boolean().default(true).required('El campo es requerido'),
   requerimientosCursos: yup.array<IRequerimientoCurso[]>().when('tipo', (tipo, schema) => {
-    if (tipo[0] === 'interno') {
-      return schema.min(1, 'Debe tener al menos una ocupación').required('El campo es requerido')
-    }
+    // if (tipo[0] === 'interno') {
+    //   return schema.min(1, 'Debe tener al menos una ocupación')
+    //   .required('El campo es requerido')
+    // }
     return schema.notRequired()
   }),
 })

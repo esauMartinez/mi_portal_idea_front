@@ -39,5 +39,9 @@ export interface IEmpleado {
   centroCostoId?: number
   ocupacionesEmpleado: IOcupacionEmpleado[]
 
+  pathArchivo: string
+
   hijos: IJerarquia[]
+
+  file: File | null
 }

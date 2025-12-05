@@ -2,18 +2,17 @@
 import router from '@/router'
 import { ref, watch } from 'vue'
 import FormularioEmpleado from '../components/FormularioEmpleado.vue'
-import type { IEmpleado } from '../interfaces/empleado'
 import useCrear from '../composables/useCrear'
 
 const visible = ref<boolean>(true)
-const { crearmutation, isPending, isSuccess } = useCrear()
+const { crearMutation, isPending, isSuccess } = useCrear()
 
 const cancelar = () => {
   visible.value = false
 }
 
-const guardar = (empleado: IEmpleado) => {
-  crearmutation.mutate(empleado)
+const guardar = (empleado: FormData) => {
+  crearMutation.mutate(empleado)
 }
 
 watch(isSuccess, (payload) => {

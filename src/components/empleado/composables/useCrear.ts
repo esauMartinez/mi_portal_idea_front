@@ -8,7 +8,7 @@ import { mensajeError, mensajeOk } from '@/helper/mensajes'
 const useCrear = () => {
   const queryClient = useQueryClient()
 
-  const crearmutation = useMutation({
+  const crearMutation = useMutation({
     mutationKey: ['postEmpleado'],
     mutationFn: postEmpleado,
     onMutate: () => {
@@ -28,10 +28,10 @@ const useCrear = () => {
   })
 
   return {
-    isPending: computed(() => crearmutation.isPending.value),
-    isSuccess: computed(() => crearmutation.isSuccess.value),
+    isPending: computed(() => crearMutation.isPending.value),
+    isSuccess: computed(() => crearMutation.isSuccess.value),
 
-    crearmutation,
+    crearMutation,
   }
 }
 

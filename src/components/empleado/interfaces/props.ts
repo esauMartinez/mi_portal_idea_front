@@ -3,7 +3,7 @@ import type { IEmpleado } from './empleado'
 export interface Props {
   empleado?: IEmpleado
   cancelar: () => void
-  guardar: (empleado: IEmpleado) => void
+  guardar: (empleado: FormData) => void
   pendiente: boolean
 }
 

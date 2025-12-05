@@ -8,6 +8,7 @@ import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces'
 import moment from 'moment'
 import { formatearNombre } from '@/helper/formatearNombre'
 import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_empleado'
+import { apiUrl } from '@/api'
 
 const usePdfCertificado = () => {
   const id = ref<number | null>(null)
@@ -21,7 +22,24 @@ const usePdfCertificado = () => {
     enabled: () => id.value !== null,
   })
 
-  const generarContenidoPdf = (payload: IClaseEmpleado) => {
+  async function descargarImagenBase64(url: string): Promise<string> {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      })
+    } catch (error) {
+      console.error('Error al descargar imagen:', error)
+      throw error
+    }
+  }
+
+  const generarContenidoPdf = async (payload: IClaseEmpleado) => {
     empleado.value = `${payload.empleado?.apellidoPaterno} ${payload.empleado?.apellidoMaterno ? payload.empleado?.apellidoMaterno : ''} ${payload.empleado?.primerNombre} ${payload.empleado?.segundoNombre ? payload.empleado?.segundoNombre : ''}`
     const representanteEmpresa = payload.clase!.representanteEmpresa
       ? formatearNombre(payload.clase!.representanteEmpresa)
@@ -29,6 +47,16 @@ const usePdfCertificado = () => {
     const representanteEmpleados = payload.clase!.representanteEmpleados
       ? formatearNombre(payload.clase!.representanteEmpleados)
       : 'S/D'
+
+    const firmaInsturctor = await descargarImagenBase64(
+      `${apiUrl}/archivos/${payload.clase!.empleadoCalifica.pathArchivo}`,
+    )
+    const firmaRepresentanteEmpresa = await descargarImagenBase64(
+      `${apiUrl}/archivos/${payload.clase!.representanteEmpresa.pathArchivo}`,
+    )
+    const firmaRepresentanteEmpleados = await descargarImagenBase64(
+      `${apiUrl}/archivos/${payload.clase!.representanteEmpleados.pathArchivo}`,
+    )
 
     const content: Content[] = [
       // Logo
@@ -233,7 +261,7 @@ const usePdfCertificado = () => {
             // Valor: Nombre del curso
             [
               {
-                text: `${payload.clase!.curso.nombre} ${payload.clase?.modelo.nombre}`,
+                text: `${payload.clase!.curso.nombre} ${payload.clase?.modelo?.nombre}`,
                 bold: false,
                 margin: [0, 2, 0, 2],
                 fontSize: 11,
@@ -443,7 +471,7 @@ const usePdfCertificado = () => {
             // Valor: Agente capacitador
             [
               {
-                text: `KOMATSU MAQUINARIAS MEXICO S.A. DE C.V. RFC: RMA910702IW1 Y5445837106`,
+                text: `KOMATSU MAQUINARIAS MEXICO S.A. DE C.V.       RFC: RMA910702IW1        Y5445837106`,
                 bold: false,
                 fontSize: 11,
                 margin: [0, 2, 0, 2],
@@ -470,7 +498,7 @@ const usePdfCertificado = () => {
         text: 'Los datos se asientan en esta constancia bajo protesta de decir verdad, apercibidos de la responsabilidad en que incurre todo aquel que no se conduce con verdad.',
         fontSize: 8,
         alignment: 'center',
-        margin: [0, 10, 0, 30],
+        margin: [0, 10, 0, 5],
       },
 
       // Firmas
@@ -479,6 +507,18 @@ const usePdfCertificado = () => {
           {
             width: '33%',
             stack: [
+              payload.clase!.empleadoCalifica.pathArchivo
+                ? [
+                    // Imagen de firma
+                    {
+                      image: `${firmaInsturctor}`, // o ruta de la imagen
+                      width: 100,
+                      height: 50,
+                      alignment: 'center',
+                      margin: [0, 0, 0, -15],
+                    },
+                  ]
+                : [{ text: '', margin: [0, 0, 0, 35] }],
               { text: '_____________________', alignment: 'center' },
               {
                 text: `${payload.clase!.empleadoCalifica?.primerNombre} ${payload.clase!.empleadoCalifica?.segundoNombre} ${payload.clase!.empleadoCalifica?.apellidoPaterno} ${payload.clase!.empleadoCalifica?.apellidoMaterno}`,
@@ -492,6 +532,18 @@ const usePdfCertificado = () => {
           {
             width: '33%',
             stack: [
+              payload.clase!.representanteEmpresa.pathArchivo
+                ? [
+                    // Imagen de firma
+                    {
+                      image: `${firmaRepresentanteEmpresa}`, // o ruta de la imagen
+                      width: 100,
+                      height: 50,
+                      alignment: 'center',
+                      margin: [0, 0, 0, -15],
+                    },
+                  ]
+                : [{ text: '', margin: [0, 0, 0, 35] }],
               { text: '_____________________', alignment: 'center' },
               {
                 text: `${representanteEmpresa}`,
@@ -505,6 +557,18 @@ const usePdfCertificado = () => {
           {
             width: '34%',
             stack: [
+              payload.clase!.representanteEmpleados.pathArchivo
+                ? [
+                    // Imagen de firma
+                    {
+                      image: `${firmaRepresentanteEmpleados}`, // o ruta de la imagen
+                      width: 100,
+                      height: 50,
+                      alignment: 'center',
+                      margin: [0, 0, 0, -15],
+                    },
+                  ]
+                : [{ text: '', margin: [0, 0, 0, 35] }],
               { text: '_____________________', alignment: 'center' },
               {
                 text: `${representanteEmpleados}`,
@@ -516,7 +580,7 @@ const usePdfCertificado = () => {
             ],
           },
         ],
-        margin: [0, 0, 0, 20],
+        margin: [0, 0, 0, 10],
       },
 
       // Instrucciones
