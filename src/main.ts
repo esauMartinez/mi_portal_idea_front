@@ -29,6 +29,7 @@ import {
   FaAngleRight,
   FaAngleLeft,
 } from 'oh-vue-icons/icons'
+import 'animate.css';
 
 import {
   AutoComplete,

@@ -166,8 +166,16 @@ const onToggleCollapse = () => {
       </div>
     </template>
     <template v-slot:toggle-icon>
-      <i class="pi pi-chevron-left" v-if="!collapsed"></i>
-      <i class="pi pi-chevron-right" v-else></i>
+      <img
+        src="/tractor-tire.png"
+        alt="close-and-open"
+        class="w-10! tire"
+        :class="{
+          animate__animated: true,
+          'rotate-left': collapsed,
+          'rotate-right': !collapsed,
+        }"
+      />
     </template>
   </sidebar-menu>
 
@@ -189,4 +197,16 @@ const onToggleCollapse = () => {
   <v-toast position="bottom-right" group="br" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.tire {
+  transition: transform 0.6s ease-in-out;
+}
+
+.rotate-left {
+  transform: rotate(-360deg);
+}
+
+.rotate-right {
+  transform: rotate(360deg);
+}
+</style>

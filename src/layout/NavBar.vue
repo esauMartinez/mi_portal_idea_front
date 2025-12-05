@@ -19,7 +19,7 @@ const { nombreEmpleado, autenticado } = storeToRefs(authSotore)
     </template>
     <template #end>
       <div class="flex items-center gap-2 p-2">
-        <span class="text-xl!">{{ nombreEmpleado }}</span>
+        <span class="text-xl! text-[#283d9a]!">{{ nombreEmpleado }}</span>
       </div>
     </template>
   </v-menubar>

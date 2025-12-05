@@ -40,7 +40,7 @@ body {
 }
 
 .v-sidebar-menu {
-  --vsm-primary-color: #0059ff !important;
+  --vsm-primary-color: #283d9a !important;
   --vsm-base-bg: #2a2a2e;
   --vsm-item-color: #fff;
   /* --vsm-item-active-color:; */
