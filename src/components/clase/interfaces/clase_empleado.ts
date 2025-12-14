@@ -9,6 +9,8 @@ export interface IClaseEmpleado {
   empleado?: IEmpleado
   calificacion?: number
   aprobado?: boolean
+  comentarios?: string
+  aceptarComentarios?: boolean
   createdAt?: Date
   updatedAt?: Date
 }

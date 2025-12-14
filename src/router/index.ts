@@ -100,6 +100,7 @@ import BitacoraModelo from '@/components/modelo/ui/BitacoraModelo.vue'
 import BitacoraClase from '@/components/clase/ui/BitacoraClase.vue'
 import RecuperarPassworPage from '@/pages/RecuperarPassworPage.vue'
 import PasswordOlvidadaPage from '@/pages/PasswordOlvidadaPage.vue'
+import ArchivosClase from '@/components/clase/ui/ArchivosClase.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -620,6 +621,13 @@ const router = createRouter({
               },
               beforeEnter: [verificarAutenticacion],
               component: CalificarClase,
+              children: [
+                {
+                  path: '/archivos-clase/:id',
+                  name: 'archivos-clase',
+                  component: ArchivosClase,
+                },
+              ],
             },
             {
               path: '/lista-instructore/:id',

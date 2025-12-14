@@ -13,7 +13,7 @@ const { data: cursosEmpleado, isLoading } = useCursosEmpleado(+params.id!)
 <template>
   <v-dialog
     v-model:visible="visible"
-    :style="{ width: '60%' }"
+    :style="{ width: '70%' }"
     v-on:after-hide="router.back()"
     header="Cursos empleado"
     :modal="true"

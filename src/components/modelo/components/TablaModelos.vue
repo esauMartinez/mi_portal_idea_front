@@ -46,6 +46,7 @@ const { eliminar, isPending } = useEliminar()
       </div>
     </template>
 
+    <v-column field="id" header="ID"></v-column>
     <v-column field="nombre" header="Nombre" sortable>
       <template #body="{ data }: { data: IModelo }">
         {{ data.nombre }}

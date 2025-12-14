@@ -95,7 +95,7 @@ export const deleteKardex = async (id: number): Promise<string> => {
 }
 
 export const getMisCursos = async (): Promise<IClaseEmpleado[]> => {
-  await timer()
+  // await timer()
   const { data } = await api_mi_portal.get<IClaseEmpleado[]>(`/mis-cursos`)
   return data
 }

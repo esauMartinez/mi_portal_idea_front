@@ -7,3 +7,8 @@ export const getDatosPdf = async (id: number): Promise<IClaseEmpleado> => {
   const { data } = await api_mi_portal.get<IClaseEmpleado>(`/datos-pdf/${id}`)
   return data
 }
+
+export const updateMiCurso = async (payload: IClaseEmpleado): Promise<string> => {
+  const { data } = await api_mi_portal.put<string>(`/mi-curso`, payload)
+  return data
+}

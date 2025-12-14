@@ -69,7 +69,13 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
         {{ formatearNombre(data.empleado!) }}
       </template>
     </v-column>
-    <v-column header="Calificacion" :style="{ width: '150px' }">
+
+    <v-column header="Comentarios" :style="{ width: '300px' }">
+      <template #body="{ data }: { data: IClaseEmpleado }">
+        <v-textarea fluid v-model="data.comentarios" :disabled="clase.clase.calificada" />
+      </template>
+    </v-column>
+    <v-column header="Calificacion" :style="{ width: '200px' }">
       <template #body="{ data }: { data: IClaseEmpleado }">
         <v-inputnumber
           fluid
@@ -108,6 +114,9 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
       size="small"
       @click="cancelar"
     />
+    <router-link :to="{ name: 'archivos-clase', params: { id: clase.clase?.id } }">
+      <v-button label="Subir archivos" size="small" icon="pi pi-file"></v-button>
+    </router-link>
     <v-button
       label="Guardar calificaciones"
       icon="pi pi-save"
@@ -117,6 +126,8 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
       :loading="pendiente"
     />
   </div>
+
+  <router-view></router-view>
 </template>
 
 <style scoped></style>
