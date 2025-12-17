@@ -4,7 +4,7 @@ import type { Props } from '../interfaces/props'
 import { computed } from 'vue'
 import { schema } from '../helpers/schema'
 import type { IUbicacion } from '../interfaces/ubicacion'
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 
 const { ubicacion, guardar } = defineProps<Props>()
 const { activo } = useDatos()

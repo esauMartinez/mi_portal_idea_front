@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 import { computed } from 'vue'
 import type { Props } from '../interfaces/props'
 import { ErrorMessage, Field, useForm } from 'vee-validate'

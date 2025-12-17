@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 import { computed } from 'vue'
 import { schema } from '../helpers/schema'
 import type { ISucursal } from '../interfaces/sucursal'

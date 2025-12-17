@@ -5,6 +5,7 @@ import type { IClaseInstructor } from '../interfaces/clase_instructor'
 import type { IEnlaceClase } from '../interfaces/enlaceClase'
 import type { ICalificacionesClase } from '../interfaces/calificacionesClase'
 import type { IBitacoraClase } from '../interfaces/bitacora_clase'
+import type { IArchivoClase } from '../interfaces/archivo_clase'
 
 export const getClases = async (
   inicio: string,
@@ -100,5 +101,24 @@ export const postEnlace = async (payload: IEnlaceClase): Promise<string> => {
 
 export const getBitacora = async (id: number): Promise<IBitacoraClase[]> => {
   const { data } = await api_mi_portal.get<IBitacoraClase[]>(`/clase/bitacora/${id}`)
+  return data
+}
+
+export const getArchivosClase = async (id: number): Promise<IArchivoClase[]> => {
+  const { data } = await api_mi_portal.get<IArchivoClase[]>(`/clase/archivos/${id}`)
+  return data
+}
+
+export const postArchivosClase = async (payload: FormData): Promise<string> => {
+  const { data } = await api_mi_portal.post<string>(`/clase/archivos`, payload, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  return data
+}
+
+export const deleteArchivoClase = async (id: number): Promise<string> => {
+  const { data } = await api_mi_portal.delete<string>(`/clase/archivo/${id}`)
   return data
 }

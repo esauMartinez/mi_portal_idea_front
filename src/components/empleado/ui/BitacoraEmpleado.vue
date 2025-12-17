@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from '@/router'
 import { ref } from 'vue'
-import TablaBitacoraEmpleado from '../components/TablaBitacoraEmpleado.vue'
+import TablaBitacora from '../components/TablaBitacora.vue'
 
 const visible = ref<boolean>(true)
 </script>
@@ -14,7 +14,7 @@ const visible = ref<boolean>(true)
     header="Bitacora empleado"
     :modal="true"
   >
-    <TablaBitacoraEmpleado />
+    <TablaBitacora />
   </v-dialog>
 </template>
 

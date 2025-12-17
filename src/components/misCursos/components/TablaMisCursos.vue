@@ -6,7 +6,7 @@ import { FilterMatchMode } from '@primevue/core/api'
 import useModificarMiCurso from '../composables/useModificarMicurso'
 
 const { misCursos } = defineProps<PropsTabla>()
-const { modificarMutation } = useModificarMiCurso()
+const { aceptarComentarios } = useModificarMiCurso()
 
 const certificadosSeleccionados = ref<IClaseEmpleado[]>([])
 
@@ -151,7 +151,7 @@ const filters = ref({
           <v-button
             icon="pi pi-check"
             size="small"
-            @click="modificarMutation.mutate(data)"
+            @click="aceptarComentarios(data)"
             v-if="!data.aceptarComentarios && data.clase?.calificada"
           />
         </div>

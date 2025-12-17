@@ -4,7 +4,7 @@ import type { Props } from '../interfaces/props'
 import { schema } from '../helpers/schema'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
 import type { IDepartamento } from '../interfaces/departamento'
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 
 const { departamento, guardar } = defineProps<Props>()
 

@@ -40,3 +40,13 @@ export interface PropstTablaCalificaciones {
 export interface PropsTablaEnlaces {
   cancelar: () => void
 }
+
+export interface PropsArchivosClase {
+  cancelar: () => void
+  guardar?: (payload: FormData) => void
+  pendiente: boolean
+}
+
+export interface PropsClaseId {
+  id: number
+}

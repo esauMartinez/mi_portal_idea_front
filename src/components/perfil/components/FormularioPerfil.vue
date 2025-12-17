@@ -11,19 +11,15 @@ const { perfil, guardar } = defineProps<Props>()
 const { data } = useModulos()
 
 const modulos = computed(() => {
-  if (data.value) {
-    const payload = data.value.map((x) => {
-      x.permisos.map((y) => {
-        if (perfil?.perfilesPermisos.find((z) => z.permisoId == y.id)) {
-          y.seleccionado = true
-        }
-        return y
-      })
-      return x
-    })
-    return payload
-  }
-  return []
+  if (!data.value) return []
+
+  return data.value.map((x) => ({
+    ...x,
+    permisos: x.permisos.map((y) => ({
+      ...y,
+      seleccionado: !!perfil?.perfilesPermisos.find((z) => z.permisoId === y.id),
+    })),
+  }))
 })
 
 const initialValues = computed(() => {

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { Props } from '../interfaces/props'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 import { schema } from '../helpers/schema'
 import type { ICentroCosto } from '../interfaces/centro_costo'
 

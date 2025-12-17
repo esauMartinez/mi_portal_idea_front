@@ -6,7 +6,7 @@ import useEmpleados from '../composables/useEmpleados'
 import type { IEmpleado } from '../interfaces/empleado'
 import { verificarPermiso } from '@/guards/verificarPermiso'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
-import useDatos from '../composables/useDatos'
+import useDatos from '../../../composables/useDatos'
 import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
 
 const { empleados, empresa, instructor, tipo, isLoading: obteniendo, filters } = useEmpleados()

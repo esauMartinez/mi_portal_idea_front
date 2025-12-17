@@ -26,6 +26,7 @@ export interface IClase {
   padre: boolean
   empresaId: number
   empresa: IEmpresa
+  archivos: boolean
 
   representanteEmpresaId: number
   representanteEmpresa: IEmpleado

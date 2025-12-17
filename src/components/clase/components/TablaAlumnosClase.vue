@@ -46,7 +46,6 @@ const agregarAlumno = (payload: IEmpleado) => {
             :instructor="false"
             v-if="clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')"
           />
-          {{ clase.estatus }}
         </div>
       </div>
     </template>

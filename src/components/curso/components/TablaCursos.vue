@@ -45,15 +45,6 @@ const { eliminar } = useEliminar()
     </template>
 
     <v-column field="id" header="ID" sortable />
-    <v-column field="tipo" header="Tipo del curso" sortable>
-      <template #body="{ data }: { data: ICurso }">
-        <v-tag
-          :value="data.tipo === '' ? 'S/D' : data.tipo"
-          :severity="data.tipo === '' ? 'danger' : 'success'"
-          class="w-full"
-        />
-      </template>
-    </v-column>
     <v-column field="nombre" header="Nombre del curso" sortable />
 
     <v-column header="Requerimientos">

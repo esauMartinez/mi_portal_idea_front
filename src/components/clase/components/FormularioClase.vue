@@ -8,7 +8,7 @@ import moment from 'moment'
 import { parseLocalDate } from '@/helper/parseLocalDate'
 import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
 import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 import useUbicaciones from '@/components/ubicacion/composables/useUbicaciones'
 import useCursosPorNombre from '@/components/curso/composables/useCursosPorNombre'
 import type { ICurso } from '@/components/curso/interfaces/curso'
@@ -24,7 +24,7 @@ import useModelosPorNombre from '@/components/modelo/composables/useModelosPorNo
 
 const { clase, guardar } = defineProps<Props>()
 const { empresas, buscarEmpresa } = useEmpresasPorNombre()
-const { tipoClase, tieneOrden } = useDatos()
+const { tipoClase, tipoCurso, tieneOrden } = useDatos()
 const { ubicaciones } = useUbicaciones()
 const { cursos, buscarCurso } = useCursosPorNombre()
 const { ocupaciones, buscarOcupacion } = useOcupacionesPorNombre()
@@ -242,9 +242,9 @@ const submit = handleSubmit((values: IClase) => {
       </Field>
     </div>
 
-    <Field name="tipo" v-slot="{ field, meta, errors }">
+    <Field name="tipo_clase" v-slot="{ field, meta, errors }">
       <div>
-        <label for="tipo">Tipo de curso</label>
+        <label for="tipo_clase">Tipo de clase</label>
         <v-select
           fluid
           optionLabel="item"
@@ -255,7 +255,24 @@ const submit = handleSubmit((values: IClase) => {
           :invalid="meta.touched && errors.length > 0"
           :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
-        <ErrorMessage name="tipo" class="text-red-500" />
+        <ErrorMessage name="tipo_clase" class="text-red-500" />
+      </div>
+    </Field>
+
+    <Field name="tipo_curso" v-slot="{ field, meta, errors }">
+      <div>
+        <label for="tipo_curso">Tipo de curso</label>
+        <v-select
+          fluid
+          optionLabel="item"
+          optionValue="value"
+          :options="tipoCurso"
+          :modelValue="field.value"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
+        />
+        <ErrorMessage name="tipo_curso" class="text-red-500" />
       </div>
     </Field>
 

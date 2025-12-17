@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { Props } from '../interfaces/props'
 import { schema } from '../helpers/schema'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 import type { ICargo } from '../interfaces/cargo'
 
 const { cargo, guardar } = defineProps<Props>()

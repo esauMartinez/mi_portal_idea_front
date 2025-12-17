@@ -28,6 +28,9 @@ import {
   FaBarcode,
   FaAngleRight,
   FaAngleLeft,
+  FaFileExcel,
+  FaFileWord,
+  FaFilePdf,
 } from 'oh-vue-icons/icons'
 import 'animate.css'
 
@@ -93,6 +96,9 @@ addIcons(
   FaBarcode,
   FaAngleRight,
   FaAngleLeft,
+  FaFileExcel,
+  FaFileWord,
+  FaFilePdf,
 )
 
 // Definir preset personalizado con colores primarios

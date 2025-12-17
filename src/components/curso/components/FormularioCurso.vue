@@ -8,7 +8,7 @@ import RequerimientosCurso from './RequerimientosCurso.vue'
 import type { IRequerimiento } from '@/components/requerimiento/interface/requerimineto'
 import type { IRequerimientoCurso } from '../interfaces/requerimiento_curso'
 import { useToast } from 'primevue'
-import useDatos from '@/components/empleado/composables/useDatos'
+import useDatos from '@/composables/useDatos'
 
 const { curso, guardar } = defineProps<Props>()
 const { activo, tipoCurso } = useDatos()

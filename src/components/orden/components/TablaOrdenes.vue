@@ -122,7 +122,7 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
           />
           <router-link
             :to="{ name: 'modificar-orden', params: { id: data.id } }"
-            v-if="verificarPermiso('Ordenes.Modificar')"
+            v-if="verificarPermiso('Ordenes.Modificar') && data.estatus !== 'Cerrada'"
           >
             <v-button icon="pi pi-pencil" severity="warn" size="small" />
           </router-link>
@@ -138,7 +138,7 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
             size="small"
             @click="eliminar(data.id!)"
             :loading="isPending"
-            v-if="verificarPermiso('Ordenes.Eliminar')"
+            v-if="verificarPermiso('Ordenes.Eliminar') && data.estatus === 'Creada'"
           />
         </div>
       </template>

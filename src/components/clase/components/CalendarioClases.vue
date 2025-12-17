@@ -47,6 +47,13 @@ const menuItems = (clase: IClase) => {
       },
     },
     {
+      label: 'Archivos clase',
+      icon: 'pi pi-file',
+      command: () => {
+        router.push({ name: 'archivos-clase', params: { id: clase.id } })
+      },
+    },
+    {
       label: 'Enlazar',
       icon: 'pi pi-arrow-down-left-and-arrow-up-right-to-center',
       command: () => {
@@ -133,6 +140,10 @@ const menuItems = (clase: IClase) => {
 
   if (!verificarPermiso('Clases.Desenlazar')) {
     items = items.filter((item) => item.label !== 'Desenlazar')
+  }
+
+  if (!verificarPermiso('Clases.Modificar.Archivos')) {
+    items = items.filter((item) => item.label !== 'Archivos clase')
   }
 
   return items

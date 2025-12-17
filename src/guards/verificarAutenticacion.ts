@@ -2,7 +2,6 @@ import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { verificarEmpleado } from './verificarEmpleado'
 import { verificarPermiso } from './verificarPermiso'
-import { verificarLocalStorage } from './verificarLocalStorage'
 import { nombreEmpleado } from './nombreEmpleado'
 
 export const verificarAutenticacion = async (
@@ -34,7 +33,6 @@ export const verificarAutenticacion = async (
     authStore.setAutenticado(true)
     const empleado = await nombreEmpleado()
     authStore.setNombreEmpleado(empleado)
-    await verificarLocalStorage()
   } else {
     authStore.setAutenticado(false)
   }

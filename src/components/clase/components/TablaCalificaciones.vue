@@ -6,6 +6,7 @@ import { ref, watch } from 'vue'
 import type { PropstTablaCalificaciones } from '../interfaces/props'
 import type { InputNumberPassThroughAttributes } from 'primevue'
 import useAlumnos from '../composables/alumno/useAlumnos'
+import { verificarPermiso } from '@/guards/verificarPermiso'
 
 defineProps<PropstTablaCalificaciones>()
 
@@ -114,9 +115,14 @@ const verificarCalificacion = (empleado: number, e: InputNumberPassThroughAttrib
       size="small"
       @click="cancelar"
     />
-    <router-link :to="{ name: 'archivos-clase', params: { id: clase.clase?.id } }">
-      <v-button label="Subir archivos" size="small" icon="pi pi-file"></v-button>
+
+    <router-link
+      :to="{ name: 'subir-archivos-clase', params: { id: clase.clase?.id } }"
+      v-if="!clase.clase?.archivos && verificarPermiso('Clases.Subir.Archivos')"
+    >
+      <v-button label="Subir archivos" size="small" icon="pi pi-file" />
     </router-link>
+
     <v-button
       label="Guardar calificaciones"
       icon="pi pi-save"

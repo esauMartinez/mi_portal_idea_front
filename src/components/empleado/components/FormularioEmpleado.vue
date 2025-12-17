@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ErrorMessage, Field, useForm } from 'vee-validate'
 import type { Props } from '../interfaces/props'
-import useDatos from '../composables/useDatos'
+import useDatos from '@/composables/useDatos'
 import type { IEmpleado } from '../interfaces/empleado'
 import { getSchema } from '../helpers/schema'
 import { computed } from 'vue'
@@ -268,7 +268,6 @@ const onSubmit = handleSubmit((values) => {
           :modelValue="field.value"
           @update:modelValue="field.onChange"
           :invalid="meta.touched && errors.length > 0"
-          :disabled="empleado?.verificado"
         />
         <ErrorMessage name="email" class="text-red-500" />
       </div>
@@ -476,13 +475,18 @@ const onSubmit = handleSubmit((values) => {
         <label for="centroCostoId">Centro de costos</label>
         <v-select
           fluid
+          filter
           :options="centrosCostos"
-          optionLabel="nombre"
           optionValue="id"
+          optionLabel="nombre"
           :modelValue="field.value"
           @update:modelValue="field.onChange"
           :invalid="meta.touched && errors.length > 0"
-        />
+        >
+          <template #option="slotProps">
+            {{ slotProps.option.clave }}-{{ slotProps.option.nombre }}
+          </template>
+        </v-select>
         <ErrorMessage name="centroCostoId" class="text-red-500" />
       </div>
     </Field>
