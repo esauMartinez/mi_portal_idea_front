@@ -108,6 +108,10 @@ const menuItems = (clase: IClase) => {
     items = items.filter((item) => item.label !== 'Modificar')
   }
 
+  if (!verificarPermiso('Clases.Eliminar')) {
+    items = items.filter((item) => item.label !== 'Eliminar')
+  }
+
   if (clase.padres.length > 0) {
     // items = items.filter((item) => item.label !== 'Modificar')
     // items = items.filter((item) => item.label !== 'Instructores')
