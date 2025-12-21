@@ -69,12 +69,13 @@ const agregarAlumno = (payload: IEmpleado) => {
         </span>
       </template>
     </v-column>
-    <!-- v-if="
-        clase.clase.estatus !== 'en curso' &&
-        clase.clase.estatus !== 'finalizada' &&
+    <v-column
+      v-if="
+        clase.estatus !== 'en curso' &&
+        clase.estatus !== 'finalizada' &&
         verificarPermiso('Clases.Eliminar.Alumno')
-      " -->
-    <v-column>
+      "
+    >
       <template #body="{ data }: { data: IEmpleado }">
         <div class="flex justify-center">
           <v-button icon="pi pi-trash" severity="danger" size="small" @click="eliminar(data.id)" />
