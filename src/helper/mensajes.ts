@@ -10,6 +10,14 @@ export const mensajeOk = (payload: string) => {
   })
 }
 
+export const mensajeOkClick = (payload: string) => {
+  Swal.fire({
+    title: payload,
+    icon: 'success',
+    draggable: true,
+  })
+}
+
 export const mensajeError = (payload: string | undefined) => {
   Swal.fire({
     icon: 'error',

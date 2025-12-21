@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/vue-query'
 import type { AxiosError } from 'axios'
 import type { IErrors } from '@/interfaces/errors'
 import { computed } from 'vue'
-import { mensajeError, mensajeOk } from '@/helper/mensajes'
+import { mensajeError, mensajeOkClick } from '@/helper/mensajes'
 import { olvidada } from '../services/recuperar'
 
 const useOlvidada = () => {
@@ -13,7 +13,7 @@ const useOlvidada = () => {
       console.log('Enviado...')
     },
     onSuccess: (payload: string) => {
-      mensajeOk(payload)
+      mensajeOkClick(payload)
     },
     onError: (error: AxiosError) => {
       const data = error.response?.data as IErrors
