@@ -21,6 +21,8 @@ export const recuperar = async (payload: IRecuperar): Promise<string> => {
 export const verificar = async (token: string): Promise<string> => {
   await timer()
   api_mi_portal.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  const { data } = await api_mi_portal.put<string>('/verificar-cuenta')
+  const { data } = await api_mi_portal.put<string>('/verificar-cuenta', {
+    token,
+  })
   return data
 }
