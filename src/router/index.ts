@@ -24,6 +24,7 @@ import { requerimientoRutas } from '@/components/requerimiento/router'
 import { sucursalRutas } from '@/components/sucursal/router'
 import { ubicacionRutas } from '@/components/ubicacion/router'
 import { createRouter, createWebHistory } from 'vue-router'
+import VerificarCuentaPage from '@/pages/VerificarCuentaPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -106,6 +107,11 @@ const router = createRouter({
     {
       ...ubicacionRutas,
       path: '/ubicaciones',
+    },
+    {
+      path: '/verificar-cuenta',
+      name: 'verificar-cuenta',
+      component: VerificarCuentaPage,
     },
     {
       path: '/password-olvidada',
