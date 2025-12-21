@@ -9,6 +9,8 @@ import { definePreset } from '@primeuix/themes'
 import 'primeicons/primeicons.css'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
+import Particles from '@tsparticles/vue3'
+import { loadSlim } from '@tsparticles/slim'
 import {
   FaUsers,
   FaUserGraduate,
@@ -132,6 +134,12 @@ app.use(PrimeVue, {
       darkModeSelector: 'white',
       cssLayer: false,
     },
+  },
+})
+app.use(Particles, {
+  init: async (engine) => {
+    // await loadFull(engine); // you can load the full tsParticles library from "tsparticles" if you need it
+    await loadSlim(engine) // or you can load the slim version from "@tsparticles/slim" if don't need Shapes or Animations
   },
 })
 

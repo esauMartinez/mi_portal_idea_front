@@ -106,7 +106,7 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
     </v-column>
     <v-column field="estatus" header="Estatus" sortable>
       <template #body="{ data }: { data: IOrden }">
-        <v-tag :value="data.estatus" :severity="severity(data.estatus)" />
+        <v-tag :value="data.estatus" :severity="severity(data.estatus)" class="w-full" />
       </template>
     </v-column>
 

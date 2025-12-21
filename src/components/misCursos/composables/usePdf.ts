@@ -1,26 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useQuery } from '@tanstack/vue-query'
-import { getDatosPdf } from '../services/pdf'
-import { computed, ref, watch } from 'vue'
-import pdfMake from 'pdfmake/build/pdfmake'
-import 'pdfmake/build/vfs_fonts'
-import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces'
-import moment from 'moment'
-import { formatearNombre } from '@/helper/formatearNombre'
-import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_empleado'
 import { apiUrl } from '@/api'
+import type { IClaseEmpleado } from '@/components/clase/interfaces/clase_empleado'
+import { formatearNombre } from '@/helper/formatearNombre'
+import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces'
+import { ref } from 'vue'
+import pdfMake from 'pdfmake/build/pdfmake'
+import moment from 'moment'
 
-const usePdfCertificado = () => {
-  const id = ref<number | null>(null)
-  const pdfUrl = ref<string>('')
+const usePdf = () => {
   const empleado = ref<string>('')
   const docDefinition = ref({} as any)
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['getDatosPdf'],
-    queryFn: () => getDatosPdf(id.value!),
-    enabled: () => id.value !== null,
-  })
 
   async function descargarImagenBase64(url: string): Promise<string> {
     try {
@@ -39,7 +28,7 @@ const usePdfCertificado = () => {
     }
   }
 
-  const generarContenidoPdf = async (payload: IClaseEmpleado) => {
+  const descargar = async (payload: IClaseEmpleado) => {
     empleado.value = `${payload.empleado?.apellidoPaterno} ${payload.empleado?.apellidoMaterno ? payload.empleado?.apellidoMaterno : ''} ${payload.empleado?.primerNombre} ${payload.empleado?.segundoNombre ? payload.empleado?.segundoNombre : ''}`
     const representanteEmpresa = payload.clase!.representanteEmpresa
       ? formatearNombre(payload.clase!.representanteEmpresa)
@@ -648,43 +637,11 @@ const usePdfCertificado = () => {
     } as TDocumentDefinitions
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition.value)
-
-    pdfDocGenerator.getDataUrl((dataUrl) => {
-      pdfUrl.value = dataUrl
-    })
+    const nombre = `${empleado.value.toUpperCase()}_${payload.clase!.curso.nombre.toUpperCase()}_${payload.clase!.areaTematica.nombre.toUpperCase()}`
+    pdfDocGenerator.download(`${nombre}.pdf`)
   }
 
-  watch(data, (payload) => {
-    if (payload) {
-      generarContenidoPdf(payload)
-    }
-  })
-
-  const descargarPdf = () => {
-    if (pdfUrl.value && data.value) {
-      const nombre = `${empleado.value.toUpperCase()}_${data.value.clase!.curso.nombre.toUpperCase()}_${data.value.clase!.areaTematica.nombre.toUpperCase()}`
-
-      const link = document.createElement('a')
-      link.href = pdfUrl.value
-      link.download = nombre
-      link.style.display = 'none'
-      document.body.appendChild(link)
-
-      link.click()
-
-      setTimeout(() => {
-        document.body.removeChild(link)
-      }, 100)
-    }
-  }
-
-  return {
-    id,
-    pdfUrl,
-    isLoading: computed(() => isLoading.value),
-
-    descargarPdf,
-  }
+  return { descargar }
 }
 
-export default usePdfCertificado
+export default usePdf

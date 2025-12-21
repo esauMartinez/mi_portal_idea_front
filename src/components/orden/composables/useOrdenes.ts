@@ -50,9 +50,9 @@ const useOrdenes = () => {
     if (estatus === 'Creada') {
       return 'info'
     } else if (estatus === 'Liberada') {
-      return 'sauccess'
-    } else {
       return 'warn'
+    } else {
+      return 'success'
     }
   }
 

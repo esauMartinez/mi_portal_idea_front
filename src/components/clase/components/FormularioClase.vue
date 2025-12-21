@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Props } from '../interfaces/props'
-import { schema } from '../helpers/schema'
-import { ErrorMessage, Field, useForm } from 'vee-validate'
-import type { IClase } from '../interfaces/clase'
-import moment from 'moment'
-import { parseLocalDate } from '@/helper/parseLocalDate'
-import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
-import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
-import useDatos from '@/composables/useDatos'
-import useUbicaciones from '@/components/ubicacion/composables/useUbicaciones'
-import useCursosPorNombre from '@/components/curso/composables/useCursosPorNombre'
-import type { ICurso } from '@/components/curso/interfaces/curso'
-import useOcupacionesPorNombre from '@/components/ocupacion/composables/useOcupacionesPorNombre'
 import useAreasTematicasPorNombre from '@/components/areaTematica/composables/useAreasTematicasPorNombre'
 import type { IAreaTematica } from '@/components/areaTematica/interfaces/area_tematica'
-import type { IOcupacion } from '@/components/ocupacion/interfaces/ocupacion'
+import useCursosPorNombre from '@/components/curso/composables/useCursosPorNombre'
+import type { ICurso } from '@/components/curso/interfaces/curso'
+import BusquedaEmpleados from '@/components/empleado/components/BusquedaEmpleados.vue'
+import type { IEmpleado } from '@/components/empleado/interfaces/empleado'
 import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
-import { formatearNombre } from '@/helper/formatearNombre'
-import useOrdenes from '@/components/orden/composables/useOrdenes'
 import useModelosPorNombre from '@/components/modelo/composables/useModelosPorNombre'
+import useOcupacionesPorNombre from '@/components/ocupacion/composables/useOcupacionesPorNombre'
+import type { IOcupacion } from '@/components/ocupacion/interfaces/ocupacion'
+import useOrdenes from '@/components/orden/composables/useOrdenes'
+import useUbicaciones from '@/components/ubicacion/composables/useUbicaciones'
+import useDatos from '@/composables/useDatos'
+import { formatearNombre } from '@/helper/formatearNombre'
+import { parseLocalDate } from '@/helper/parseLocalDate'
+import moment from 'moment'
+import { ErrorMessage, Field, useForm } from 'vee-validate'
+import { computed } from 'vue'
+import { schema } from '../helpers/schema'
+import type { IClase } from '../interfaces/clase'
+import type { Props } from '../interfaces/props'
 
 const { clase, guardar } = defineProps<Props>()
 const { empresas, buscarEmpresa } = useEmpresasPorNombre()
@@ -32,7 +32,7 @@ const { areasTematicas, buscarAreaTematica } = useAreasTematicasPorNombre()
 const { ordenes, estatus } = useOrdenes()
 const { modelos, buscarModelo } = useModelosPorNombre()
 
-estatus.value = 'Liberada'
+estatus.value = clase?.estatus === undefined ? 'Liberada' : 'Cerrada'
 
 const initialValues = computed(() => {
   return clase
@@ -72,10 +72,17 @@ const calcularDuracion = () => {
   const hora1 = moment(values.horaInicio).format('HH:mm')
   const fecha2 = moment(values.fechaFinalizacion).format('YYYY-MM-DD')
   const hora2 = moment(values.horaFinalizacion).format('HH:mm')
-  const concatenacionf1 = moment(`${fecha1} ${hora1}:00`)
-  const concatenacionf2 = moment(`${fecha2} ${hora2}:00`)
-  const diff = concatenacionf2.diff(concatenacionf1, 'hours')
-  setFieldValue('duracion', diff.toString())
+
+  const inicio = moment(`${fecha1} ${hora1}:00`, 'YYYY-MM-DD HH:mm:ss')
+  const fin = moment(`${fecha2} ${hora2}:00`, 'YYYY-MM-DD HH:mm:ss')
+
+  const diffMinutos = fin.diff(inicio, 'minutes')
+
+  const horas = Math.floor(diffMinutos / 60)
+  const minutos = diffMinutos % 60
+
+  const duracion = `${horas}h ${minutos}m`
+  setFieldValue('duracion', duracion)
 }
 
 const seleccionarRepresentanteEmpresa = (empleado: IEmpleado) => {
@@ -127,6 +134,7 @@ const submit = handleSubmit((values: IClase) => {
           optionValue="id"
           @update:modelValue="field.onChange"
           :invalid="meta.touched && errors.length > 0"
+          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="ordenId" class="text-red-500" />
       </div>
@@ -137,7 +145,7 @@ const submit = handleSubmit((values: IClase) => {
         <label for="empresaId">Empresa</label>
         <v-autocomplete
           fluid
-          :modelValue="clase?.empresa.razonSocial"
+          :modelValue="clase?.empresa?.razonSocial"
           :suggestions="empresas"
           @complete="buscarEmpresa"
           optionLabel="razonSocial"
@@ -149,6 +157,7 @@ const submit = handleSubmit((values: IClase) => {
             }
           "
           :invalid="meta.touched && errors.length > 0"
+          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="empresaId" class="text-red-500" />
       </div>
@@ -326,6 +335,7 @@ const submit = handleSubmit((values: IClase) => {
               }
             "
             :invalid="meta.touched && errors.length > 0"
+            :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
           />
           <ErrorMessage name="cursoId" class="text-red-500" />
         </div>
@@ -347,6 +357,7 @@ const submit = handleSubmit((values: IClase) => {
               }
             "
             :invalid="meta.touched && errors.length > 0"
+            :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
           />
           <ErrorMessage name="modeloId" class="text-red-500" />
         </div>
@@ -405,6 +416,7 @@ const submit = handleSubmit((values: IClase) => {
             }
           "
           :invalid="meta.touched && errors.length > 0"
+          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="ocupacionId" class="text-red-500" />
       </div>
@@ -427,6 +439,7 @@ const submit = handleSubmit((values: IClase) => {
             }
           "
           :invalid="meta.touched && errors.length > 0"
+          :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
         />
         <ErrorMessage name="areaTematicaId" class="text-red-500" />
       </div>

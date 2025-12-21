@@ -4,18 +4,28 @@ import type { PropsTabla } from '../interface/propsTabla'
 import { computed, ref } from 'vue'
 import { FilterMatchMode } from '@primevue/core/api'
 import useModificarMiCurso from '../composables/useModificarMicurso'
+import usePdfsCertificados from '../composables/usePdfsCertificados'
 
 const { misCursos } = defineProps<PropsTabla>()
 const { aceptarComentarios } = useModificarMiCurso()
+const { descargarCertificados } = usePdfsCertificados()
 
 const certificadosSeleccionados = ref<IClaseEmpleado[]>([])
 
 const descargar = () => {
-  certificadosSeleccionados.value.forEach((x) => {
-    console.log(x.claseId)
-    console.log(x.calificacion)
-    console.log(x.aprobado)
-  })
+  const certificados = certificadosSeleccionados.value
+    .map((x) => {
+      if (
+        x.aprobado &&
+        x.clase!.calificada &&
+        ((x.comentarios === null && !x.aceptarComentarios) ||
+          (x.comentarios !== null && x.aceptarComentarios))
+      ) {
+        return x.id
+      }
+    })
+    .filter((id): id is number => id !== undefined)
+  descargarCertificados(certificados)
 }
 
 const selectableItems = computed(() => {
@@ -144,7 +154,12 @@ const filters = ref({
               name: !empleado ? 'certificado-pdf' : 'certificado-empleado-pdf',
               params: { id: data.id },
             }"
-            v-if="data.aprobado && data.clase!.calificada && data.aceptarComentarios"
+            v-if="
+              data.aprobado &&
+              data.clase!.calificada &&
+              ((data.comentarios === null && !data.aceptarComentarios) ||
+                (data.comentarios !== null && data.aceptarComentarios))
+            "
           >
             <v-button icon="pi pi-file-pdf" severity="danger" size="small" />
           </router-link>
@@ -152,7 +167,7 @@ const filters = ref({
             icon="pi pi-check"
             size="small"
             @click="aceptarComentarios(data)"
-            v-if="!data.aceptarComentarios && data.clase?.calificada"
+            v-if="!data.aceptarComentarios && data.comentarios !== null && data.clase?.calificada"
           />
         </div>
       </template>
@@ -169,7 +184,12 @@ const filters = ref({
       </template>
       <template #body="{ data }: { data: IClaseEmpleado }">
         <v-checkbox
-          v-if="data.aprobado && data.clase!.calificada && data.aceptarComentarios"
+          v-if="
+            data.aprobado &&
+            data.clase!.calificada &&
+            ((data.comentarios === null && !data.aceptarComentarios) ||
+              (data.comentarios !== null && data.aceptarComentarios))
+          "
           :modelValue="isSelected(data)"
           @update:modelValue="toggleSelection(data)"
           binary

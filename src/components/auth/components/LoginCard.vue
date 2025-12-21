@@ -4,6 +4,7 @@ import { schema } from '../helpers/schema'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
 import useAuth from '../composables/useAuth'
 import type { IAuth } from '../interfaces/auth'
+import { options } from '../helpers/particles'
 
 const { authMutation, isPending } = useAuth()
 
@@ -22,8 +23,14 @@ const submit = handleSubmit((values) => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center h-[100vh]!">
-    <v-card :style="{ 'min-width': '480px' }">
+  <vue-particles
+    id="tsparticles"
+    :options="{
+      ...options,
+    }"
+  />
+  <div class="flex justify-center items-center fixed top-0 left-0 right-0 bottom-0">
+    <v-card :style="{ 'min-width': '480px', 'z-index': 1001 }">
       <template #content>
         <div class="flex justify-center flex-col items-center mb-10 mt-10 gap-2">
           <h1 class="text-4xl! font-bold">Bienvenido de nuevo</h1>
