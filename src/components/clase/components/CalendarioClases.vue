@@ -112,6 +112,10 @@ const menuItems = (clase: IClase) => {
     items = items.filter((item) => item.label !== 'Eliminar')
   }
 
+  if (!verificarPermiso('Clases.Calificar')) {
+    items = items.filter((item) => item.label !== 'Subir calificaciones')
+  }
+
   if (clase.padres.length > 0) {
     // items = items.filter((item) => item.label !== 'Modificar')
     // items = items.filter((item) => item.label !== 'Instructores')
