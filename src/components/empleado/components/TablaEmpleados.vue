@@ -107,7 +107,7 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
         <v-tag class="w-full" :severity="data.tipo == 'interno' ? '' : 'warn'" :value="data.tipo" />
       </template>
     </v-column>
-    <v-column field="idUsuario" header="ID Usuario" sortable />
+    <v-column field="idUsuario" header="Numero empleado" sortable />
     <v-column field="activo" header="Estatus" sortable>
       <template #body="{ data }: { data: IEmpleado }">
         <v-tag

@@ -60,8 +60,8 @@ const agregarAlumno = (payload: IEmpleado) => {
       </div>
     </template>
 
-    <v-column field="empleado.id" header="ID" sortable />
-    <v-column field="empleado.idUsuario" header="ID Usuario" sortable />
+    <!-- <v-column field="empleado.id" header="ID" sortable /> -->
+    <v-column field="empleado.idUsuario" header="Numero empleado" sortable />
     <v-column field="empleado.primerNombre" header="Nombre" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
         <span>
@@ -69,6 +69,10 @@ const agregarAlumno = (payload: IEmpleado) => {
         </span>
       </template>
     </v-column>
+    <v-column field="empleado.curp" header="CURP" sortable />
+    <v-column field="empleado.cargo.nombre" header="Cargo" sortable />
+    <v-column field="empleado.sucursal.nombre" header="Sucursal" sortable />
+
     <v-column
       v-if="
         clase.estatus !== 'en curso' &&
