@@ -32,10 +32,7 @@ const useModificarMiCurso = () => {
   })
 
   const aceptarComentarios = (payload: IClaseEmpleado) => {
-    pregunta(
-      'Acuerdo de comenatarios',
-      'Estas de acuerdo con los comentarios que te pusieron en la clase?',
-    ).then(() => {
+    pregunta('Comentarios del instructor', `${payload.comentarios}`).then(() => {
       modificarMutation.mutate(payload)
     })
   }
