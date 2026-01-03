@@ -11,7 +11,7 @@ export const schema = yup.object({
     .required('El campo es requerido'),
   horaFinalizacion: yup.date().required('El campo es requerido'),
   duracion: yup.string().required('El campo es requerido'),
-  tipo_clase: yup.string().required('El campo es requerido'),
+  tipo_clase: yup.string().default('presencial').required('El campo es requerido'),
   tipo_curso: yup.string().required('El campo es requerido'),
   cursoId: yup.number().required('El campo es requerido'),
   modeloId: yup.number().nullable(),

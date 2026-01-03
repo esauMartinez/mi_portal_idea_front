@@ -8,7 +8,9 @@ export const formatearNombre = (empleado: IEmpleado): string => {
     empleado.segundoNombre,
     empleado.apellidoPaterno,
     empleado.apellidoMaterno,
-  ].filter(Boolean)
+  ]
+    .map((p) => (p == null ? '' : String(p).trim()))
+    .filter((p) => p && p.toLowerCase() !== 'undefined')
 
   return partes.join(' ').trim()
 }

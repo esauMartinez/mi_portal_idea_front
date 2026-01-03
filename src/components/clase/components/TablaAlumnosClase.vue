@@ -12,7 +12,7 @@ import useClase from '../composables/useClase'
 
 const { params } = useRoute()
 const { claseId, clase: alumnos, isLoading } = useAlumnos()
-const { crearMutation, isPending } = useCrear()
+const { crearMutation, isPending, isSuccess } = useCrear()
 const { eliminar } = useEliminar()
 const { clase } = useClase(+params.id!)
 claseId.value = +params.id!
@@ -37,14 +37,15 @@ const agregarAlumno = (payload: IEmpleado) => {
     <template #header>
       <div class="grid grid-cols-12 items-center">
         <div class="col-span-7">
-          <span class="text-xl! font-bold">Alumnos</span>
+          <span class="text-xl! font-bold">Registrar colaborador</span>
         </div>
         <div class="col-span-5">
           <BusquedaEmpleados
             :seleccionarEmpleado="agregarAlumno"
             :pendiente="isPending"
+            :registrado="isSuccess"
             :instructor="false"
-            v-if="clase.estatus == 'pendiente' && verificarPermiso('Clases.Agregar.Alumno')"
+            v-if="clase.estatus !== 'finalizada' && verificarPermiso('Clases.Agregar.Alumno')"
           />
         </div>
       </div>
@@ -73,13 +74,7 @@ const agregarAlumno = (payload: IEmpleado) => {
     <v-column field="empleado.cargo.nombre" header="Cargo" sortable />
     <v-column field="empleado.sucursal.nombre" header="Sucursal" sortable />
 
-    <v-column
-      v-if="
-        clase.estatus !== 'en curso' &&
-        clase.estatus !== 'finalizada' &&
-        verificarPermiso('Clases.Eliminar.Alumno')
-      "
-    >
+    <v-column v-if="clase.estatus !== 'finalizada' && verificarPermiso('Clases.Eliminar.Alumno')">
       <template #body="{ data }: { data: IEmpleado }">
         <div class="flex justify-center">
           <v-button icon="pi pi-trash" severity="danger" size="small" @click="eliminar(data.id)" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import useEmpleadosPorNombre from '../composables/useEmpleadosPorNombre'
 import type { IEmpleado } from '../interfaces/empleado'
 import type { PropsBusquedaEmpleados } from '../interfaces/props'
@@ -10,13 +10,24 @@ const {
   boton = true,
   pendiente = false,
   instructor: instructorProp,
+  registrado = false,
+  nombre: nombreEmpleado,
 } = defineProps<PropsBusquedaEmpleados>()
 
 const empleadoSeleccionado = ref<IEmpleado | null>(null)
-const { empleados, activo, instructor, search } = useEmpleadosPorNombre()
+const { empleados, activo, instructor, nombre, search } = useEmpleadosPorNombre()
 
 activo.value = activoProp
 instructor.value = instructorProp
+
+watch(
+  () => registrado,
+  (payload) => {
+    if (payload) {
+      nombre.value = ''
+    }
+  },
+)
 
 const submit = () => {
   if (empleadoSeleccionado.value) {
@@ -29,7 +40,7 @@ const submit = () => {
   <form @submit.prevent="submit" class="grid grid-cols-[1fr_auto] items-center gap-2">
     <v-autocomplete
       fluid
-      :modelValue="nombre"
+      :modelValue="nombreEmpleado"
       :suggestions="empleados"
       @complete="search"
       optionLabel="nombreCompleto"
@@ -47,7 +58,7 @@ const submit = () => {
 
     <v-autocomplete
       fluid
-      :modelValue="nombre"
+      :modelValue="nombreEmpleado"
       :suggestions="empleados"
       @complete="search"
       optionLabel="nombreCompleto"

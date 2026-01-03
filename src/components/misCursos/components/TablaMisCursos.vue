@@ -5,6 +5,7 @@ import { computed, ref } from 'vue'
 import { FilterMatchMode } from '@primevue/core/api'
 import useModificarMiCurso from '../composables/useModificarMicurso'
 import usePdfsCertificados from '../composables/usePdfsCertificados'
+import { verificarPermiso } from '@/guards/verificarPermiso'
 
 const { misCursos } = defineProps<PropsTabla>()
 const { aceptarComentarios } = useModificarMiCurso()
@@ -107,34 +108,33 @@ const filters = ref({
       </div>
     </template>
 
-    <v-column header="Clase" sortable>
+    <!-- <v-column header="Clase" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
         {{ data.clase!.id }}
       </template>
-    </v-column>
-    <v-column header="Estatus clase" sortable>
-      <template #body="{ data }: { data: IClaseEmpleado }">
-        <v-tag :value="estatusClase(data.clase!.estatus)" severity="info" class="w-full" />
-      </template>
-    </v-column>
+    </v-column> -->
     <v-column header="Curso" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
         {{ data.clase!.curso.nombre }}
       </template>
     </v-column>
+    <v-column header="Fecha" sortable>
+      <template #body="{ data }: { data: IClaseEmpleado }">
+        {{ data.clase!.fechaInicio }}
+      </template>
+    </v-column>
+    <v-column header="Progreso" sortable>
+      <template #body="{ data }: { data: IClaseEmpleado }">
+        <v-tag :value="estatusClase(data.clase!.estatus)" severity="info" class="w-full" />
+      </template>
+    </v-column>
+
     <v-column header="Calificacion" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
         {{ data.calificacion }}
       </template>
     </v-column>
-
-    <v-column header="Comentarios" :style="{ width: '300px' }">
-      <template #body="{ data }: { data: IClaseEmpleado }">
-        <v-textarea fluid v-model="data.comentarios" disabled />
-      </template>
-    </v-column>
-
-    <v-column header="Estatus" sortable>
+    <v-column header="Estado" sortable>
       <template #body="{ data }: { data: IClaseEmpleado }">
         <v-tag
           :value="data.aprobado ? 'Acreditado' : 'No acreditado'"
@@ -146,7 +146,13 @@ const filters = ref({
       </template>
     </v-column>
 
-    <v-column header="PDF">
+    <v-column header="Comentarios" :style="{ width: '300px' }">
+      <template #body="{ data }: { data: IClaseEmpleado }">
+        <v-textarea fluid v-model="data.comentarios" disabled />
+      </template>
+    </v-column>
+
+    <v-column header="Descargar DC3" v-if="verificarPermiso('Empleados.Descargar.DC3')">
       <template #body="{ data }: { data: IClaseEmpleado }">
         <div class="flex justify-center">
           <router-link
@@ -173,7 +179,7 @@ const filters = ref({
       </template>
     </v-column>
 
-    <v-column headerStyle="width: 3rem">
+    <v-column headerStyle="width: 3rem" v-if="verificarPermiso('Empleados.Descargar.DC3')">
       <template #header>
         <v-checkbox
           v-if="selectableItems.length > 0"
@@ -188,7 +194,8 @@ const filters = ref({
             data.aprobado &&
             data.clase!.calificada &&
             ((data.comentarios === null && !data.aceptarComentarios) ||
-              (data.comentarios !== null && data.aceptarComentarios))
+              (data.comentarios !== null && data.aceptarComentarios)) &&
+            verificarPermiso('Empleados.Descargar.DC3')
           "
           :modelValue="isSelected(data)"
           @update:modelValue="toggleSelection(data)"

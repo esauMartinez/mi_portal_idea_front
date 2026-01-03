@@ -295,6 +295,20 @@ function isSelected(d: Date) {
           ›
         </button>
       </div>
+      <div class="flex justify-between gap-3">
+        <div class="flex items-center">
+          <div class="bg-[#0059ff]! w-5 h-5 rounded-full mr-2"></div>
+          <span class="font-bold">Pendiente</span>
+        </div>
+        <div class="flex items-center">
+          <div class="bg-[#f97316]! w-5 h-5 rounded-full mr-2"></div>
+          <span class="font-bold">En curso</span>
+        </div>
+        <div class="flex items-center">
+          <div class="bg-green-500! w-5 h-5 rounded-full mr-2"></div>
+          <span class="font-bold">Finalizada</span>
+        </div>
+      </div>
       <div class="flex gap-3">
         <!-- <v-button @click="goToday" icon="pi pi-replay" label="Hoy" size="small" /> -->
         <router-link :to="{ name: 'enlazar-clases' }" v-if="verificarPermiso('Clases.Enlazar')">
@@ -338,7 +352,7 @@ function isSelected(d: Date) {
         <!-- 🔥 Iteramos sobre todas las clases del día -->
         <div v-if="day.clases.length > 0">
           <div v-for="clase in day.clases" :key="clase.id" class="mt-1!">
-            <!-- <div class="rounded-md mt-2">
+            <div class="rounded-md mt-2">
               <span class="text-[12px]! p-2! bg-orange-400! text-white rounded-tl-md rounded-tr-md">
                 <span>Id: {{ clase.id }} - </span>
                 <span v-if="clase.enlazada">
@@ -347,7 +361,7 @@ function isSelected(d: Date) {
                 <span>{{ clase.horaInicio }} - </span>
                 <span>{{ clase.horaFinalizacion }} </span>
               </span>
-            </div> -->
+            </div>
             <!-- <router-link to="" @click.stop> -->
             <v-splitbutton
               fluid

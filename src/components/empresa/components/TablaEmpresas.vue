@@ -18,8 +18,8 @@ const { eliminar, isPending } = useEliminar()
     v-model:filters="filters"
     :globalFilterFields="['razonSocial', 'rfc']"
     paginator
-    :rows="10"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
+    :rows="20"
+    :rowsPerPageOptions="[20, 40, 60]"
     :loading="obteniendo"
   >
     <template #header>

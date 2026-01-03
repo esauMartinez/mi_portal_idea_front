@@ -11,7 +11,7 @@ const visible = ref<boolean>(true)
     v-model:visible="visible"
     :style="{ width: '50%' }"
     v-on:after-hide="router.back()"
-    header="Empleados"
+    :header="' '"
     :modal="true"
   >
     <TablaAlumnosClase />

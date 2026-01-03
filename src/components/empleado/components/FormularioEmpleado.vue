@@ -63,8 +63,7 @@ const { handleSubmit, setFieldValue, values } = useForm<IEmpleado>({
 })
 
 const seleccionarEmpleado = (empleado: IEmpleado) => {
-  console.log(empleado)
-  // setFieldValue('padreId', empleado.id)
+  setFieldValue('padreId', empleado.id)
 }
 
 const onFileSelect = (event: FileUploadSelectEvent) => {

@@ -24,8 +24,8 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
     v-model:filters="filters"
     :globalFilterFields="['referencia']"
     paginator
-    :rows="10"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
+    :rows="20"
+    :rowsPerPageOptions="[20, 40, 60]"
     :loading="isLoading"
   >
     <template #header>

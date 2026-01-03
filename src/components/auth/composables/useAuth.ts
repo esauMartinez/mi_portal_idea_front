@@ -51,7 +51,7 @@ const useAuth = () => {
   })
 
   const logout = () => {
-    pregunta('Saldras del sistema', 'Estas seguro ?').then(() => {
+    pregunta('¿Deseas salir del sistema?', '', 'Aceptar').then(() => {
       localStorage.removeItem('empleado')
       authStore.setAutenticado(false)
       router.push('/')

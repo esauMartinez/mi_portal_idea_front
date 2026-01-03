@@ -34,7 +34,12 @@ export const mensajeWarning = (payload: string | undefined) => {
   })
 }
 
-export const pregunta = (title: string, text: string) => {
+export const pregunta = (
+  title: string,
+  text: string,
+  confirmButtonText: string = 'Si, Aceptar!',
+  cancelButtonText: string = 'Cancelar',
+) => {
   return new Promise((resolve) => {
     Swal.fire({
       title,
@@ -43,8 +48,8 @@ export const pregunta = (title: string, text: string) => {
       showCancelButton: true,
       confirmButtonColor: '#0059ff',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Aceptar!',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText,
+      cancelButtonText,
     }).then((result) => {
       if (result.isConfirmed) {
         resolve(true)

@@ -17,7 +17,7 @@ import { formatearNombre } from '@/helper/formatearNombre'
 import { parseLocalDate } from '@/helper/parseLocalDate'
 import moment from 'moment'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { schema } from '../helpers/schema'
 import type { IClase } from '../interfaces/clase'
 import type { Props } from '../interfaces/props'
@@ -56,7 +56,9 @@ const initialValues = computed(() => {
     : {
         ...schema.getDefault(),
         fechaInicio: new Date(),
+        horaInicio: moment().add(1, 'hour').toDate(),
         fechaFinalizacion: new Date(),
+        horaFinalizacion: moment().add(2, 'hour').toDate(),
         instructores: [],
         alumnos: [],
       }
@@ -95,6 +97,10 @@ const seleccionarRepresentanteEmpleados = (empleado: IEmpleado) => {
 
 const submit = handleSubmit((values: IClase) => {
   guardar?.(values)
+})
+
+onMounted(() => {
+  calcularDuracion()
 })
 </script>
 

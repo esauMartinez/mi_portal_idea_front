@@ -14,6 +14,7 @@ export interface PropsBusquedaEmpleados {
   instructor?: boolean
   boton?: boolean
   pendiente?: boolean
+  registrado?: boolean
   invalid?: boolean
   seleccionarEmpleado: (empleado: IEmpleado) => void
 }

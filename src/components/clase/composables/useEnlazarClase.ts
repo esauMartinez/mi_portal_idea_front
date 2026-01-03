@@ -29,7 +29,10 @@ const useEnlazarClase = () => {
   })
 
   const enlazar = (padreId: number, hijoId: number) => {
-    pregunta('Las clase se enlazara', 'estas seguro?').then(() => {
+    pregunta(
+      '¿Deseas enlazar clases?',
+      'Instructores, Técnicos inscritos y calificaciones serán afectados',
+    ).then(() => {
       const data: IEnlaceClase = {
         padreId,
         hijoId,

@@ -8,6 +8,7 @@ import { verificarPermiso } from '@/guards/verificarPermiso'
 import type { IEmpresa } from '@/components/empresa/interfaces/empresa'
 import useDatos from '../../../composables/useDatos'
 import useEmpresasPorNombre from '@/components/empresa/composables/useEmpresasPorNombre'
+import { ref } from 'vue'
 
 const { empleados, empresa, instructor, tipo, isLoading: obteniendo, filters } = useEmpleados()
 const { opcionesInstructor, opcionesTipoEmpleado } = useDatos()
@@ -15,6 +16,10 @@ const { eliminar } = useEliminar()
 const { activarUsuario, isPending: activando } = useActivar()
 const { desactivarEmpleado, isPending: desactivando } = useDesactivar()
 const { empresas, buscarEmpresa } = useEmpresasPorNombre()
+const dt = ref()
+const exportCSV = () => {
+  dt.value.exportCSV()
+}
 </script>
 
 <template>
@@ -28,9 +33,10 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
     v-model:filters="filters"
     :globalFilterFields="['nombreCompleto', 'email']"
     paginator
-    :rows="5"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
+    :rows="20"
+    :rowsPerPageOptions="[20, 40, 60]"
     :loading="obteniendo"
+    ref="dt"
   >
     <template #header>
       <div className="grid grid-cols-12 gap-4">
@@ -90,6 +96,15 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
             <v-button icon="pi pi-plus" label="Crear empleado" size="small" class="w-full" />
           </router-link>
         </div>
+        <div className="col-span-2 col-start-13 row-start-1">
+          <v-button
+            icon="pi pi-external-link"
+            label="Exportar"
+            @click="exportCSV"
+            size="small"
+            class="w-full bg-green-600! border-green-600! hover:bg-green-500! hover:border-green-500!"
+          />
+        </div>
       </div>
     </template>
 
@@ -133,11 +148,12 @@ const { empresas, buscarEmpresa } = useEmpresasPorNombre()
         />
       </template>
     </v-column>
-    <v-column field="empresa.nombre" header="Empresa" sortable>
+    <v-column field="empresa.razonSocial" header="Empresa" sortable>
       <template #body="{ data }: { data: IEmpleado }">
         <div v-if="data.empresa">{{ data.empresa?.razonSocial }}/{{ data.empresa?.rfc }}</div>
       </template>
     </v-column>
+    <v-column field="sucursal.nombre" header="Sucursal" sortable></v-column>
     <v-column field="email" header="Email" sortable />
     <v-column field="perfil.nombre" header="Perfil" sortable />
     <v-column field="tieneUsuario" header="Tiene usuario" sortable>
