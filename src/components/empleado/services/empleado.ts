@@ -1,6 +1,6 @@
 import { api_mi_portal } from '@/api'
 import type { IEmpleado } from '../interfaces/empleado'
-import { timer } from '@/helper/timer'
+// import { timer } from '@/helper/timer'
 import type { IBitacoraEmpleado } from '../interfaces/bitacora'
 import type { IJerarquia } from '../interfaces/jerarquia'
 import type { IKardex } from '../interfaces/kardex'
@@ -52,19 +52,19 @@ export const deleteEmpleado = async (id: number): Promise<string> => {
 }
 
 export const updateEmpleado = async (payload: FormData): Promise<string> => {
-  await timer()
+  // await timer()
   const { data } = await api_mi_portal.put<string>(`/empleado`, payload)
   return data
 }
 
 export const activar = async (payload: IEmpleado): Promise<string> => {
-  await timer()
+  // await timer()
   const { data } = await api_mi_portal.put<string>(`/empleado/activar/${payload.id}`, payload)
   return data
 }
 
 export const desactivar = async (payload: IBitacoraEmpleado): Promise<string> => {
-  await timer()
+  // await timer()
   const { data } = await api_mi_portal.put<string>(`/empleado/desactivar/${payload.id}`, payload)
   return data
 }

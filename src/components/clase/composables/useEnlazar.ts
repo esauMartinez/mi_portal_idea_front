@@ -6,9 +6,11 @@ import type { AxiosError } from 'axios'
 import type { IErrors } from '@/interfaces/errors'
 import type { IEnlaceClase } from '../interfaces/enlaceClase'
 import { computed } from 'vue'
+import useClases from './useClases'
 
 const useEnlazar = () => {
   const queryClient = useQueryClient()
+  const { estatus } = useClases()
 
   const crearEnlaze = useMutation({
     mutationKey: ['postEnlaces'],
@@ -18,6 +20,8 @@ const useEnlazar = () => {
     },
     onSuccess: (payload: string) => {
       mensajeOk(payload)
+
+      estatus.value = 'todos'
 
       queryClient.invalidateQueries({
         queryKey: ['getClases'],
