@@ -27,6 +27,17 @@ watch(
       nombre.value = ''
     }
   },
+  { deep: true },
+)
+
+watch(
+  () => nombreEmpleado,
+  (payload) => {
+    if (payload) {
+      nombre.value = payload
+    }
+  },
+  { deep: true },
 )
 
 const submit = () => {
@@ -40,7 +51,7 @@ const submit = () => {
   <form @submit.prevent="submit" class="grid grid-cols-[1fr_auto] items-center gap-2">
     <v-autocomplete
       fluid
-      :modelValue="nombreEmpleado"
+      :modelValue="nombre"
       :suggestions="empleados"
       @complete="search"
       optionLabel="nombreCompleto"
@@ -58,7 +69,7 @@ const submit = () => {
 
     <v-autocomplete
       fluid
-      :modelValue="nombreEmpleado"
+      :modelValue="nombre"
       :suggestions="empleados"
       @complete="search"
       optionLabel="nombreCompleto"
