@@ -26,6 +26,16 @@ const baseSchema = {
     .nullable()
     .required('El campo es requerido.'),
   tieneUsuario: yup.boolean().nullable().default(false).required('El campo es requerido.'),
+  usuario: yup
+    .string()
+    .nullable()
+    .when('tieneUsuario', (tieneUsuario, schema) => {
+      const val = tieneUsuario[0]
+      if (val === true || val === 'true') {
+        return schema.required('El campo es requerido')
+      }
+      return schema.notRequired()
+    }),
   password: yup.string().nullable(),
   verificarPassword: yup.string().nullable(),
   verificado: yup.boolean().nullable().default(false).required('El campo es requerido.'),
@@ -77,7 +87,8 @@ const baseSchema = {
     .number()
     .nullable()
     .when('tieneUsuario', (tieneUsuario, schema) => {
-      if (tieneUsuario[0] === true) {
+      const val = tieneUsuario[0]
+      if (val === true || val === 'true') {
         return schema.required('El campo es requerido')
       }
       return schema.notRequired()
@@ -116,7 +127,8 @@ export const crearSchema = yup.object({
     .string()
     .nullable()
     .when('tieneUsuario', (tieneUsuario, schema) => {
-      if (tieneUsuario[0] === true) {
+      const val = tieneUsuario[0]
+      if (val === true || val === 'true') {
         return schema.required('El campo es requerido')
       }
       return schema.notRequired()
@@ -125,7 +137,8 @@ export const crearSchema = yup.object({
     .string()
     .nullable()
     .when('tieneUsuario', (tieneUsuario, schema) => {
-      if (tieneUsuario[0] === true) {
+      const val = tieneUsuario[0]
+      if (val === true || val === 'true') {
         return schema
           .oneOf([yup.ref('password')], 'Las contraseñas no coinciden')
           .required('El campo es requerido')
@@ -138,7 +151,17 @@ export const crearSchema = yup.object({
 export const modificarSchema = yup.object({
   ...baseSchema,
   password: yup.string().nullable(),
-  verificarPassword: yup.string().nullable(),
+  verificarPassword: yup
+    .string()
+    .nullable()
+    .when('password', (password, schema) => {
+      if (password[0] && password[0].trim() !== '') {
+        return schema
+          .oneOf([yup.ref('password')], 'Las contraseñas no coinciden')
+          .required('El campo es requerido')
+      }
+      return schema.notRequired()
+    }),
 })
 
 // Función para obtener el schema apropiado

@@ -180,10 +180,10 @@ onMounted(() => {
             :modelValue="field.value"
             @update:modelValue="field.onChange"
             v-on:value-change="calcularDuracion"
-            :minDate="values.fechaInicio"
             :invalid="meta.touched && errors.length > 0"
             :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
           />
+          <!-- :minDate="values.fechaInicio" -->
           <ErrorMessage name="fechaInicio" class="text-red-500" />
         </div>
       </Field>
@@ -217,9 +217,9 @@ onMounted(() => {
             @update:modelValue="field.onChange"
             v-on:value-change="calcularDuracion"
             :invalid="meta.touched && errors.length > 0"
-            :minDate="values.fechaInicio"
             :disabled="clase?.estatus === 'en curso' || clase?.estatus === 'finalizada'"
           />
+          <!-- :minDate="values.fechaInicio" -->
           <ErrorMessage name="fechaFinalizacion" class="text-red-500" />
         </div>
       </Field>

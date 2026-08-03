@@ -95,11 +95,17 @@ const onSubmit = handleSubmit((values) => {
   Object.keys(values).forEach((key) => {
     // Evitar meter file en esta parte
     if (key !== 'file') {
+      const val = values[key as keyof IEmpleado]
       if (key === 'ocupacionesEmpleado') {
-        formData.append(key, JSON.stringify(values[key]))
+        formData.append(key, JSON.stringify(val))
+      } else if (key === 'password' || key === 'verificarPassword') {
+        if (typeof val === 'string' && val.trim() !== '') {
+          formData.append(key, val)
+        }
       } else {
-        // @ts-expect-error no usar
-        formData.append(key, values[key])
+        if (val !== undefined && val !== null) {
+          formData.append(key, val as unknown as string | Blob)
+        }
       }
     }
   })
@@ -285,6 +291,19 @@ const onSubmit = handleSubmit((values) => {
           :invalid="meta.touched && errors.length > 0"
         />
         <ErrorMessage name="tieneUsuario" class="text-red-500" />
+      </div>
+    </Field>
+
+    <Field name="usuario" v-slot="{ field, meta, errors }" v-if="values.tieneUsuario">
+      <div>
+        <label for="usuario">Usuario</label>
+        <v-inputtext
+          fluid
+          :modelValue="field.value"
+          @update:modelValue="field.onChange"
+          :invalid="meta.touched && errors.length > 0"
+        />
+        <ErrorMessage name="usuario" class="text-red-500" />
       </div>
     </Field>
 

@@ -7,6 +7,7 @@ import type { IPuesto } from '@/components/puesto/interfaces/puesto'
 export interface IEmpleado {
   id: number
   idUsuario: string
+  usuario?: string
   primerNombre: string
   segundoNombre?: string
   apellidoPaterno: string

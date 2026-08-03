@@ -31,7 +31,7 @@ const exportCSV = () => {
     responsiveLayout="scroll"
     rowHover
     v-model:filters="filters"
-    :globalFilterFields="['nombreCompleto', 'email']"
+    :globalFilterFields="['nombreCompleto', 'email', 'usuario', 'idUsuario']"
     paginator
     :rows="20"
     :rowsPerPageOptions="[20, 40, 60]"
@@ -123,6 +123,7 @@ const exportCSV = () => {
       </template>
     </v-column>
     <v-column field="idUsuario" header="Numero empleado" sortable />
+    <v-column field="usuario" header="Usuario" sortable />
     <v-column field="activo" header="Estatus" sortable>
       <template #body="{ data }: { data: IEmpleado }">
         <v-tag

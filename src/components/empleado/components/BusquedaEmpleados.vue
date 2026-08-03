@@ -36,6 +36,7 @@ watch(
       nombreLocal.value = ''
     }
   },
+  { deep: true },
 )
 
 const submit = () => {
@@ -46,6 +47,7 @@ const submit = () => {
 </script>
 
 <template>
+  {{ nombreLocal }}
   <form @submit.prevent="submit" class="grid grid-cols-[1fr_auto] items-center gap-2">
     <v-autocomplete
       fluid

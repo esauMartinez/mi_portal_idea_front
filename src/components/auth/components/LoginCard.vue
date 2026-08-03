@@ -43,15 +43,15 @@ const submit = handleSubmit((values) => {
           :schema-validation="schema"
           class="grid grid-cols-1 gap-3"
         >
-          <Field name="email" v-slot="{ field, meta, errors }">
+          <Field name="usuario" v-slot="{ field, meta, errors }">
             <div class="grid grid-cols-1">
-              <label for="email" class="text-lg!">Usuario</label>
+              <label for="usuario" class="text-lg!">Usuario</label>
               <v-inputtext
                 :modelValue="field.value"
                 @update:modelValue="field.onChange"
                 :invalid="meta.touched && errors.length > 0"
               />
-              <ErrorMessage name="email" class="text-red-500 text-lg" />
+              <ErrorMessage name="usuario" class="text-red-500 text-lg" />
             </div>
           </Field>
 

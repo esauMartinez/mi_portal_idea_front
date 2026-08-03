@@ -11,20 +11,33 @@ const usePdf = () => {
   const empleado = ref<string>('')
   const docDefinition = ref({} as any)
 
-  async function descargarImagenBase64(url: string): Promise<string> {
+  async function descargarImagenBase64(url: string | null | undefined): Promise<string> {
+    if (!url || typeof url !== 'string' || url.endsWith('/undefined') || url.endsWith('/null')) {
+      return ''
+    }
     try {
       const response = await fetch(url)
-      const blob = await response.blob()
+      if (!response.ok) return ''
 
-      return new Promise((resolve, reject) => {
+      const blob = await response.blob()
+      if (!blob.type.startsWith('image/')) return ''
+
+      return new Promise((resolve) => {
         const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result as string)
-        reader.onerror = reject
+        reader.onloadend = () => {
+          const res = reader.result as string
+          if (res && res.startsWith('data:image/')) {
+            resolve(res)
+          } else {
+            resolve('')
+          }
+        }
+        reader.onerror = () => resolve('')
         reader.readAsDataURL(blob)
       })
     } catch (error) {
       console.error('Error al descargar imagen:', error)
-      throw error
+      return ''
     }
   }
 
@@ -37,15 +50,21 @@ const usePdf = () => {
       ? formatearNombre(payload.clase!.representanteEmpleados)
       : 'S/D'
 
-    const firmaInsturctor = await descargarImagenBase64(
-      `${apiUrl}/archivos/${payload.clase!.empleadoCalifica.pathArchivo}`,
-    )
-    const firmaRepresentanteEmpresa = await descargarImagenBase64(
-      `${apiUrl}/archivos/${payload.clase!.representanteEmpresa.pathArchivo}`,
-    )
-    const firmaRepresentanteEmpleados = await descargarImagenBase64(
-      `${apiUrl}/archivos/${payload.clase!.representanteEmpleados.pathArchivo}`,
-    )
+    const firmaInsturctor = payload.clase?.empleadoCalifica?.pathArchivo
+      ? await descargarImagenBase64(
+          `${apiUrl}/archivos/${payload.clase.empleadoCalifica.pathArchivo}`,
+        )
+      : ''
+    const firmaRepresentanteEmpresa = payload.clase?.representanteEmpresa?.pathArchivo
+      ? await descargarImagenBase64(
+          `${apiUrl}/archivos/${payload.clase.representanteEmpresa.pathArchivo}`,
+        )
+      : ''
+    const firmaRepresentanteEmpleados = payload.clase?.representanteEmpleados?.pathArchivo
+      ? await descargarImagenBase64(
+          `${apiUrl}/archivos/${payload.clase.representanteEmpleados.pathArchivo}`,
+        )
+      : ''
 
     const content: Content[] = [
       // Logo
@@ -496,11 +515,11 @@ const usePdf = () => {
           {
             width: '33%',
             stack: [
-              payload.clase!.empleadoCalifica.pathArchivo
+              firmaInsturctor
                 ? [
                     // Imagen de firma
                     {
-                      image: `${firmaInsturctor}`, // o ruta de la imagen
+                      image: firmaInsturctor, // o ruta de la imagen
                       width: 100,
                       height: 50,
                       alignment: 'center',
@@ -510,7 +529,7 @@ const usePdf = () => {
                 : [{ text: '', margin: [0, 0, 0, 35] }],
               { text: '_____________________', alignment: 'center' },
               {
-                text: `${payload.clase!.empleadoCalifica?.primerNombre} ${payload.clase!.empleadoCalifica?.segundoNombre} ${payload.clase!.empleadoCalifica?.apellidoPaterno} ${payload.clase!.empleadoCalifica?.apellidoMaterno}`,
+                text: `${payload.clase!.empleadoCalifica?.primerNombre} ${payload.clase!.empleadoCalifica?.segundoNombre ? payload.clase!.empleadoCalifica.segundoNombre : ''} ${payload.clase!.empleadoCalifica?.apellidoPaterno} ${payload.clase!.empleadoCalifica?.apellidoMaterno ? payload.clase!.empleadoCalifica.apellidoMaterno : ''}`,
                 alignment: 'center',
                 bold: true,
                 fontSize: 9,
@@ -521,11 +540,11 @@ const usePdf = () => {
           {
             width: '33%',
             stack: [
-              payload.clase!.representanteEmpresa.pathArchivo
+              firmaRepresentanteEmpresa
                 ? [
                     // Imagen de firma
                     {
-                      image: `${firmaRepresentanteEmpresa}`, // o ruta de la imagen
+                      image: firmaRepresentanteEmpresa, // o ruta de la imagen
                       width: 100,
                       height: 50,
                       alignment: 'center',
@@ -546,11 +565,11 @@ const usePdf = () => {
           {
             width: '34%',
             stack: [
-              payload.clase!.representanteEmpleados.pathArchivo
+              firmaRepresentanteEmpleados
                 ? [
                     // Imagen de firma
                     {
-                      image: `${firmaRepresentanteEmpleados}`, // o ruta de la imagen
+                      image: firmaRepresentanteEmpleados, // o ruta de la imagen
                       width: 100,
                       height: 50,
                       alignment: 'center',
